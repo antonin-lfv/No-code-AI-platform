@@ -48,7 +48,7 @@ def Regressions():
 
 @app.route('/Classifications')
 def Classification():
-    return render_template('classification.html')
+    return render_template('classifications.html')
 
 
 @app.route('/Ensemble learning')
