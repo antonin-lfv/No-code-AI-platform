@@ -1,8 +1,6 @@
 import numpy as np
 import pandas as pd
-import binascii
 from scipy.spatial import distance
-from collections import Counter
 
 def max_std(dataset):  # colonne de maximum de variance
     l = []

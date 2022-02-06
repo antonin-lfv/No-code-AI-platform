@@ -1,14 +1,11 @@
 # Importations
-import itertools
 import plotly.express as px
 import plotly.graph_objects as go
 import numpy as np
 import pandas as pd
-import graphviz
 from flask import Flask, request, redirect, abort, render_template
-from collections import Counter
+
 from main_module.static.utils import *
-import more_itertools
 
 app = Flask(__name__)
 app.config.from_object('config')
