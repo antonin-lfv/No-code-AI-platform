@@ -22,7 +22,9 @@ def home():
 def Dataset():
     return render_template('dataset.html')
 
+
 df = pd.read_csv("main_module/static/datasets/iris.csv")
+
 
 @app.route('/Analyse des colonnes')
 def Analyse_colonnes():
