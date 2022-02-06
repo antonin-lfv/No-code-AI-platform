@@ -1,0 +1,1 @@
+CONSTANTE = "Hello world depuis config.py"

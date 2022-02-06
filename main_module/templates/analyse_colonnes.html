@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <br><p class="grand_titre">Analyse des colonnes</p>
+
+    <div class="row">
+    <div class="column_10"></div>
+    <div class="column_50">
+        <table>
+            <tr>
+                {% for col in column_names %}
+                    <th>{{ col }}</th>
+                {% endfor %}
+            </tr>
+            {% for row in row_data %}
+                <tr>
+                    {% for col, row_ in zip(column_names, row) %}
+                        <td>{{ row_ }}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+
+        </table>
+    </div>
+    <div class="column_30"></div>
+    <div class="column_10"></div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,234 @@
+/* For text */
+* , ::before, ::after {
+    font-family: Sans-Serif, serif;
+    color: #222f3e;
+    word-spacing: 4px;
+    line-height: 1.4;
+    font-size: small;
+    box-sizing: border-box;
+}
+
+h3 {
+  margin: 0;
+}
+
+a {
+  text-decoration: none;
+}
+
+body {
+
+}
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+    height: 15em;
+    overflow: scroll;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+
+.first_titre {
+    font-size: 60px !important;
+    font-weight: bold;
+    box-sizing: border-box;
+    text-align: center;
+    width: 100%;
+}
+
+.intro {
+    text-align: justify;
+}
+
+.grand_titre {
+    font-size: 30px !important;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: underline;
+    text-decoration-color: #4976E4;
+    text-decoration-thickness: 5px;
+}
+
+.section {
+    font-size: 20px !important;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: underline;
+    text-decoration-color: #111111;
+    text-decoration-thickness: 3px;
+}
+
+.petite_section {
+    font-size: 16px !important;
+    font-weight: bold;
+}
+
+.nom_colonne_page3 {
+    font-size: 17px !important;
+    text-decoration: underline;
+    text-decoration-color: #000;
+    text-decoration-thickness: 1px;
+}
+
+/* For columns */
+.row {
+    display: flex;
+}
+
+.column_50 {
+    flex: 50%;
+}
+
+.column_40 {
+    flex: 40%;
+}
+
+.column_30 {
+    flex: 30%;
+}
+
+.column_10 {
+    flex: 10%;
+}
+
+/* For element */
+hr { /* Ligne séparatrice */
+    width: 80%;
+    text-align: center;
+}
+
+a:link { /* Hyperliens */
+    color: cornflowerblue;
+}
+
+a:visited { /* Hyperliens */
+    color: cornflowerblue;
+}
+
+a:hover { /* Hyperliens */
+    color: royalblue;
+}
+
+/* For images */
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Menu sidebar burger */
+#menuToggle {
+    display: block;
+    position: relative;
+    top: 50px;
+    left: 50px;
+
+    z-index: 1;
+
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+#menuToggle a {
+    text-decoration: none;
+    color: #232323;
+
+    transition: color 0.3s ease;
+}
+
+#menuToggle a:hover {
+    color: tomato;
+}
+
+#menuToggle input {
+    display: block;
+    width: 40px;
+    height: 32px;
+    position: absolute;
+    top: -7px;
+    left: -5px;
+
+    cursor: pointer;
+
+    opacity: 0; /* hide this */
+    z-index: 2; /* and place it over the hamburger */
+
+    -webkit-touch-callout: none;
+}
+
+#menuToggle span {
+    display: block;
+    width: 33px;
+    height: 4px;
+    margin-bottom: 5px;
+    position: relative;
+
+    background: #cdcdcd;
+    border-radius: 3px;
+
+    z-index: 1;
+
+    transform-origin: 4px 0;
+
+    transition: transform 0.5s cubic-bezier(0.77, 0.2, 0.05, 1.0),
+    background 0.5s cubic-bezier(0.77, 0.2, 0.05, 1.0),
+    opacity 0.55s ease;
+}
+
+#menuToggle span:first-child {
+    transform-origin: 0% 0%;
+}
+
+#menuToggle span:nth-last-child(2) {
+    transform-origin: 0% 100%;
+}
+
+#menuToggle input:checked ~ span {
+    opacity: 1;
+    transform: rotate(45deg) translate(-2px, -1px);
+    background: #232323;
+}
+
+#menuToggle input:checked ~ span:nth-last-child(3) {
+    opacity: 0;
+    transform: rotate(0deg) scale(0.2, 0.2);
+}
+
+#menuToggle input:checked ~ span:nth-last-child(2) {
+    transform: rotate(-45deg) translate(0, -1px);
+}
+
+#menu {
+    position: absolute;
+    width: 300px;
+    margin: -100px 0 0 -50px;
+    padding: 50px;
+    padding-top: 125px;
+
+    background: #ededed;
+    list-style-type: none;
+    -webkit-font-smoothing: antialiased;
+    /* to stop flickering of text in safari */
+
+    transform-origin: 0% 0%;
+    transform: translate(-100%, 0);
+
+    transition: transform 0.5s cubic-bezier(0.77, 0.2, 0.05, 1.0);
+}
+
+#menu li {
+    padding: 10px 0;
+    font-size: 22px;
+}
+
+#menuToggle input:checked ~ ul {
+    transform: none;
+}

@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <p class="first_titre">No-code AI Platform</p><hr><br>
+    <!-- Les 2 colonnes de la page d'accueil -->
+    <div class="row">
+        <div class="column_10"></div>
+        <div class="column_50">
+
+            <p class="intro">Bienvenue sur la <b>no-code AI platform</b> ! Déposez vos datasets csv ou excel ou
+                choisissez en un parmi ceux proposés et commencez votre analyse dès maintenant ! Cherchez les variables
+                les plus intéressantes, visualisez vos données, et créez vos modèles de Machine Learning en toute
+                simplicité. Si vous choisissez de travailler avec votre dataset et que vous voulez effectuez des
+                modifications sur celui-ci, il faudra le télécharger une fois les modifications faites pour pouvoir
+                l'utiliser sur les autres pages. </p>
+            <p class="intro">Un tutoriel sur l'utilisation de ce site est disponible sur le repo Github. En cas de bug ou d'erreur veuillez m'en informer par mail ou sur Discord.</p>
+            <p class="intro"><b>Commencez par choisir un dataset dans la section Dataset !</b></p><br>
+            <div class="row">
+                <div class="column_50">
+                    <h4>Liens</h4>
+                    · <a href="https://github.com/antonin-lfv/Online_preprocessing_for_ML/blob/master/README.md">Mon
+                    profil
+                    GitHub</a>
+                    <br>
+                    · <a href="https://antonin-lfv.github.io">Mon site</a>
+                </div>
+                <div class="column_50">
+                    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+                    <lottie-player src="https://assets6.lottiefiles.com/packages/lf20_vEfHlN.json"
+                                   background="transparent"
+                                   speed="1"
+                                   style="width: 120px; height: 120px; display: flex; flex-flow: column wrap; " loop
+                                   autoplay></lottie-player>
+                </div>
+            </div>
+        </div>
+        <div class="column_30">
+            <img src="{{ url_for('static', filename='images/logos.png') }}" alt="Logos">
+        </div>
+        <div class="column_10"></div>
+
+    </div>
+
+{% endblock %}
