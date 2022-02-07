@@ -4,3 +4,4 @@ pandas
 scipy
 plotly
 gunicorn
+flask-bootstrap

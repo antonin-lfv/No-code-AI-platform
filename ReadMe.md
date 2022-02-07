@@ -19,6 +19,3 @@ with
 def result():
     return render_template('result.html', user_name="Anto")
 ```
-
-### activate venv
-source env/bin/activate
