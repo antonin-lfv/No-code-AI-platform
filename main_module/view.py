@@ -4,11 +4,14 @@ import plotly.graph_objects as go
 import numpy as np
 import pandas as pd
 from flask import Flask, request, redirect, abort, render_template
+from flask_bootstrap import Bootstrap
 
 from main_module.static.utils import *
+from main_module.static.classes import *
 
 app = Flask(__name__)
 app.config.from_object('config')
+bootstrap = Bootstrap(app)
 
 
 # To get one variable, tape app.config['MY_VARIABLE']
@@ -18,9 +21,14 @@ def home():
     return render_template('home.html')
 
 
-@app.route('/Dataset')
+@app.route('/Dataset', methods=['GET', 'POST'])
 def Dataset():
-    return render_template('dataset.html')
+    name = None
+    form = NameForm()
+    if form.validate_on_submit():
+        name = form.name.data
+    form.name.data = ''
+    return render_template('dataset.html', form=form, name=name)
 
 
 df = pd.read_csv("main_module/static/datasets/iris.csv")
