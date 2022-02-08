@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <br><p class="grand_titre">Chargement du dataset</p>
+
+    <div class="page-header">
+        <h1>Hello, {% if session['name'] %}{{ session['name'] }}{% else %}Stranger{% endif %}!</h1>
+    </div>
+
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        {{ form.name.label }}
+        {{ form.name }}
+        {{ form.submit() }}
+    </form>
+
+    <form method="POST">
+        {{ select.hidden_tag() }}
+        {{ select.choix.label }}
+        {{ select.choix }}
+        {{ select.submit() }}
+    </form>
+
+    {%  if session['name'] == 'oui' %}
+        Tu es oui
+    {% else %}
+        Mauvaise option
+    {% endif %}
+
+{% endblock %}

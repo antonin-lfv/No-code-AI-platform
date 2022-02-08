@@ -34,3 +34,11 @@ def max_dist(donnee_apres_pca, df, voisins):  # pour knn, retourne la distance d
         distances.append(distance_e(donnee_apres_pca, [df['x'].iloc[i], df['y'].iloc[i]]))
     distances.sort()
     return distances[voisins-1]
+
+def type_col_dataset(df):
+    types_col = [str(df.dtypes.value_counts().index[i]) for i in range(len(df.dtypes.value_counts()))]
+    num_col_types = [str(df.dtypes.value_counts().values[i]) for i in range(len(df.dtypes.value_counts()))]
+    res = ""
+    for i, j in zip(types_col, num_col_types):
+        res += f"{i} -> {j}  "
+    return res
