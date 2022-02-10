@@ -7,3 +7,4 @@ gunicorn
 flask-bootstrap
 flask-wtf
 WTForms~=3.0.1
+flask-nav
