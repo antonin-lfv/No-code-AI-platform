@@ -5,11 +5,18 @@
     <link rel="stylesheet" href="{{ url_for('static',filename='styles/style.css') }}">
     <title>No-code AI platform</title>
 </head>
-<body>
 
-{{nav.top.render(renderer='simple')}}
-{% block content %}
-{% endblock %}
+<div>
+
+    <div class="row"></div>
+    <div class="left nav">
+        {{ nav.top.render(renderer='simple') }}
+    </div>
+    <div class="right content">
+        {% block content %}
+        {% endblock %}
+    </div>
+</div>
 
 </body>
 </html>

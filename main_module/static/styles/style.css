@@ -89,6 +89,9 @@ tr:nth-child(even) {
 }
 
 /* For columns */
+.column_70 {
+    flex: 70%;
+}
 .column_50 {
     flex: 50%;
 }
@@ -103,6 +106,30 @@ tr:nth-child(even) {
 }
 .column_10 {
     flex: 10%;
+}
+.right{
+    right: 0;
+}
+.left{
+    left: 0;
+}
+.nav{
+    width: 30%;
+    height: 100%;
+    position: fixed;
+    overflow-x: hidden;
+    z-index: 1;
+    top: 8vh;
+    padding-top: 20px;
+}
+.content{
+    width: 90%;
+    height: 100%;
+    position: fixed;
+    overflow-x: hidden;
+    z-index: 1;
+    top: 0;
+    padding-top: 20px;
 }
 
 /* For element */
