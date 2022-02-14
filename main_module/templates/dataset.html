@@ -2,47 +2,53 @@
 
 {% block content %}
 
-    <br><p class="grand_titre">Chargement du Dataset</p><br>
-
-    <div class="row">
-        <div class="column_10"></div>
-        <div class="column_50"><br><br>
-            <form method="POST">
-                {{ select_dataset.hidden_tag() }}
-                {{ select_dataset.choix.label }}
-                {{ select_dataset.choix }}
-                {{ select_dataset.submit() }}
-            </form>
+    <div class="container">
+        <div class="row">
+            <div class="col-1"></div>
+            <div class="col-5"><br><br>
+                <p class="grand_titre">Chargement du Dataset</p><br>
             <br>
+                <form method="POST">
+                    {{ select_dataset.hidden_tag() }}
+                    {{ select_dataset.choix.label }}
+                    {{ select_dataset.choix }}
+                    {{ select_dataset.submit() }}
+                </form>
+                <br>
 
-            {% if session['_choix_dataset'] == 'Iris (Classification)' %}
-                Vous avez choisi le Dataset des Iris
-            {% elif session['_choix_dataset'] == 'Penguins (Classification)' %}
-                Vous avez choisi le Dataset des Penguins
-            {% elif session['_choix_dataset'] == 'Prix des voitures (Régression)' %}
-                Vous avez choisi le Dataset du prix des voitures
-            {% elif session['_choix_dataset'] == 'Choisir un dataset personnel' %}
-                Vous avez choisi d'importer votre dataset
-            {% else %}{% endif %}
+                {% if session['_choix_dataset'] == 'Iris (Classification)' %}
+                    Vous avez choisi le Dataset des Iris
+                {% elif session['_choix_dataset'] == 'Penguins (Classification)' %}
+                    Vous avez choisi le Dataset des Penguins
+                {% elif session['_choix_dataset'] == 'Prix des voitures (Régression)' %}
+                    Vous avez choisi le Dataset du prix des voitures
+                {% elif session['_choix_dataset'] == 'Choisir un dataset personnel' %}
+                    Vous avez choisi d'importer votre dataset
+                {% else %}{% endif %}
+            </div>
+            <div class="col-3"></div>
+            <div class="col-1">
+                <br><br><br><br>
+                <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+                <lottie-player src="https://assets9.lottiefiles.com/packages/lf20_zidar9jm.json"
+                               background="transparent"
+                               speed="1"
+                               style="width: 120px; height: 120px; display: flex; flex-flow: column wrap; " loop
+                               autoplay></lottie-player>
+            </div>
+            <div class="col-2">
+            </div>
         </div>
-        <div class="column_30">
-            <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
-            <lottie-player src="https://assets9.lottiefiles.com/packages/lf20_zidar9jm.json"
-                           background="transparent"
-                           speed="1"
-                           style="width: 120px; height: 120px; display: flex; flex-flow: column wrap; " loop
-                           autoplay></lottie-player>
-        </div>
-        <div class="column_10"></div>
-    </div><br>
+    </div><br><br><br>
 
     {% if row_data %}
-    <div class="row">
-        <div class="column_10"></div>
-        <div class="column_40">
-            <p class="section">Aperçu</p><br>
-            <div style="height: 300px; box-sizing: border-box;">
-                <!-- Afficher le dataset -->
+        <div class="container">
+        <div class="row">
+            <div class="col-1"></div>
+            <div class="col-6">
+                <p class="section">Aperçu</p>
+                <div style="height: 300px; box-sizing: border-box;">
+                    <!-- Afficher le dataset -->
                     <br><br>
                     <table>
                         <tr>
@@ -58,21 +64,25 @@
                             </tr>
                         {% endfor %}
                     </table>
+                </div>
             </div>
+            <div class="col-3">
+                <p class="section">Caractéristiques</p><br>
+                <!-- Affficher les infos du dataset -->
+                <br>
+                <ul style="text-align: center; list-style-position: inside">
+                    <li><b>Taille:</b> {{ caract_dataset['taille'] }}</li>
+                    <li><b>Nombre de valeurs:</b> {{ caract_dataset['nombre_val'] }}</li>
+                    <li><b>Type des colonnes:</b> {{ caract_dataset['type_col'] }}</li>
+                    <li><b>Pourcentage de valeurs manquantes:</b> {{ caract_dataset['pourcentage_missing_val'][0] }}%
+                        ({{ caract_dataset['pourcentage_missing_val'][1] }})
+                    </li>
+                </ul>
+            </div>
+            <div class="col-2"><br></div>
+        </div><br>
         </div>
-        <div class="column_40">
-            <p class="section">Caractéristiques</p><br>
-            <!-- Affficher les infos du dataset -->
-            <br>
-            <ul style="text-align: center; list-style-position: inside">
-                <li><b>Taille:</b> {{ caract_dataset['taille'] }}</li>
-                <li><b>Nombre de valeurs:</b> {{ caract_dataset['nombre_val'] }}</li>
-                <li><b>Type des colonnes:</b> {{ caract_dataset['type_col'] }}</li>
-                <li><b>Pourcentage de valeurs manquantes:</b> {{ caract_dataset['pourcentage_missing_val'][0] }}% ({{ caract_dataset['pourcentage_missing_val'][1] }})</li>
-            </ul>
-        </div>
-        <div class="column_10"></div>
-    </div>
     {% endif %}
+    <br><br><br><br>
 
 {% endblock %}

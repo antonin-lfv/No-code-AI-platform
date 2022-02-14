@@ -11,7 +11,7 @@ from flask_nav.elements import *
 from main_module.static.utils import *
 from main_module.static.classes import *
 
-nav = Nav()
+"""nav = Nav()
 # Menu
 nav.register_element('top', Navbar(
     View('Home', '_home'),
@@ -31,26 +31,26 @@ nav.register_element('top', Navbar(
              View('PCA', 'PCA'),
              View('UMAP', 'UMAP'),
              View('T-SNE', 'TSNE')),
-    View('test', 'test')))
+    View('test', 'test')))"""
 
 app = Flask(__name__)
 app.config.from_object('config')
 bootstrap = Bootstrap(app)
 
+dico_dataset = {
+    'Iris (Classification)': pd.read_csv("main_module/static/datasets/iris.csv"),
+    'Penguins (Classification)': pd.read_csv("main_module/static/datasets/penguins.csv"),
+    'Prix des voitures (Régression)': pd.read_csv("main_module/static/datasets/CarPrice.csv"),
+}
 
 # To get one variable, tape app.config['MY_VARIABLE']
 
 @app.route('/')
-def _home():
-    # pour clear les objets enregistrés sur la session dès qu'on revient au menu
-    session.clear()
-    return render_template('home.html')
-
-@app.route('/home')
 def home():
     # pour clear les objets enregistrés sur la session dès qu'on revient au menu
-    session.clear()
+    # session.clear()
     return render_template('home.html')
+
 
 @app.route('/test', methods=['GET', 'POST'])
 def test():
@@ -70,11 +70,6 @@ def test():
 @app.route('/dataset', methods=['GET', 'POST'])
 def dataset():
     select_dataset = SelectDataset()
-    dico_dataset = {
-        'Iris (Classification)': pd.read_csv("main_module/static/datasets/iris.csv"),
-        'Penguins (Classification)': pd.read_csv("main_module/static/datasets/penguins.csv"),
-        'Prix des voitures (Régression)': pd.read_csv("main_module/static/datasets/CarPrice.csv"),
-    }
     if select_dataset.validate_on_submit():
         _choix_dataset = select_dataset.choix.data
         session['_choix_dataset'] = _choix_dataset
@@ -99,8 +94,13 @@ def dataset():
 @app.route('/analyse_colonnes', methods=['GET', 'POST'])
 def analyse_colonnes():
     # return render_template('analyse_colonnes.html')
-    return render_template("analyse_colonnes.html", column_names=df.columns.values, row_data=list(df.values.tolist()),
-                           zip=zip)
+    if '_choix_dataset' in session.keys():
+        df = dico_dataset[session['_choix_dataset']]
+        return render_template("analyse_colonnes.html", column_names=df.columns.values,
+                               row_data=list(df.values.tolist()),
+                               zip=zip)
+    else:
+        return render_template("analyse_colonnes.html")
 
 
 @app.route('/matrice_correlation', methods=['GET', 'POST'])
@@ -117,33 +117,41 @@ def section_graphiques():
 def regressions():
     return render_template('regressions.html')
 
+
 @app.route('/KNN', methods=['GET', 'POST'])
 def KNN():
     return render_template('KNN.html')
+
 
 @app.route('/KMeans', methods=['GET', 'POST'])
 def KMeans():
     return render_template('KMeans.html')
 
+
 @app.route('/SVM', methods=['GET', 'POST'])
 def SVM():
     return render_template('SVM.html')
+
 
 @app.route('/decision_tree', methods=['GET', 'POST'])
 def decision_tree():
     return render_template('decision_tree.html')
 
+
 @app.route('/XGBoost', methods=['GET', 'POST'])
 def XGBoost():
     return render_template('XGBoost.html')
+
 
 @app.route('/PCA', methods=['GET', 'POST'])
 def PCA():
     return render_template('PCA.html')
 
+
 @app.route('/UMAP', methods=['GET', 'POST'])
 def UMAP():
     return render_template('UMAP.html')
+
 
 @app.route('/TSNE', methods=['GET', 'POST'])
 def TSNE():
@@ -158,5 +166,3 @@ def user(name):
 if __name__ == '__main__':
     app.run()
 """
-
-nav.init_app(app)

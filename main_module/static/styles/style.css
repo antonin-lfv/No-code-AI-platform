@@ -5,7 +5,6 @@
     word-spacing: 2px;
     line-height: 1.4;
     font-size: small;
-    box-sizing: border-box;
 }
 
 h3 {
@@ -17,23 +16,26 @@ a:focus,
 a:hover {
  text-decoration: none;
 }
-
-body {
-
+a:link { /* Hyperliens */
+    color: cornflowerblue;
 }
+
+a:visited { /* Hyperliens */
+    color: cornflowerblue;
+}
+
+a:hover { /* Hyperliens */
+    color: royalblue;
+}
+
 table {
     font-family: arial, sans-serif;
     border-collapse: collapse;
-    height: 300px;
+    height: 400px;
     overflow-x: auto;
     display: block;
 }
 
-.row {
-  /*width: 100%;
-  overflow: hidden;*/
-    display: flex;
-}
 
 td, th {
     border: 1px solid #dddddd;
@@ -63,7 +65,6 @@ tr:nth-child(even) {
     font-weight: bold;
     text-align: center;
     text-decoration: underline;
-    text-decoration-color: #4976E4;
     text-decoration-thickness: 5px;
 }
 
@@ -86,68 +87,6 @@ tr:nth-child(even) {
     text-decoration: underline;
     text-decoration-color: #000;
     text-decoration-thickness: 1px;
-}
-
-/* For columns */
-.column_70 {
-    flex: 70%;
-}
-.column_50 {
-    flex: 50%;
-}
-.column_40 {
-    flex: 40%;
-}
-.column_30 {
-    flex: 30%;
-}
-.column_20 {
-    flex: 20%;
-}
-.column_10 {
-    flex: 10%;
-}
-.right{
-    right: 0;
-}
-.left{
-    left: 0;
-}
-.nav{
-    width: 30%;
-    height: 100%;
-    position: fixed;
-    overflow-x: hidden;
-    z-index: 1;
-    top: 8vh;
-    padding-top: 20px;
-}
-.content{
-    width: 90%;
-    height: 100%;
-    position: fixed;
-    overflow-x: hidden;
-    z-index: 1;
-    top: 0;
-    padding-top: 20px;
-}
-
-/* For element */
-hr { /* Ligne séparatrice */
-    width: 80%;
-    text-align: center;
-}
-
-a:link { /* Hyperliens */
-    color: cornflowerblue;
-}
-
-a:visited { /* Hyperliens */
-    color: cornflowerblue;
-}
-
-a:hover { /* Hyperliens */
-    color: royalblue;
 }
 
 /* For images */

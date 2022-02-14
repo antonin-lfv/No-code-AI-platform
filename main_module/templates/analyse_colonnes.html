@@ -4,27 +4,31 @@
 
     <br><p class="grand_titre">Analyse des colonnes</p>
 
-    <div class="row">
-    <div class="column_10"></div>
-    <div class="column_50">
-        <table>
-            <tr>
-                {% for col in column_names %}
-                    <th>{{ col }}</th>
-                {% endfor %}
-            </tr>
-            {% for row in row_data %}
-                <tr>
-                    {% for col, row_ in zip(column_names, row) %}
-                        <td>{{ row_ }}</td>
-                    {% endfor %}
-                </tr>
-            {% endfor %}
+    {% if row_data %}
+        <div class="container">
+            <div class="row">
+                <div class="col-1"></div>
+                <div class="col-6">
+                    <table>
+                        <tr>
+                            {% for col in column_names %}
+                                <th>{{ col }}</th>
+                            {% endfor %}
+                        </tr>
+                        {% for row in row_data %}
+                            <tr>
+                                {% for col, row_ in zip(column_names, row) %}
+                                    <td>{{ row_ }}</td>
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
 
-        </table>
-    </div>
-    <div class="column_30"></div>
-    <div class="column_10"></div>
-    </div>
+                    </table>
+                </div>
+                <div class="col-3"></div>
+                <div class="col-2"></div>
+            </div>
+        </div>
+    {% endif %}
 
 {% endblock %}

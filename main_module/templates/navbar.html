@@ -1,0 +1,54 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="{{ url_for('home') }}">No-code AI platform</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+                aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('home') }}">Accueil</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('dataset') }}">Dataset</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('analyse_colonnes') }}">Analyse des colonnes</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('matrice_correlation') }}">Matrice de corrélations</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('section_graphiques') }}">Graphiques</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('regressions') }}">Régressions</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" role="button"
+                       data-bs-toggle="dropdown" aria-expanded="false">
+                        Classifications
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <li><a class="dropdown-item" href="{{ url_for('KNN') }}">KNN</a></li>
+                        <li><a class="dropdown-item" href="{{ url_for('KMeans') }}">K-Means</a></li>
+                        <li><a class="dropdown-item" href="{{ url_for('SVM') }}">SVM</a></li>
+                        <li><a class="dropdown-item" href="{{ url_for('decision_tree') }}">Decision Tree</a></li>
+                    </ul>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" role="button"
+                       data-bs-toggle="dropdown" aria-expanded="false">
+                        Réduction de dimension
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <li><a class="dropdown-item" href="{{ url_for('PCA') }}">PCA</a></li>
+                        <li><a class="dropdown-item" href="{{ url_for('UMAP') }}">UMAP</a></li>
+                        <li><a class="dropdown-item" href="{{ url_for('TSNE') }}">t-SNE</a></li>
+                    </ul>
+                </li>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
