@@ -63,7 +63,7 @@ tr:nth-child(even) {
 .grand_titre {
     font-size: 30px !important;
     font-weight: bold;
-    text-align: center;
+    padding-left: 10%;
     text-decoration: underline;
     text-decoration-thickness: 5px;
 }
