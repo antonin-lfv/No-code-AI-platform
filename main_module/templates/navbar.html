@@ -1,3 +1,4 @@
+
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="{{ url_for('home') }}">No-code AI platform</a>
@@ -8,25 +9,25 @@
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('home') }}">Accueil</a>
+                    <a class="nav-link {% if request.endpoint == 'home' %}active{% endif %}" href="{{ url_for('home') }}">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('dataset') }}">Dataset</a>
+                    <a class="nav-link {% if request.endpoint == 'dataset' %}active{% endif %}" href="{{ url_for('dataset') }}">Dataset</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('analyse_colonnes') }}">Analyse des colonnes</a>
+                    <a class="nav-link {% if request.endpoint == 'analyse_colonnes' %}active{% endif %}" href="{{ url_for('analyse_colonnes') }}">Analyse des colonnes</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('matrice_correlation') }}">Matrice de corrélations</a>
+                    <a class="nav-link {% if request.endpoint == 'matrice_correlation' %}active{% endif %}" href="{{ url_for('matrice_correlation') }}">Matrice de corrélations</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('section_graphiques') }}">Graphiques</a>
+                    <a class="nav-link {% if request.endpoint == 'section_graphiques' %}active{% endif %}" href="{{ url_for('section_graphiques') }}">Graphiques</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('regressions') }}">Régressions</a>
+                    <a class="nav-link {% if request.endpoint == 'regressions' %}active{% endif %}" href="{{ url_for('regressions') }}">Régressions</a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" role="button"
+                    <a class="nav-link dropdown-toggle  {% if 'KNN' in request.endpoint or 'KMeans' in request.endpoint or 'SVM' in request.endpoint or 'decision_tree' in request.endpoint%}active{% endif %}" id="navbarDropdownMenuLink" role="button"
                        data-bs-toggle="dropdown" aria-expanded="false">
                         Classifications
                     </a>
@@ -36,8 +37,9 @@
                         <li><a class="dropdown-item" href="{{ url_for('SVM') }}">SVM</a></li>
                         <li><a class="dropdown-item" href="{{ url_for('decision_tree') }}">Decision Tree</a></li>
                     </ul>
+                </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" role="button"
+                    <a class="nav-link dropdown-toggle {% if 'PCA' in request.endpoint or 'UMAP' in request.endpoint or 'TSNE' in request.endpoint%}active{% endif %}" id="navbarDropdownMenuLink" role="button"
                        data-bs-toggle="dropdown" aria-expanded="false">
                         Réduction de dimension
                     </a>
@@ -46,7 +48,6 @@
                         <li><a class="dropdown-item" href="{{ url_for('UMAP') }}">UMAP</a></li>
                         <li><a class="dropdown-item" href="{{ url_for('TSNE') }}">t-SNE</a></li>
                     </ul>
-                </li>
                 </li>
             </ul>
         </div>

@@ -138,11 +138,6 @@ def decision_tree():
     return render_template('decision_tree.html')
 
 
-@app.route('/XGBoost', methods=['GET', 'POST'])
-def XGBoost():
-    return render_template('XGBoost.html')
-
-
 @app.route('/PCA', methods=['GET', 'POST'])
 def PCA():
     return render_template('PCA.html')

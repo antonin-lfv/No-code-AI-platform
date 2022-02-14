@@ -1,13 +1,12 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
+    <p class="grand_titre">Chargement du Dataset</p><br>
+    <br>
     <div class="container">
         <div class="row">
             <div class="col-1"></div>
             <div class="col-5"><br><br>
-                <p class="grand_titre">Chargement du Dataset</p><br>
-            <br>
                 <form method="POST">
                     {{ select_dataset.hidden_tag() }}
                     {{ select_dataset.choix.label }}
@@ -28,7 +27,6 @@
             </div>
             <div class="col-3"></div>
             <div class="col-1">
-                <br><br><br><br>
                 <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
                 <lottie-player src="https://assets9.lottiefiles.com/packages/lf20_zidar9jm.json"
                                background="transparent"
@@ -43,44 +41,45 @@
 
     {% if row_data %}
         <div class="container">
-        <div class="row">
-            <div class="col-1"></div>
-            <div class="col-6">
-                <p class="section">Aperçu</p>
-                <div style="height: 300px; box-sizing: border-box;">
-                    <!-- Afficher le dataset -->
-                    <br><br>
-                    <table>
-                        <tr>
-                            {% for col in column_names %}
-                                <th>{{ col }}</th>
-                            {% endfor %}
-                        </tr>
-                        {% for row in row_data %}
+            <div class="row">
+                <div class="col-1"></div>
+                <div class="col-6">
+                    <p class="section">Aperçu</p>
+                    <div style="height: 300px; box-sizing: border-box;">
+                        <!-- Afficher le dataset -->
+                        <br><br>
+                        <table>
                             <tr>
-                                {% for col, row_ in zip(column_names, row) %}
-                                    <td>{{ row_ }}</td>
+                                {% for col in column_names %}
+                                    <th>{{ col }}</th>
                                 {% endfor %}
                             </tr>
-                        {% endfor %}
-                    </table>
+                            {% for row in row_data %}
+                                <tr>
+                                    {% for col, row_ in zip(column_names, row) %}
+                                        <td>{{ row_ }}</td>
+                                    {% endfor %}
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
                 </div>
+                <div class="col-3">
+                    <p class="section">Caractéristiques</p><br>
+                    <!-- Affficher les infos du dataset -->
+                    <br>
+                    <ul style="text-align: center; list-style-position: inside">
+                        <li><b>Taille:</b> {{ caract_dataset['taille'] }}</li>
+                        <li><b>Nombre de valeurs:</b> {{ caract_dataset['nombre_val'] }}</li>
+                        <li><b>Type des colonnes:</b> {{ caract_dataset['type_col'] }}</li>
+                        <li><b>Pourcentage de valeurs manquantes:</b> {{ caract_dataset['pourcentage_missing_val'][0] }}%
+                            ({{ caract_dataset['pourcentage_missing_val'][1] }})
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-2"><br></div>
             </div>
-            <div class="col-3">
-                <p class="section">Caractéristiques</p><br>
-                <!-- Affficher les infos du dataset -->
-                <br>
-                <ul style="text-align: center; list-style-position: inside">
-                    <li><b>Taille:</b> {{ caract_dataset['taille'] }}</li>
-                    <li><b>Nombre de valeurs:</b> {{ caract_dataset['nombre_val'] }}</li>
-                    <li><b>Type des colonnes:</b> {{ caract_dataset['type_col'] }}</li>
-                    <li><b>Pourcentage de valeurs manquantes:</b> {{ caract_dataset['pourcentage_missing_val'][0] }}%
-                        ({{ caract_dataset['pourcentage_missing_val'][1] }})
-                    </li>
-                </ul>
-            </div>
-            <div class="col-2"><br></div>
-        </div><br>
+            <br>
         </div>
     {% endif %}
     <br><br><br><br>
