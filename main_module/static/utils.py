@@ -40,5 +40,15 @@ def type_col_dataset(df):
     num_col_types = [str(df.dtypes.value_counts().values[i]) for i in range(len(df.dtypes.value_counts()))]
     res = ""
     for i, j in zip(types_col, num_col_types):
-        res += f"{i} -> {j}  "
+        res += f"{i} -> {j}  \n"
     return res
+
+def all_caract(df):
+    return {
+                'taille': df.shape,
+                'nombre_de_val': str(df.shape[0] * df.shape[1]),
+                'type_col': type_col_dataset(df),
+                'pourcentage_missing_val': [
+                    str(round(sum(df.isnull().sum(axis=1).tolist()) * 100 / (df.shape[0] * df.shape[1]), 2)),
+                    str(sum(df.isnull().sum(axis=1).tolist()))]
+            }

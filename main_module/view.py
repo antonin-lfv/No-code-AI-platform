@@ -11,28 +11,6 @@ from flask_nav.elements import *
 from main_module.static.utils import *
 from main_module.static.classes import *
 
-"""nav = Nav()
-# Menu
-nav.register_element('top', Navbar(
-    View('Home', '_home'),
-    View('Accueil', 'home'),
-    View('Dataset', 'dataset'),
-    View('Matrice de corrélations', 'matrice_correlation'),
-    View('Section graphiques', 'section_graphiques'),
-    View('Régressions', 'regressions'),
-    Subgroup('Classifications',
-             View('KNN', 'KNN'),
-             View('K-Means', 'KMeans'),
-             View('SVM', 'SVM'),
-             View('Decision tree', 'decision_tree')),
-    Subgroup('Ensemble learning',
-             View('XGBoost', 'XGBoost')),
-    Subgroup('Réduction de dimension',
-             View('PCA', 'PCA'),
-             View('UMAP', 'UMAP'),
-             View('T-SNE', 'TSNE')),
-    View('test', 'test')))"""
-
 app = Flask(__name__)
 app.config.from_object('config')
 bootstrap = Bootstrap(app)
@@ -75,20 +53,19 @@ def dataset():
         session['_choix_dataset'] = _choix_dataset
         if session['_choix_dataset'] in dico_dataset.keys():
             df = dico_dataset[session['_choix_dataset']]
-            caract_dataset = {
-                'taille': df.shape,
-                'nombre_de_val': str(df.shape[0] * df.shape[1]),
-                'type_col': type_col_dataset(df),
-                'pourcentage_missing_val': [
-                    str(round(sum(df.isnull().sum(axis=1).tolist()) * 100 / (df.shape[0] * df.shape[1]), 2)),
-                    str(sum(df.isnull().sum(axis=1).tolist()))]
-            }
+            caract_dataset = all_caract(df)
             return render_template('dataset.html', select_dataset=select_dataset, column_names=df.columns.values,
                                    row_data=list(df.values.tolist()), zip=zip, caract_dataset=caract_dataset)
         else:
             return render_template('dataset.html', select_dataset=select_dataset)
     else:
-        return render_template('dataset.html', select_dataset=select_dataset)
+        if session['_choix_dataset'] in dico_dataset.keys():
+            df = dico_dataset[session['_choix_dataset']]
+            caract_dataset = all_caract(df)
+            return render_template('dataset.html', select_dataset=select_dataset, column_names=df.columns.values,
+                                   row_data=list(df.values.tolist()), zip=zip, caract_dataset=caract_dataset)
+        else:
+            return render_template('dataset.html', select_dataset=select_dataset)
 
 
 @app.route('/analyse_colonnes', methods=['GET', 'POST'])
