@@ -3,7 +3,7 @@ from wtforms import StringField, SubmitField, SelectField, SelectMultipleField, 
 from wtforms.validators import DataRequired
 
 label_dataset = "Dataset"
-choix_dataset = ['-- Choisissez une option --', 'Iris (Classification)', 'Penguins (Classification)', 'Prix des voitures (Régression)', 'Choisir un dataset personnel']
+choix_dataset = ['-- Choisissez une option --', 'Iris (Classification)', 'Penguins (Classification)', 'Prix des voitures (Régression)']  #, 'Choisir un dataset personnel']
 
 class SelectDataset(FlaskForm):
     choix = SelectField(label=label_dataset, choices=choix_dataset, validators=[DataRequired()], default=choix_dataset[0])

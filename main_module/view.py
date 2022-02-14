@@ -26,7 +26,7 @@ dico_dataset = {
 @app.route('/')
 def home():
     # pour clear les objets enregistrés sur la session dès qu'on revient au menu
-    # session.clear()
+    session.clear()
     return render_template('home.html')
 
 
@@ -59,7 +59,7 @@ def dataset():
         else:
             return render_template('dataset.html', select_dataset=select_dataset)
     else:
-        if session['_choix_dataset'] in dico_dataset.keys():
+        if '_choix_dataset' in session.keys():
             df = dico_dataset[session['_choix_dataset']]
             caract_dataset = all_caract(df)
             return render_template('dataset.html', select_dataset=select_dataset, column_names=df.columns.values,
@@ -77,57 +77,117 @@ def analyse_colonnes():
                                row_data=list(df.values.tolist()),
                                zip=zip)
     else:
-        return render_template("analyse_colonnes.html")
+        return render_template("waiting_for_data.html")
 
 
 @app.route('/matrice_correlation', methods=['GET', 'POST'])
 def matrice_correlation():
-    return render_template('matrice_correlation.html')
+    if '_choix_dataset' in session.keys():
+        df = dico_dataset[session['_choix_dataset']]
+        return render_template("matrice_correlation.html", column_names=df.columns.values,
+                               row_data=list(df.values.tolist()),
+                               zip=zip)
+    else:
+        return render_template("waiting_for_data.html")
 
 
 @app.route('/section_graphique', methods=['GET', 'POST'])
 def section_graphiques():
-    return render_template('section_graphiques.html')
+    if '_choix_dataset' in session.keys():
+        df = dico_dataset[session['_choix_dataset']]
+        return render_template("section_graphiques.html", column_names=df.columns.values,
+                               row_data=list(df.values.tolist()),
+                               zip=zip)
+    else:
+        return render_template("waiting_for_data.html")
 
 
 @app.route('/regressions', methods=['GET', 'POST'])
 def regressions():
-    return render_template('regressions.html')
+    if '_choix_dataset' in session.keys():
+        df = dico_dataset[session['_choix_dataset']]
+        return render_template("regressions.html", column_names=df.columns.values,
+                               row_data=list(df.values.tolist()),
+                               zip=zip)
+    else:
+        return render_template("waiting_for_data.html")
 
 
 @app.route('/KNN', methods=['GET', 'POST'])
 def KNN():
-    return render_template('KNN.html')
+    if '_choix_dataset' in session.keys():
+        df = dico_dataset[session['_choix_dataset']]
+        return render_template("KNN.html", column_names=df.columns.values,
+                               row_data=list(df.values.tolist()),
+                               zip=zip)
+    else:
+        return render_template("waiting_for_data.html")
 
 
 @app.route('/KMeans', methods=['GET', 'POST'])
 def KMeans():
-    return render_template('KMeans.html')
+    if '_choix_dataset' in session.keys():
+        df = dico_dataset[session['_choix_dataset']]
+        return render_template("KMeans.html", column_names=df.columns.values,
+                               row_data=list(df.values.tolist()),
+                               zip=zip)
+    else:
+        return render_template("waiting_for_data.html")
 
 
 @app.route('/SVM', methods=['GET', 'POST'])
 def SVM():
-    return render_template('SVM.html')
+    if '_choix_dataset' in session.keys():
+        df = dico_dataset[session['_choix_dataset']]
+        return render_template("SVM.html", column_names=df.columns.values,
+                               row_data=list(df.values.tolist()),
+                               zip=zip)
+    else:
+        return render_template("waiting_for_data.html")
 
 
 @app.route('/decision_tree', methods=['GET', 'POST'])
 def decision_tree():
-    return render_template('decision_tree.html')
+    if '_choix_dataset' in session.keys():
+        df = dico_dataset[session['_choix_dataset']]
+        return render_template("decision_tree.html", column_names=df.columns.values,
+                               row_data=list(df.values.tolist()),
+                               zip=zip)
+    else:
+        return render_template("waiting_for_data.html")
 
 
 @app.route('/PCA', methods=['GET', 'POST'])
 def PCA():
-    return render_template('PCA.html')
+    if '_choix_dataset' in session.keys():
+        df = dico_dataset[session['_choix_dataset']]
+        return render_template("PCA.html", column_names=df.columns.values,
+                               row_data=list(df.values.tolist()),
+                               zip=zip)
+    else:
+        return render_template("waiting_for_data.html")
 
 
 @app.route('/UMAP', methods=['GET', 'POST'])
 def UMAP():
-    return render_template('UMAP.html')
+    if '_choix_dataset' in session.keys():
+        df = dico_dataset[session['_choix_dataset']]
+        return render_template("UMAP.html", column_names=df.columns.values,
+                               row_data=list(df.values.tolist()),
+                               zip=zip)
+    else:
+        return render_template("waiting_for_data.html")
 
 
 @app.route('/TSNE', methods=['GET', 'POST'])
 def TSNE():
-    return render_template('TSNE.html')
+    if '_choix_dataset' in session.keys():
+        df = dico_dataset[session['_choix_dataset']]
+        return render_template("TSNE.html", column_names=df.columns.values,
+                               row_data=list(df.values.tolist()),
+                               zip=zip)
+    else:
+        return render_template("waiting_for_data.html")
 
 
 """
