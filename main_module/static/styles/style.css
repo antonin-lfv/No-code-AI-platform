@@ -20,10 +20,6 @@ a:link { /* Hyperliens */
     color: cornflowerblue;
 }
 
-a:visited { /* Hyperliens */
-    color: cornflowerblue;
-}
-
 a:hover { /* Hyperliens */
     color: royalblue;
 }

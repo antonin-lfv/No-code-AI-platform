@@ -1,19 +1,36 @@
+import wtforms.widgets
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, SelectField, SelectMultipleField, FieldList
-from wtforms.validators import DataRequired
+from wtforms import StringField, SubmitField, SelectField, SelectMultipleField, FieldList, IntegerField, BooleanField, TextAreaField, RadioField
+from wtforms.validators import InputRequired, Length, DataRequired
+
+"""
+StringField: A text input.
+TextAreaField: A text area field.
+IntegerField: A field for integers.
+BooleanField: A checkbox field.
+RadioField: A field for displaying a list of radio buttons for the user to choose from.
+"""
 
 label_dataset = "Dataset"
 choix_dataset = ['-- Choisissez une option --', 'Iris (Classification)', 'Penguins (Classification)', 'Prix des voitures (Régression)']  #, 'Choisir un dataset personnel']
+label_colonnes = "Choisissez des colonnes"
 
 class SelectDataset(FlaskForm):
-    choix = SelectField(label=label_dataset, choices=choix_dataset, validators=[DataRequired()], default=choix_dataset[0])
+    """ Page Dataset """
+    choix = SelectField(label=label_dataset, choices=choix_dataset, validators=[InputRequired()], default=choix_dataset[0])
     submit = SubmitField('Choisir')
 
-
-
-
-
-
+class CourseForm(FlaskForm):
+    title = StringField('Title', validators=[InputRequired(),
+                                             Length(min=10, max=100)])
+    description = TextAreaField('Course Description',
+                                validators=[InputRequired(),
+                                            Length(max=200)])
+    price = IntegerField('Price', validators=[InputRequired()])
+    level = RadioField('Level',
+                       choices=['Beginner', 'Intermediate', 'Advanced'],
+                       validators=[InputRequired()])
+    available = BooleanField('Available', default='checked')
 
 
 

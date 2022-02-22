@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 from scipy.spatial import distance
+from collections import Counter
 
 def max_std(dataset):  # colonne de maximum de variance
     l = []
@@ -44,6 +45,7 @@ def type_col_dataset(df):
     return res
 
 def all_caract(df):
+    """Page Dataset"""
     return {
                 'taille': df.shape,
                 'nombre_de_val': str(df.shape[0] * df.shape[1]),
@@ -52,3 +54,27 @@ def all_caract(df):
                     str(round(sum(df.isnull().sum(axis=1).tolist()) * 100 / (df.shape[0] * df.shape[1]), 2)),
                     str(sum(df.isnull().sum(axis=1).tolist()))]
             }
+
+def column_caract(df, selected_nom_col):
+    """Page analyse des colonnes"""
+    output = {}
+    for col in selected_nom_col:
+        output[col] = {}
+        output[col]['type_col'] = type(df[str(col)])
+        output[col]['type_valeurs'] = type(df[col].iloc[1])
+        n_data = df[col].to_numpy()
+        if n_data.dtype == float:
+            moyenne = df[col].mean()
+            variance = df[col].std()
+            max_val = df[col].max()
+            min_val = df[col].min()
+            output[col]['Moyenne'] = round(moyenne, 3)
+            output[col]['Variance'] = round(variance, 3)
+            output[col]['Maximum'] = max_val
+            output[col]['Minimum'] = min_val
+
+        output[col]['plus_presentes'] = str((Counter(n_data).most_common()[0])[0])+' apparait '+str((Counter(n_data).most_common()[0])[1])+' fois, '+str((Counter(n_data).most_common()[1])[0])+' apparait '+str((Counter(n_data).most_common()[1])[1])+' fois'
+        output[col]['nb_val_manquantes'] = sum(pd.DataFrame(n_data).isnull().sum(axis=1).tolist())
+        output[col]['Longueur'] = n_data.shape[0]
+        output[col]['val_differentes_non_NaN'] = abs(len(Counter(n_data)) - sum(pd.DataFrame(n_data).isnull().sum(axis=1).tolist()))
+    return output

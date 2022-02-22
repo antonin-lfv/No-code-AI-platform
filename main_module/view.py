@@ -3,6 +3,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 import numpy as np
 import pandas as pd
+import wtforms.widgets
 from flask import Flask, request, redirect, abort, render_template, session, flash
 from flask_bootstrap import Bootstrap
 from flask_nav import Nav
@@ -20,6 +21,7 @@ dico_dataset = {
     'Penguins (Classification)': pd.read_csv("main_module/static/datasets/penguins.csv"),
     'Prix des voitures (Régression)': pd.read_csv("main_module/static/datasets/CarPrice.csv"),
 }
+
 
 # To get one variable, tape app.config['MY_VARIABLE']
 
@@ -70,12 +72,18 @@ def dataset():
 
 @app.route('/analyse_colonnes', methods=['GET', 'POST'])
 def analyse_colonnes():
-    # return render_template('analyse_colonnes.html')
     if '_choix_dataset' in session.keys():
         df = dico_dataset[session['_choix_dataset']]
-        return render_template("analyse_colonnes.html", column_names=df.columns.values,
-                               row_data=list(df.values.tolist()),
-                               zip=zip)
+        nom_col = df.columns.values
+        selected_nom_col, caract_col = None, None
+        try:
+            selected_nom_col = request.form.keys()
+            caract_col = column_caract(df, selected_nom_col)
+        except:
+            ...
+        return render_template("analyse_colonnes.html", nom_col=nom_col, selected_nom_col=selected_nom_col,
+                               row_data=list(df.values.tolist()), zip=zip, caract_col=caract_col
+                               )
     else:
         return render_template("waiting_for_data.html")
 
