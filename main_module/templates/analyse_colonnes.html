@@ -19,12 +19,6 @@
                         <form method="POST" action="{{ url_for('analyse_colonnes') }}">
                             <h3 class="dropdown-header">Colonnes</h3>
                             <div class="dropdown-divider"></div>
-                            <div class="form-check">
-                                <input type="checkbox" class="form-check-input" id="dropdownCheck2" name="all_col">
-                                <label class="form-check-label" for="dropdownCheck2">
-                                    Tout selectionner
-                                </label>
-                            </div>
                             {% for colonne in nom_col %}
                                 <div class="form-check">
                                     <input type="checkbox" class="form-check-input" id="dropdownCheck2"
