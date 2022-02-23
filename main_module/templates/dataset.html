@@ -44,6 +44,7 @@
                         </form>
                     </div>
                 </div>
+
                 <br><br>
                 {% if session['_choix_dataset'] == 'iris' %}
                     <div class="alert alert-success" role="alert">
@@ -81,7 +82,8 @@
     {% if row_data %}
         <div class="container">
             <div class="row">
-                <div class="col-7">
+            <div class="col-1"></div>
+                <div class="col-6">
                     <p class="section">Aperçu</p>
                     <div style="height: 300px; box-sizing: border-box;">
                         <!-- Afficher le dataset -->
