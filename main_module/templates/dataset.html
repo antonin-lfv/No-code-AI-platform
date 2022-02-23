@@ -3,27 +3,68 @@
 {% block content %}
 
     <div class="container">
+        <br>
         <div class="row">
-            <div class="col-5"><br><br>
-                <form method="POST" class="form form-horizontal">
-                    {{ select_dataset.hidden_tag() }}
-                    {{ select_dataset.choix.label }}
-                    {{ select_dataset.choix }}
-                    {{ select_dataset.submit() }}
-                </form>
-                <br>
-
-                {% if session['_choix_dataset'] == 'Iris (Classification)' %}
-                    Vous avez choisi le Dataset des Iris
-                {% elif session['_choix_dataset'] == 'Penguins (Classification)' %}
-                    Vous avez choisi le Dataset des Penguins
-                {% elif session['_choix_dataset'] == 'Prix des voitures (Régression)' %}
-                    Vous avez choisi le Dataset du prix des voitures
-                {% elif session['_choix_dataset'] == 'Choisir un dataset personnel' %}
-                    Vous avez choisi d'importer votre dataset
-                {% else %}{% endif %}
+            <div class="col-1"></div>
+            <div class="col-6"><br><br>
+                <!-- split button -->
+                <div class="btn-group">
+                    <button type="button" class="btn btn-primary btn-lg ">Choisir des données</button>
+                    <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split btn-lg "
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="sr-only"></span>
+                    </button>
+                    <div class="dropdown-menu p-4">
+                        <form method="POST" action="{{ url_for('dataset') }}">
+                            <h3 class="dropdown-header">Choix du dataset</h3>
+                            <div class="dropdown-divider"></div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="dropdownCheck2"
+                                       name="iris">
+                                <label class="form-check-label" for="dropdownCheck2">
+                                    Iris (Classification)
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="dropdownCheck2"
+                                       name="penguins">
+                                <label class="form-check-label" for="dropdownCheck2">
+                                    Penguins (Classification)
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="dropdownCheck2"
+                                       name="voitures">
+                                <label class="form-check-label" for="dropdownCheck2">
+                                    Prix des voitures (Régression)
+                                </label>
+                            </div>
+                            <br>
+                            <input type="submit" class="btn btn-success" value="Envoyer"/>
+                        </form>
+                    </div>
+                </div>
+                <br><br>
+                {% if session['_choix_dataset'] == 'iris' %}
+                    <div class="alert alert-success" role="alert">
+                        Vous avez choisi le Dataset des Iris
+                    </div>
+                {% elif session['_choix_dataset'] == 'penguins' %}
+                    <div class="alert alert-success" role="alert">
+                        Vous avez choisi le Dataset des Penguins
+                    </div>
+                {% elif session['_choix_dataset'] == 'voitures' %}
+                    <div class="alert alert-success" role="alert">
+                        Vous avez choisi le Dataset du prix des voitures
+                    </div>
+                {% elif session['_choix_dataset'] == 'custom' %}
+                    <div class="alert alert-success" role="alert">
+                        This is a info alert—check it out!
+                    </div>
+                {% else %}
+                {% endif %}
             </div>
-            <div class="col-3"></div>
+            <div class="col-1"></div>
             <div class="col-1">
                 <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
                 <lottie-player src="https://assets9.lottiefiles.com/packages/lf20_zidar9jm.json"
@@ -45,26 +86,26 @@
                     <div style="height: 300px; box-sizing: border-box;">
                         <!-- Afficher le dataset -->
                         <br><br>
-                    <div class="d-flex justify-content-center">
-                        <table>
-                            <tr>
-                                {% for col in column_names %}
-                                    <th>{{ col }}</th>
-                                {% endfor %}
-                            </tr>
-                            {% for row in row_data %}
+                        <div class="d-flex justify-content-center">
+                            <table>
                                 <tr>
-                                    {% for col, row_ in zip(column_names, row) %}
-                                        <td>{{ row_ }}</td>
+                                    {% for col in column_names %}
+                                        <th>{{ col }}</th>
                                     {% endfor %}
                                 </tr>
-                            {% endfor %}
-                        </table>
-                    </div>
+                                {% for row in row_data %}
+                                    <tr>
+                                        {% for col, row_ in zip(column_names, row) %}
+                                            <td>{{ row_ }}</td>
+                                        {% endfor %}
+                                    </tr>
+                                {% endfor %}
+                            </table>
+                        </div>
                     </div>
                 </div>
-            <div class="col-1"></div>
-                <div class="col-3">
+                <div class="col-1"></div>
+                <div class="col-2">
                     <p class="section">Caractéristiques</p><br>
                     <!-- Affficher les infos du dataset -->
                     <br>

@@ -19,3 +19,21 @@ with
 def result():
     return render_template('result.html', user_name="Anto")
 ```
+
+
+
+## Info boxes
+https://getbootstrap.com/docs/4.0/components/alerts/
+
+
+## Collapse
+https://getbootstrap.com/docs/4.0/components/collapse/
+
+
+## dropdowns
+https://getbootstrap.com/docs/4.0/components/dropdowns/
+
+
+## over texte
+https://getbootstrap.com/docs/4.0/components/popovers/
+https://getbootstrap.com/docs/4.0/components/tooltips/

@@ -17,9 +17,9 @@ app.config.from_object('config')
 bootstrap = Bootstrap(app)
 
 dico_dataset = {
-    'Iris (Classification)': pd.read_csv("main_module/static/datasets/iris.csv"),
-    'Penguins (Classification)': pd.read_csv("main_module/static/datasets/penguins.csv"),
-    'Prix des voitures (Régression)': pd.read_csv("main_module/static/datasets/CarPrice.csv"),
+    'iris': pd.read_csv("main_module/static/datasets/iris.csv"),
+    'penguins': pd.read_csv("main_module/static/datasets/penguins.csv"),
+    'voitures': pd.read_csv("main_module/static/datasets/CarPrice.csv"),
 }
 
 
@@ -49,25 +49,25 @@ def test():
 
 @app.route('/dataset', methods=['GET', 'POST'])
 def dataset():
-    select_dataset = SelectDataset()
-    if select_dataset.validate_on_submit():
-        _choix_dataset = select_dataset.choix.data
+    _choix_dataset = None
+    if request.method == "POST":
+        _choix_dataset = list(request.form.keys())[0]
         session['_choix_dataset'] = _choix_dataset
         if session['_choix_dataset'] in dico_dataset.keys():
             df = dico_dataset[session['_choix_dataset']]
             caract_dataset = all_caract(df)
-            return render_template('dataset.html', select_dataset=select_dataset, column_names=df.columns.values,
+            return render_template('dataset.html', select_dataset=_choix_dataset, column_names=df.columns.values,
                                    row_data=list(df.values.tolist()), zip=zip, caract_dataset=caract_dataset)
         else:
-            return render_template('dataset.html', select_dataset=select_dataset)
+            return render_template('dataset.html', select_dataset=_choix_dataset)
     else:
         if '_choix_dataset' in session.keys():
             df = dico_dataset[session['_choix_dataset']]
             caract_dataset = all_caract(df)
-            return render_template('dataset.html', select_dataset=select_dataset, column_names=df.columns.values,
+            return render_template('dataset.html', select_dataset=_choix_dataset, column_names=df.columns.values,
                                    row_data=list(df.values.tolist()), zip=zip, caract_dataset=caract_dataset)
         else:
-            return render_template('dataset.html', select_dataset=select_dataset)
+            return render_template('dataset.html', select_dataset=_choix_dataset)
 
 
 @app.route('/analyse_colonnes', methods=['GET', 'POST'])
@@ -76,14 +76,11 @@ def analyse_colonnes():
         df = dico_dataset[session['_choix_dataset']]
         nom_col = df.columns.values
         selected_nom_col, caract_col = None, None
-        try:
+        if request.method == "POST":
             selected_nom_col = request.form.keys()
             caract_col = column_caract(df, selected_nom_col)
-        except:
-            ...
         return render_template("analyse_colonnes.html", nom_col=nom_col, selected_nom_col=selected_nom_col,
-                               row_data=list(df.values.tolist()), zip=zip, caract_col=caract_col
-                               )
+                               row_data=list(df.values.tolist()), zip=zip, caract_col=caract_col)
     else:
         return render_template("waiting_for_data.html")
 

@@ -90,3 +90,8 @@ img {
     max-width: 100%;
     height: auto;
 }
+
+/* Bootstrap alert - fit the text */
+.alert {
+  display:inline-block;
+}
