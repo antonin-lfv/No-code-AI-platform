@@ -72,6 +72,11 @@ def analyse_colonnes():
             caract_col_analyse = column_caract(df, session['selected_nom_col_analyse'])
             return render_template("analyse_colonnes.html", nom_col=nom_col,
                                    row_data=list(df.values.tolist()), zip=zip, caract_col_analyse=caract_col_analyse)
+
+        else:
+            caract_col_analyse = None
+            return render_template("analyse_colonnes.html", nom_col=nom_col,
+                                   row_data=list(df.values.tolist()), zip=zip, caract_col_analyse=caract_col_analyse)
     else:
         return render_template("waiting_for_data.html")
 
