@@ -16,31 +16,15 @@
                     </button>
                     <div class="dropdown-menu p-4">
                         <form method="POST" action="{{ url_for('dataset') }}">
-                            <h3 class="dropdown-header">Choix du dataset</h3>
+                            <h1 class="dropdown-header"><strong>Choix du dataset</strong></h1>
                             <div class="dropdown-divider"></div>
-                            <div class="form-check">
-                                <input type="checkbox" class="form-check-input" id="dropdownCheck2"
-                                       name="iris">
-                                <label class="form-check-label" for="dropdownCheck2">
-                                    Iris (Classification)
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input type="checkbox" class="form-check-input" id="dropdownCheck2"
-                                       name="penguins">
-                                <label class="form-check-label" for="dropdownCheck2">
-                                    Penguins (Classification)
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input type="checkbox" class="form-check-input" id="dropdownCheck2"
-                                       name="voitures">
-                                <label class="form-check-label" for="dropdownCheck2">
-                                    Prix des voitures (Régression)
-                                </label>
-                            </div>
+                            <fieldset>
+                            <input type="radio" name="dataset" value="iris"> Iris (Classification)<br>
+                            <input type="radio" name="dataset" value="penguins"> Penguins (Classification)<br>
+                            <input type="radio" name="dataset" value="voitures"> Prix des voitures (Régression)<br>
                             <br>
                             <input type="submit" class="btn btn-success" value="Envoyer"/>
+                            </fieldset>
                         </form>
                     </div>
                 </div>
@@ -107,7 +91,7 @@
                     </div>
                 </div>
                 <div class="col-1"></div>
-                <div class="col-2">
+                <div class="col-3">
                     <p class="section">Caractéristiques</p><br>
                     <!-- Affficher les infos du dataset -->
                     <br>
@@ -115,7 +99,7 @@
                         <li><b>Taille:</b> {{ caract_dataset['taille'] }}</li>
                         <li><b>Nombre de valeurs:</b> {{ caract_dataset['nombre_val'] }}</li>
                         <li><b>Type des colonnes:</b> {{ caract_dataset['type_col'] }}</li>
-                        <li><b>Pourcentage de valeurs manquantes:</b> {{ caract_dataset['pourcentage_missing_val'][0] }}%
+                        <li><b>Valeurs manquantes:</b> {{ caract_dataset['pourcentage_missing_val'][0] }}%
                             ({{ caract_dataset['pourcentage_missing_val'][1] }})
                         </li>
                     </ul>

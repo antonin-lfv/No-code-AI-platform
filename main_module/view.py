@@ -32,26 +32,11 @@ def home():
     return render_template('home.html')
 
 
-@app.route('/test', methods=['GET', 'POST'])
-def test():
-    # form #
-    form = NameForm()
-    if form.validate_on_submit():
-        name = form.name.data
-        session['name'] = name
-    # dropdown select #
-    select = SelectBox()
-    if select.validate_on_submit():
-        choix = select.choix.data
-        session['choix'] = choix
-    return render_template('test.html', form=form, select=select)
-
-
 @app.route('/dataset', methods=['GET', 'POST'])
 def dataset():
     _choix_dataset = None
     if request.method == "POST":
-        _choix_dataset = list(request.form.keys())[0]
+        _choix_dataset = request.form.get('dataset')
         session['_choix_dataset'] = _choix_dataset
         if session['_choix_dataset'] in dico_dataset.keys():
             df = dico_dataset[session['_choix_dataset']]
