@@ -39,8 +39,8 @@
 
 
     <!-- Affichage colonnes + analyse -->
-    {% if selected_nom_col %}
-        {% for elem in selected_nom_col %}
+    {% if session['selected_nom_col_analyse'] %}
+        {% for elem in session['selected_nom_col_analyse'] %}
             <div class="container">
                 <div class="row">
                     <div class="col-2"></div>
@@ -55,7 +55,7 @@
                                     </tr>
                                     {% for row in row_data %}
                                         <tr>
-                                            {% for col, row_ in zip(selected_nom_col, row) %}
+                                            {% for col, row_ in zip(session['selected_nom_col_analyse'], row) %}
                                                 {% if col == elem %}
                                                     <td>{{ row_ }}</td>
                                                 {% endif %}
@@ -70,18 +70,18 @@
                     <br><br><br><br><br>
                         <!-- Affichage analyse -->
                         <ul style="text-align: center; list-style-position: inside">
-                            <li><b>Type colonne:</b> {{ caract_col[elem]['type_col'] }}</li>
-                            <li><b>Type valeurs:</b> {{ caract_col[elem]['type_valeurs'] }}</li>
-                            {% if 'Moyenne' in caract_col.keys() %}
-                                <li><b>Moyenne:</b> {{ caract_col[elem]['Moyenne'] }}</li>
-                                <li><b>Variance:</b> {{ caract_col[elem]['Variance'] }}</li>
-                                <li><b>Maximum:</b> {{ caract_col[elem]['Maximum'] }}</li>
-                                <li><b>Minimum:</b> {{ caract_col[elem]['Minimum'] }}</li>
+                            <li><b>Type colonne:</b> {{ caract_col_analyse[elem]['type_col'] }}</li>
+                            <li><b>Type valeurs:</b> {{ caract_col_analyse[elem]['type_valeurs'] }}</li>
+                            {% if 'Moyenne' in caract_col_analyse.keys() %}
+                                <li><b>Moyenne:</b> {{ caract_col_analyse[elem]['Moyenne'] }}</li>
+                                <li><b>Variance:</b> {{ caract_col_analyse[elem]['Variance'] }}</li>
+                                <li><b>Maximum:</b> {{ caract_col_analyse[elem]['Maximum'] }}</li>
+                                <li><b>Minimum:</b> {{ caract_col_analyse[elem]['Minimum'] }}</li>
                             {% endif %}
-                            <li><b>Valeurs les plus présentes:</b> {{ caract_col[elem]['plus_presentes'] }}</li>
-                            <li><b>Nombre de valeurs manquantes:</b> {{ caract_col[elem]['nb_val_manquantes'] }}</li>
-                            <li><b>Taille:</b> {{ caract_col[elem]['Longueur'] }}</li>
-                            <li><b>Valeurs differentes non NaN:</b> {{ caract_col[elem]['val_differentes_non_NaN'] }}</li>
+                            <li><b>Valeurs les plus présentes:</b> {{ caract_col_analyse[elem]['plus_presentes'] }}</li>
+                            <li><b>Nombre de valeurs manquantes:</b> {{ caract_col_analyse[elem]['nb_val_manquantes'] }}</li>
+                            <li><b>Taille:</b> {{ caract_col_analyse[elem]['Longueur'] }}</li>
+                            <li><b>Valeurs differentes non NaN:</b> {{ caract_col_analyse[elem]['val_differentes_non_NaN'] }}</li>
                         </ul>
                     </div>
                 </div>

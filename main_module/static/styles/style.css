@@ -95,3 +95,8 @@ img {
 .alert {
   display:inline-block;
 }
+
+.dropdown-menu {
+    max-height: 40vh;
+    overflow-y: auto;
+}

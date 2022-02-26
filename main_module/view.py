@@ -1,4 +1,5 @@
 # Importations
+
 import plotly.express as px
 import plotly.graph_objects as go
 import numpy as np
@@ -60,12 +61,17 @@ def analyse_colonnes():
     if '_choix_dataset' in session.keys():
         df = dico_dataset[session['_choix_dataset']]
         nom_col = df.columns.values
-        selected_nom_col, caract_col = None, None
         if request.method == "POST":
-            selected_nom_col = request.form.keys()
-            caract_col = column_caract(df, selected_nom_col)
-        return render_template("analyse_colonnes.html", nom_col=nom_col, selected_nom_col=selected_nom_col,
-                               row_data=list(df.values.tolist()), zip=zip, caract_col=caract_col)
+            selected_nom_col_analyse = request.form.keys()
+            session['selected_nom_col_analyse'] = list(selected_nom_col_analyse)
+            caract_col_analyse = column_caract(df, selected_nom_col_analyse)
+            return render_template("analyse_colonnes.html", nom_col=nom_col,
+                                   row_data=list(df.values.tolist()), zip=zip, caract_col_analyse=caract_col_analyse)
+
+        elif 'selected_nom_col_analyse' in session.keys():
+            caract_col_analyse = column_caract(df, session['selected_nom_col_analyse'])
+            return render_template("analyse_colonnes.html", nom_col=nom_col,
+                                   row_data=list(df.values.tolist()), zip=zip, caract_col_analyse=caract_col_analyse)
     else:
         return render_template("waiting_for_data.html")
 
