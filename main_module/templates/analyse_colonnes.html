@@ -9,7 +9,7 @@
             <div class="col-6"><br><br>
                 <!-- split button -->
                 <div class="btn-group">
-                    <button type="button" class="btn btn-primary btn-lg ">Choisir des colonnes à visualiser</button>
+                    <button type="button" class="btn btn-primary btn-lg " data-toggle="tooltip" data-placement="top" title="La séléction est sauvegardés même si vous changez d'onglet">Choisir des colonnes à visualiser</button>
                     <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split btn-lg "
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <span class="sr-only"></span>
@@ -21,7 +21,7 @@
                             {% for colonne in nom_col %}
                                 <div class="form-check">
                                     <input type="checkbox" class="form-check-input" id="dropdownCheck2"
-                                           name="{{ colonne }}">
+                                           name="{{ colonne }}" {% if colonne in session['selected_nom_col_analyse'] %}checked{% endif %}>
                                     <label class="form-check-label" for="dropdownCheck2">
                                         {{ colonne }}
                                     </label>

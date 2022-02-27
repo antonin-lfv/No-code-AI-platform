@@ -19,9 +19,9 @@
                             <h1 class="dropdown-header"><strong>Choix du dataset</strong></h1>
                             <div class="dropdown-divider"></div>
                             <fieldset>
-                            <input type="radio" name="dataset" value="iris"> Iris (Classification)<br>
-                            <input type="radio" name="dataset" value="penguins"> Penguins (Classification)<br>
-                            <input type="radio" name="dataset" value="voitures"> Prix des voitures (Régression)<br>
+                            <input type="radio" name="dataset" value="iris" {% if session['_choix_dataset'] == 'iris'%}checked{% endif %}> Iris (Classification)<br>
+                            <input type="radio" name="dataset" value="penguins" {% if session['_choix_dataset'] == 'penguins'%}checked{% endif %}> Penguins (Classification)<br>
+                            <input type="radio" name="dataset" value="voitures" {% if session['_choix_dataset'] == 'voitures'%}checked{% endif %}> Prix des voitures (Régression)<br>
                             <br>
                             <input type="submit" class="btn btn-success" value="Envoyer"/>
                             </fieldset>

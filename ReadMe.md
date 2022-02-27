@@ -37,3 +37,6 @@ https://getbootstrap.com/docs/4.0/components/dropdowns/
 ## over texte
 https://getbootstrap.com/docs/4.0/components/popovers/
 https://getbootstrap.com/docs/4.0/components/tooltips/
+
+## Accordeon
+https://getbootstrap.com/docs/5.0/components/accordion/
