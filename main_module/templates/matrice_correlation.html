@@ -2,4 +2,62 @@
 
 {% block content %}
 
+    <div class="container">
+        <br>
+        <div class="row">
+            <div class="col-1"></div>
+            <div class="col-6"><br><br>
+                <!-- split button -->
+                <div class="btn-group">
+                    <button type="button" class="btn btn-primary btn-lg " data-toggle="tooltip" data-placement="top"
+                            title="La séléction est sauvegardés même si vous changez d'onglet">Choix des features
+                    </button>
+                    <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split btn-lg "
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="sr-only"></span>
+                    </button>
+                    <div class="dropdown-menu p-4">
+                        <form method="POST" action="{{ url_for('matrice_correlation') }}">
+                            <h3 class="dropdown-header">Colonnes</h3>
+                            <div class="dropdown-divider"></div>
+                            {% for colonne in nom_col %}
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="dropdownCheck2"
+                                           name="{{ colonne }}"
+                                           {% if colonne in session['selected_nom_col_matrice_corr'] %}checked{% endif %}>
+                                    <label class="form-check-label" for="dropdownCheck2">
+                                        {{ colonne }}
+                                    </label>
+                                </div>
+                            {% endfor %}
+                            <br>
+                            <h3 class="dropdown-header">Couleurs</h3>
+                            <div class="dropdown-divider"></div>
+                            {% for colonne in all_col %}
+                                <input type="radio" name="couleur_matrice" value="{{ colonne }}"
+                                       {% if session['couleur_matrice'] == colonne %}checked{% endif %}> {{ colonne }}<br>
+                            {% endfor %}
+                            <br>
+                            <input type="submit" class="btn btn-success" value="Envoyer"/>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br><br>
+
+
+    <div class="center-block">
+        <div id='chart' class='chart center-block'></div>
+    </div>
+
+
+
+    {% if fig %}
+        <script type='text/javascript'>
+            var graphs = {{fig | safe}};
+            Plotly.plot('chart', graphs, {});
+        </script>
+    {% endif %}
 {% endblock %}
