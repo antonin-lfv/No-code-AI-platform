@@ -40,3 +40,6 @@ https://getbootstrap.com/docs/4.0/components/tooltips/
 
 ## Accordeon
 https://getbootstrap.com/docs/5.0/components/accordion/
+
+## Plotly in flask
+https://towardsdatascience.com/web-visualization-with-plotly-and-flask-3660abf9c946
