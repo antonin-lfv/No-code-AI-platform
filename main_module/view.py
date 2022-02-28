@@ -134,9 +134,23 @@ def matrice_correlation():
 def section_graphiques():
     if '_choix_dataset' in session.keys():
         df = dico_dataset[session['_choix_dataset']]
-        return render_template("section_graphiques.html", column_names=df.columns.values,
-                               row_data=list(df.values.tolist()),
-                               zip=zip)
+        choix_col = col_numeric(df) + col_temporal(df)
+        selected_nom_col_sect_graphiques = None
+        if request.method == "POST":
+            session['selected_nom_col_sect_graphiques'] = request.form
+            return render_template("section_graphiques.html", selected_nom_col_sect_graphiques=session['selected_nom_col_sect_graphiques'],
+                                   all_col=choix_col,
+                                   row_data=list(df.values.tolist()), zip=zip)
+        else:
+            if 'selected_nom_col_sect_graphiques' in session.keys():
+                return render_template("section_graphiques.html",
+                                       selected_nom_col_sect_graphiques=session['selected_nom_col_sect_graphiques'], all_col=choix_col,
+                                       row_data=list(df.values.tolist()), zip=zip)
+            else:
+                return render_template("section_graphiques.html", selected_nom_col_sect_graphiques=selected_nom_col_sect_graphiques,
+                                       all_col=choix_col,
+                                       row_data=list(df.values.tolist()), zip=zip)
+
     else:
         return render_template("waiting_for_data.html")
 

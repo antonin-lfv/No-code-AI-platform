@@ -6,22 +6,41 @@
         <br><br><br><br>
 
         <div class="row">
-            <div class="col-1"></div>
-            <div class="col-3">
-                <div class="accordion accordion-flush" id="accordionFlushExample">
+            <div class="col-2"></div>
+            <div class="col-2">
+                <div class="accordion" id="accordionFlushExample">
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="flush-headingOne">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                     data-bs-target="#flush-collapseOne" aria-expanded="false"
                                     aria-controls="flush-collapseOne">
-                                Accordion Item #1
+                                Données à visualiser
                             </button>
                         </h2>
                         <div id="flush-collapseOne" class="accordion-collapse collapse"
                              aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
-                            <div class="accordion-body">Placeholder content for this accordion, which is intended to
-                                demonstrate the <code>.accordion-flush</code> class. This is the first item's accordion
-                                body.
+                            <div class="accordion-body">
+                                <!-- Choix de l'abscisse et de l'ordonnée -->
+                                <form method="POST" action="{{ url_for('section_graphiques') }}">
+                                    <h3 class="dropdown-header">Données en abscisse</h3>
+                                    <div class="dropdown-divider"></div>
+                                    {% for colonne in all_col %}
+                                        <input type="radio" name="selected_abscisse_col_sect_graphiques" value="{{ colonne }}"
+                                               {% if session['selected_nom_col_sect_graphiques']['selected_abscisse_col_sect_graphiques'] == colonne %}checked{% endif %} required>
+                                        {{ colonne }}<br>
+                                    {% endfor %}
+                                    <br>
+                                    <h3 class="dropdown-header">Données en ordonnée</h3>
+                                    <div class="dropdown-divider"></div>
+                                    {% for colonne in all_col %}
+                                        <input type="radio" name="selected_ordonnee_col_sect_graphiques" value="{{ colonne }}"
+                                               {% if session['selected_nom_col_sect_graphiques']['selected_ordonnee_col_sect_graphiques'] == colonne %}checked{% endif %} required>
+                                        {{ colonne }}<br>
+                                    {% endfor %}
+                                    <br>
+                                    <input type="submit" class="btn btn-success" value="Envoyer"/>
+                                </form>
+
                             </div>
                         </div>
                     </div>
@@ -29,13 +48,13 @@
             </div>
 
             <div class="col-2">
-                <div class="accordion accordion-flush" id="accordionFlushExample">
+                <div class="accordion accordion" id="accordionFlushExample">
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="flush-headingTwo">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                     data-bs-target="#flush-collapseTwo" aria-expanded="false"
                                     aria-controls="flush-collapseTwo">
-                                Accordion Item #2
+                                Type de graphique
                             </button>
                         </h2>
                         <div id="flush-collapseTwo" class="accordion-collapse collapse"
@@ -50,13 +69,13 @@
             </div>
 
             <div class="col-2">
-                <div class="accordion accordion-flush" id="accordionFlushExample">
+                <div class="accordion accordion" id="accordionFlushExample">
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="flush-headingThree">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                     data-bs-target="#flush-collapseThree" aria-expanded="false"
                                     aria-controls="flush-collapseThree">
-                                Accordion Item #3
+                                Indices statistiques
                             </button>
                         </h2>
                         <div id="flush-collapseThree" class="accordion-collapse collapse"
@@ -72,14 +91,14 @@
                 </div>
             </div>
 
-            <div class="col-3">
-                <div class="accordion accordion-flush" id="accordionFlushExample">
+            <div class="col-2">
+                <div class="accordion accordion" id="accordionFlushExample">
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="flush-headingFour">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                     data-bs-target="#flush-collapseFour" aria-expanded="false"
                                     aria-controls="flush-collapseFour">
-                                Accordion Item #4
+                                Régressions simples
                             </button>
                         </h2>
                         <div id="flush-collapseFour" class="accordion-collapse collapse"
@@ -92,8 +111,15 @@
                     </div>
                 </div>
             </div>
-            <div class="col-1"></div>
+            <div class="col-2"></div>
         </div>
     </div>
+
+
+    <!--test-->
+    <br><br><br><br><br><br>
+    {% if selected_nom_col_sect_graphiques %}
+        {{selected_nom_col_sect_graphiques}}
+    {% endif %}
 
 {% endblock %}
