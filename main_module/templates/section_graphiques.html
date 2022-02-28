@@ -26,7 +26,10 @@
                                     <div class="dropdown-divider"></div>
                                     {% for colonne in all_col %}
                                         <input type="radio" name="selected_abscisse_col_sect_graphiques" value="{{ colonne }}"
-                                               {% if session['selected_nom_col_sect_graphiques']['selected_abscisse_col_sect_graphiques'] == colonne %}checked{% endif %} required>
+                                               {% if 'selected_abscisse_col_sect_graphiques' in session['selected_nom_col_sect_graphiques'] %}
+                                                {% if session['selected_nom_col_sect_graphiques']['selected_abscisse_col_sect_graphiques'] == colonne %}checked{% endif %}
+                                               {% endif %}
+                                        required>
                                         {{ colonne }}<br>
                                     {% endfor %}
                                     <br>
@@ -34,7 +37,10 @@
                                     <div class="dropdown-divider"></div>
                                     {% for colonne in all_col %}
                                         <input type="radio" name="selected_ordonnee_col_sect_graphiques" value="{{ colonne }}"
-                                               {% if session['selected_nom_col_sect_graphiques']['selected_ordonnee_col_sect_graphiques'] == colonne %}checked{% endif %} required>
+                                               {% if 'selected_ordonnee_col_sect_graphiques' in session['selected_nom_col_sect_graphiques'] %}
+                                                {% if session['selected_nom_col_sect_graphiques']['selected_ordonnee_col_sect_graphiques'] == colonne %}checked{% endif %}
+                                               {% endif %}
+                                        required>
                                         {{ colonne }}<br>
                                     {% endfor %}
                                     <br>
@@ -120,6 +126,7 @@
     <br><br><br><br><br><br>
     {% if selected_nom_col_sect_graphiques %}
         {{selected_nom_col_sect_graphiques}}
+        {{ 'selected_abscisse_col_sect_graphiques' in session['selected_nom_col_sect_graphiques'] }}
     {% endif %}
 
 {% endblock %}

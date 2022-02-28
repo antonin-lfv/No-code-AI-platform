@@ -150,7 +150,6 @@ def section_graphiques():
                 return render_template("section_graphiques.html", selected_nom_col_sect_graphiques=selected_nom_col_sect_graphiques,
                                        all_col=choix_col,
                                        row_data=list(df.values.tolist()), zip=zip)
-
     else:
         return render_template("waiting_for_data.html")
 
