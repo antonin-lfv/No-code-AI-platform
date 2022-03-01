@@ -25,22 +25,26 @@
                                     <h3 class="dropdown-header">Données en abscisse</h3>
                                     <div class="dropdown-divider"></div>
                                     {% for colonne in all_col %}
-                                        <input type="radio" name="selected_abscisse_col_sect_graphiques" value="{{ colonne }}"
-                                               {% if 'selected_abscisse_col_sect_graphiques' in session['selected_nom_col_sect_graphiques'] %}
-                                                {% if session['selected_nom_col_sect_graphiques']['selected_abscisse_col_sect_graphiques'] == colonne %}checked{% endif %}
+                                        <input type="radio" name="selected_abscisse_col_sect_graphiques"
+                                               value="{{ colonne }}"
+                                                {% if 'selected_abscisse_col_sect_graphiques' in session['requete_section_graphique'] %}
+                                               {% if session['requete_section_graphique']['selected_abscisse_col_sect_graphiques'] == [colonne] %}checked
                                                {% endif %}
-                                        required>
+                                                {% endif %}
+                                               required>
                                         {{ colonne }}<br>
                                     {% endfor %}
                                     <br>
                                     <h3 class="dropdown-header">Données en ordonnée</h3>
                                     <div class="dropdown-divider"></div>
                                     {% for colonne in all_col %}
-                                        <input type="radio" name="selected_ordonnee_col_sect_graphiques" value="{{ colonne }}"
-                                               {% if 'selected_ordonnee_col_sect_graphiques' in session['selected_nom_col_sect_graphiques'] %}
-                                                {% if session['selected_nom_col_sect_graphiques']['selected_ordonnee_col_sect_graphiques'] == colonne %}checked{% endif %}
+                                        <input type="radio" name="selected_ordonnee_col_sect_graphiques"
+                                               value="{{ colonne }}"
+                                                {% if 'selected_ordonnee_col_sect_graphiques' in session['requete_section_graphique'] %}
+                                               {% if session['requete_section_graphique']['selected_ordonnee_col_sect_graphiques'] == [colonne] %}checked
                                                {% endif %}
-                                        required>
+                                                {% endif %}
+                                               required>
                                         {{ colonne }}<br>
                                     {% endfor %}
                                     <br>
@@ -65,9 +69,47 @@
                         </h2>
                         <div id="flush-collapseTwo" class="accordion-collapse collapse"
                              aria-labelledby="flush-headingTwo" data-bs-parent="#accordion2">
-                            <div class="accordion-body">Placeholder content for this accordion, which is intended to
-                                demonstrate the <code>.accordion-flush</code> class. This is the second item's accordion
-                                body. Let's imagine this being filled with some actual content.
+                            <div class="accordion-body">
+                                <!-- Choix du type de graphique -->
+                                <form method="POST" action="{{ url_for('section_graphiques') }}">
+                                    <h3 class="dropdown-header">Choisir un type</h3>
+                                    <div class="dropdown-divider"></div>
+                                    <input type="radio" name="type_graphique_sect_graphiques"
+                                           value="Points"
+                                            {% if 'type_graphique_sect_graphiques' in session['requete_section_graphique'] %}
+                                           {% if session['requete_section_graphique']['type_graphique_sect_graphiques'] == ['Points'] %}checked
+                                           {% endif %}
+                                            {% endif %}
+                                           required>
+                                    Points<br>
+                                    <input type="radio" name="type_graphique_sect_graphiques"
+                                           value="Courbe"
+                                            {% if 'type_graphique_sect_graphiques' in session['requete_section_graphique'] %}
+                                           {% if session['requete_section_graphique']['type_graphique_sect_graphiques'] == ['Courbe'] %}checked
+                                           {% endif %}
+                                            {% endif %}
+                                           required>
+                                    Courbe<br>
+                                    <input type="radio" name="type_graphique_sect_graphiques"
+                                           value="Latitude/Longitude"
+                                            {% if 'type_graphique_sect_graphiques' in session['requete_section_graphique'] %}
+                                           {% if session['requete_section_graphique']['type_graphique_sect_graphiques'] == ['Latitude/Longitude'] %}checked
+                                           {% endif %}
+                                            {% endif %}
+                                           required>
+                                    Latitude/Longitude<br>
+                                    <input type="radio" name="type_graphique_sect_graphiques"
+                                           value="Histogramme"
+                                            {% if 'type_graphique_sect_graphiques' in session['requete_section_graphique'] %}
+                                           {% if session['requete_section_graphique']['type_graphique_sect_graphiques'] == ['Histogramme'] %}checked
+                                           {% endif %}
+                                            {% endif %}
+                                           required>
+                                    Histogramme<br>
+                                    <br>
+                                    <input type="submit" class="btn btn-success" value="Envoyer"/>
+                                </form>
+
                             </div>
                         </div>
                     </div>
@@ -86,11 +128,38 @@
                         </h2>
                         <div id="flush-collapseThree" class="accordion-collapse collapse"
                              aria-labelledby="flush-headingThree" data-bs-parent="#accordion3">
-                            <div class="accordion-body">Placeholder content for this accordion, which is intended to
-                                demonstrate the <code>.accordion-flush</code> class. This is the third item's accordion
-                                body. Nothing more exciting happening here in terms of content, but just filling up the
-                                space to make it look, at least at first glance, a bit more representative of how this
-                                would look in a real-world application.
+                            <div class="accordion-body">
+                                <!-- Choix du type de graphique -->
+                                <form method="POST" action="{{ url_for('section_graphiques') }}">
+                                    <h3 class="dropdown-header">Choisir un indice</h3>
+                                    <div class="dropdown-divider"></div>
+                                    <input type="radio" name="stats_graphique_sect_graphiques"
+                                           value="Max"
+                                            {% if 'stats_graphique_sect_graphiques' in session['requete_section_graphique'] %}
+                                           {% if session['requete_section_graphique']['stats_graphique_sect_graphiques'] == ['Maximum'] %}checked
+                                           {% endif %}
+                                            {% endif %}
+                                           required>
+                                    Maximum<br>
+                                    <input type="radio" name="stats_graphique_sect_graphiques"
+                                           value="Moy"
+                                            {% if 'stats_graphique_sect_graphiques' in session['requete_section_graphique'] %}
+                                           {% if session['requete_section_graphique']['stats_graphique_sect_graphiques'] == ['Moyenne'] %}checked
+                                           {% endif %}
+                                            {% endif %}
+                                           required>
+                                    Moyenne<br>
+                                    <input type="radio" name="stats_graphique_sect_graphiques"
+                                           value="Min"
+                                            {% if 'stats_graphique_sect_graphiques' in session['requete_section_graphique'] %}
+                                           {% if session['requete_section_graphique']['stats_graphique_sect_graphiques'] == ['Minimum'] %}checked
+                                           {% endif %}
+                                            {% endif %}
+                                           required>
+                                    Minimum<br>
+                                    <br>
+                                    <input type="submit" class="btn btn-success" value="Envoyer"/>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -109,9 +178,30 @@
                         </h2>
                         <div id="flush-collapseFour" class="accordion-collapse collapse"
                              aria-labelledby="flush-headingFour" data-bs-parent="#accordion4">
-                            <div class="accordion-body">Placeholder content for this accordion, which is intended to
-                                demonstrate the <code>.accordion-flush</code> class. This is the first item's accordion
-                                body.
+                            <div class="accordion-body">
+                                <!-- Choix du type de graphique -->
+                                <form method="POST" action="{{ url_for('section_graphiques') }}">
+                                    <h3 class="dropdown-header">Choisir un indice</h3>
+                                    <div class="dropdown-divider"></div>
+                                    <input type="radio" name="reg_graphique_sect_graphiques"
+                                           value="RegLin"
+                                            {% if 'reg_graphique_sect_graphiques' in session['requete_section_graphique'] %}
+                                           {% if session['requete_section_graphique']['reg_graphique_sect_graphiques'] == 'Regression Linéaire' %}checked
+                                           {% endif %}
+                                            {% endif %}
+                                           required>
+                                    Regression Linéaire<br>
+                                    <input type="radio" name="reg_graphique_sect_graphiques"
+                                           value="RegPol"
+                                            {% if 'reg_graphique_sect_graphiques' in session['requete_section_graphique'] %}
+                                           {% if session['requete_section_graphique']['reg_graphique_sect_graphiques'] == 'Régression polynomiale' %}checked
+                                           {% endif %}
+                                            {% endif %}
+                                           required>
+                                    Régression polynomiale<br>
+                                    <br>
+                                    <input type="submit" class="btn btn-success" value="Envoyer"/>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -124,9 +214,15 @@
 
     <!--test-->
     <br><br><br><br><br><br>
-    {% if selected_nom_col_sect_graphiques %}
-        {{selected_nom_col_sect_graphiques}}
-        {{ 'selected_abscisse_col_sect_graphiques' in session['selected_nom_col_sect_graphiques'] }}
+    {% if 'requete_section_graphique' in session.keys() %}
+        {{ session['requete_section_graphique'] }}
     {% endif %}
+    <br><br>
+    {{ session }}
+    <br><br>
+    {{ session['requete_section_graphique']['selected_abscisse_col_sect_graphiques'] }}
+
+
+
 
 {% endblock %}

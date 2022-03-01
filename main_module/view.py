@@ -95,7 +95,6 @@ def matrice_correlation():
             if couleur_matrice:
                 session['selected_nom_col_matrice_corr'] = list(selected_nom_col_matrice_corr)[:-1]
                 session['couleur_matrice'] = str(couleur_matrice)
-                print(session['couleur_matrice'])
                 fig = px.scatter_matrix(df_sans_NaN,
                                         dimensions=col_numeric(df_sans_NaN[session['selected_nom_col_matrice_corr']]),
                                         color=session['couleur_matrice'])
@@ -135,19 +134,37 @@ def section_graphiques():
     if '_choix_dataset' in session.keys():
         df = dico_dataset[session['_choix_dataset']]
         choix_col = col_numeric(df) + col_temporal(df)
-        selected_nom_col_sect_graphiques = None
+        if 'requete_section_graphique' not in session.keys():
+            session['requete_section_graphique'] = {
+                'selected_abscisse_col_sect_graphiques': None,
+                'selected_ordonnee_col_sect_graphiques': None,
+                'type_graphique_sect_graphiques': ['Points'],
+                'stats_graphique_sect_graphiques': None,
+                'reg_graphique_sect_graphiques': None
+            }
+
         if request.method == "POST":
-            session['selected_nom_col_sect_graphiques'] = request.form
-            return render_template("section_graphiques.html", selected_nom_col_sect_graphiques=session['selected_nom_col_sect_graphiques'],
+            session['requete_section_graphique']['selected_abscisse_col_sect_graphiques'] = request.form.getlist(
+                'selected_abscisse_col_sect_graphiques')
+            session['requete_section_graphique']['selected_ordonnee_col_sect_graphiques'] = request.form.getlist(
+                'selected_ordonnee_col_sect_graphiques')
+            session['requete_section_graphique']['type_graphique_sect_graphiques'] = request.form.getlist(
+                'type_graphique_sect_graphiques')
+            session['requete_section_graphique']['stats_graphique_sect_graphiques'] = request.form.getlist(
+                'stats_graphique_sect_graphiques')
+            session['requete_section_graphique']['reg_graphique_sect_graphiques'] = request.form.getlist(
+                'reg_graphique_sect_graphiques')
+
+            return render_template("section_graphiques.html",
                                    all_col=choix_col,
                                    row_data=list(df.values.tolist()), zip=zip)
         else:
-            if 'selected_nom_col_sect_graphiques' in session.keys():
+            if 'requete_section_graphique' in session.keys():
                 return render_template("section_graphiques.html",
-                                       selected_nom_col_sect_graphiques=session['selected_nom_col_sect_graphiques'], all_col=choix_col,
+                                       all_col=choix_col,
                                        row_data=list(df.values.tolist()), zip=zip)
             else:
-                return render_template("section_graphiques.html", selected_nom_col_sect_graphiques=selected_nom_col_sect_graphiques,
+                return render_template("section_graphiques.html",
                                        all_col=choix_col,
                                        row_data=list(df.values.tolist()), zip=zip)
     else:
