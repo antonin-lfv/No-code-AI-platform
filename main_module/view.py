@@ -144,7 +144,6 @@ def matrice_correlation():
 
 @app.route('/section_graphique', methods=['GET', 'POST'])
 def section_graphiques():
-    fig = None
     if '_choix_dataset' in session.keys():
         df = dico_dataset[session['_choix_dataset']]
         choix_col = col_numeric(df) + col_temporal(df)
@@ -187,7 +186,7 @@ def section_graphiques():
             df_sans_NaN = pd.concat([df[session['selected_abscisse_col_sect_graphiques']].reset_index(drop=True), df[session['selected_ordonnee_col_sect_graphiques']].reset_index(drop=True)], axis=1).dropna()
             # ajouter erreur si le df_sans_NaN est vide !
 
-            if session['type_graphique_sect_graphiques'] == ['Latitude/Longitude']:
+            if session['type_graphique_sect_graphiques'] == 'Latitude/Longitude':
                 fig = go.Figure()
                 fig.add_scattermapbox(
                     mode="markers",
@@ -203,8 +202,8 @@ def section_graphiques():
                         'style': "stamen-terrain",
                         'zoom': 1})
 
-            elif session['type_graphique_sect_graphiques'] == ['Histogramme']:
-                fig = px.histogram(df_sans_NaN, x=session['selected_abscisse_col_sect_graphiques'][0], y=session['selected_ordonnee_col_sect_graphiques'][0])
+            elif session['type_graphique_sect_graphiques'] == 'Histogramme':
+                fig = px.histogram(df_sans_NaN, x=session['selected_abscisse_col_sect_graphiques'], y=session['selected_ordonnee_col_sect_graphiques'])
 
             else:
                 # Courbe ou points
@@ -215,7 +214,7 @@ def section_graphiques():
                 }
                 fig.add_scatter(x=df_sans_NaN[session['selected_abscisse_col_sect_graphiques']],
                                 y=df_sans_NaN[session['selected_ordonnee_col_sect_graphiques']],
-                                mode=type_graphe[session['type_graphique_sect_graphiques'][0]], name='', showlegend=False)
+                                mode=type_graphe[session['type_graphique_sect_graphiques']], name='', showlegend=False)
 
                 if 'Régression Linéaire' in session['reg_graphique_sect_graphiques']:
                     # regression linaire

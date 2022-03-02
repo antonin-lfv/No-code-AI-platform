@@ -77,7 +77,7 @@
                                     <input type="radio" name="type_graphique_sect_graphiques"
                                            value="Points"
                                             {% if 'type_graphique_sect_graphiques' in session %}
-                                           {% if session['type_graphique_sect_graphiques'] == ['Points'] %}checked
+                                           {% if session['type_graphique_sect_graphiques'] == 'Points' %}checked
                                            {% endif %}
                                             {% endif %}
                                            required>
@@ -85,7 +85,7 @@
                                     <input type="radio" name="type_graphique_sect_graphiques"
                                            value="Courbe"
                                             {% if 'type_graphique_sect_graphiques' in session %}
-                                           {% if session['type_graphique_sect_graphiques'] == ['Courbe'] %}checked
+                                           {% if session['type_graphique_sect_graphiques'] == 'Courbe' %}checked
                                            {% endif %}
                                             {% endif %}
                                            required>
@@ -93,7 +93,7 @@
                                     <input type="radio" name="type_graphique_sect_graphiques"
                                            value="Latitude/Longitude"
                                             {% if 'type_graphique_sect_graphiques' in session %}
-                                           {% if session['type_graphique_sect_graphiques'] == ['Latitude/Longitude'] %}checked
+                                           {% if session['type_graphique_sect_graphiques'] == 'Latitude/Longitude' %}checked
                                            {% endif %}
                                             {% endif %}
                                            required>
@@ -101,7 +101,7 @@
                                     <input type="radio" name="type_graphique_sect_graphiques"
                                            value="Histogramme"
                                             {% if 'type_graphique_sect_graphiques' in session %}
-                                           {% if session['type_graphique_sect_graphiques'] == ['Histogramme'] %}checked
+                                           {% if session['type_graphique_sect_graphiques'] == 'Histogramme' %}checked
                                            {% endif %}
                                             {% endif %}
                                            required>
@@ -143,7 +143,7 @@
                                                {% endif %}{% endif %}
                                                 {% endif %}
                                                 {% if 'type_graphique_sect_graphiques' in session %}
-                                                    {% if session['type_graphique_sect_graphiques'] == ['Histogramme'] or session['type_graphique_sect_graphiques'] == ['Latitude/Longitude'] %}
+                                                    {% if session['type_graphique_sect_graphiques'] == 'Histogramme' or session['type_graphique_sect_graphiques'] == 'Latitude/Longitude' %}
                                                disabled
                                                     {% endif %}{% endif %}
                                         >
@@ -160,7 +160,7 @@
                                                     {% endif %}
                                                 {% endif %}
                                                 {% if 'type_graphique_sect_graphiques' in session %}
-                                                    {% if session['type_graphique_sect_graphiques'] == ['Histogramme'] or session['type_graphique_sect_graphiques'] == ['Latitude/Longitude'] %}
+                                                    {% if session['type_graphique_sect_graphiques'] == 'Histogramme' or session['type_graphique_sect_graphiques'] == 'Latitude/Longitude' %}
                                                disabled
                                                     {% endif %}{% endif %}
                                         >
@@ -176,7 +176,7 @@
                                                {% endif %}{% endif %}
                                                 {% endif %}
                                                 {% if 'type_graphique_sect_graphiques' in session %}
-                                                    {% if session['type_graphique_sect_graphiques'] == ['Histogramme'] or session['type_graphique_sect_graphiques'] == ['Latitude/Longitude'] %}
+                                                    {% if session['type_graphique_sect_graphiques'] == 'Histogramme' or session['type_graphique_sect_graphiques'] == 'Latitude/Longitude' %}
                                                disabled
                                                     {% endif %}{% endif %}
                                         >
@@ -224,7 +224,7 @@
                                                     {% endif %}
                                                 {% endif %}
                                                 {% if 'type_graphique_sect_graphiques' in session %}
-                                                    {% if session['type_graphique_sect_graphiques'] == ['Histogramme'] or session['type_graphique_sect_graphiques'] == ['Latitude/Longitude'] %}
+                                                    {% if session['type_graphique_sect_graphiques'] == 'Histogramme' or session['type_graphique_sect_graphiques'] == 'Latitude/Longitude' %}
                                                disabled
                                                     {% endif %}{% endif %}
                                         >
@@ -240,7 +240,7 @@
                                                {% endif %}{% endif %}
                                                 {% endif %}
                                                 {% if 'type_graphique_sect_graphiques' in session %}
-                                                    {% if session['type_graphique_sect_graphiques'] == ['Histogramme'] or session['type_graphique_sect_graphiques'] == ['Latitude/Longitude'] %}
+                                                    {% if session['type_graphique_sect_graphiques'] == 'Histogramme' or session['type_graphique_sect_graphiques'] == 'Latitude/Longitude' %}
                                                disabled
                                                     {% endif %}{% endif %}
                                         >
