@@ -223,7 +223,7 @@ def section_graphiques():
                     model.fit(X, df_sans_NaN[session['selected_ordonnee_col_sect_graphiques']])
                     x_range = np.linspace(X.min(), X.max(), len(df_sans_NaN[session['selected_ordonnee_col_sect_graphiques']]))
                     y_range = model.predict(x_range.reshape(-1, 1))
-                    fig.add_scatter(x=x_range, y=y_range, name='<b>Regression linéaire<b>', mode='lines',
+                    fig.add_scatter(x=x_range, y=y_range, name='Regression linéaire', mode='lines',
                                     marker=dict(color='red'))
                     # #################
                 if 'Régression polynomiale' in session['reg_graphique_sect_graphiques']:
@@ -237,7 +237,7 @@ def section_graphiques():
                     model = LinearRegression(fit_intercept=False)
                     model.fit(X_poly, df_sans_NaN[session['selected_ordonnee_col_sect_graphiques']])
                     y_poly = model.predict(x_range_poly)
-                    fig.add_scatter(x=x_range.squeeze(), y=y_poly, name='<b>Polynomial Features<b>',
+                    fig.add_scatter(x=x_range.squeeze(), y=y_poly, name='Polynomial Features',
                                     marker=dict(color='green'))
                     # #################
 
