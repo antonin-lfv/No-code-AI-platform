@@ -155,7 +155,7 @@ def section_graphiques():
             else:
                 if accordion_choice not in session.keys():
                     """ Par défaut on trace avec des points """
-                    session[accordion_choice] = ['Points']
+                    session[accordion_choice] = 'Points'
 
         if request.method == "POST":
             if request.form.getlist('selected_abscisse_col_sect_graphiques'):
