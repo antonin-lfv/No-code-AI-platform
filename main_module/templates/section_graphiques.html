@@ -28,7 +28,7 @@
                                         <input type="radio" name="selected_abscisse_col_sect_graphiques"
                                                value="{{ colonne }}"
                                                 {% if 'selected_abscisse_col_sect_graphiques' in session %}
-                                               {% if session['selected_abscisse_col_sect_graphiques'] == [colonne] %}checked
+                                               {% if session['selected_abscisse_col_sect_graphiques'] == colonne %}checked
                                                {% endif %}
                                                 {% endif %}
                                                required>
@@ -41,7 +41,7 @@
                                         <input type="radio" name="selected_ordonnee_col_sect_graphiques"
                                                value="{{ colonne }}"
                                                 {% if 'selected_ordonnee_col_sect_graphiques' in session %}
-                                               {% if session['selected_ordonnee_col_sect_graphiques'] == [colonne] %}checked
+                                               {% if session['selected_ordonnee_col_sect_graphiques'] == colonne %}checked
                                                {% endif %}
                                                 {% endif %}
                                                required>
@@ -133,21 +133,60 @@
                                 <form method="POST" action="{{ url_for('section_graphiques') }}">
                                     <h3 class="dropdown-header">Choisir un indice</h3>
                                     <div class="dropdown-divider"></div>
-                                    <input type="radio" name="stats_graphique_sect_graphiques"
-                                           value="Maximum"
-                                           {% if session['stats_graphique_sect_graphiques'] == ['Maximum'] %}checked{% endif %}
-                                           required>
-                                    Maximum<br>
-                                    <input type="radio" name="stats_graphique_sect_graphiques"
-                                           value="Moyenne"
-                                           {% if session['stats_graphique_sect_graphiques'] == ['Moyenne'] %}checked{% endif %}
-                                           required>
-                                    Moyenne<br>
-                                    <input type="radio" name="stats_graphique_sect_graphiques"
-                                           value="Minimum"
-                                           {% if session['stats_graphique_sect_graphiques'] == ['Minimum'] %}checked{% endif %}
-                                           required>
-                                    Minimum<br>
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input"
+                                               name="stats_graphique_sect_graphiques"
+                                               value="Maximum"
+                                                {% if 'stats_graphique_sect_graphiques' in session %}
+                                                    {% if session['stats_graphique_sect_graphiques'] %}
+                                               {% if 'Maximum' in session['stats_graphique_sect_graphiques'] %}checked
+                                               {% endif %}{% endif %}
+                                                {% endif %}
+                                                {% if 'type_graphique_sect_graphiques' in session %}
+                                                    {% if session['type_graphique_sect_graphiques'] == ['Histogramme'] or session['type_graphique_sect_graphiques'] == ['Latitude/Longitude'] %}
+                                               disabled
+                                                    {% endif %}{% endif %}
+                                        >
+                                        Maximum<br>
+                                    </div>
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input"
+                                               name="stats_graphique_sect_graphiques"
+                                               value="Moyenne"
+                                                {% if 'stats_graphique_sect_graphiques' in session %}
+                                                    {% if session['stats_graphique_sect_graphiques'] %}
+                                               {% if 'Moyenne' in session['stats_graphique_sect_graphiques'] %}checked
+                                               {% endif %}
+                                                    {% endif %}
+                                                {% endif %}
+                                                {% if 'type_graphique_sect_graphiques' in session %}
+                                                    {% if session['type_graphique_sect_graphiques'] == ['Histogramme'] or session['type_graphique_sect_graphiques'] == ['Latitude/Longitude'] %}
+                                               disabled
+                                                    {% endif %}{% endif %}
+                                        >
+                                        Moyenne<br>
+                                    </div>
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input"
+                                               name="stats_graphique_sect_graphiques"
+                                               value="Minimum"
+                                                {% if 'stats_graphique_sect_graphiques' in session %}
+                                                    {% if session['stats_graphique_sect_graphiques'] %}
+                                               {% if 'Minimum' in session['stats_graphique_sect_graphiques'] %}checked
+                                               {% endif %}{% endif %}
+                                                {% endif %}
+                                                {% if 'type_graphique_sect_graphiques' in session %}
+                                                    {% if session['type_graphique_sect_graphiques'] == ['Histogramme'] or session['type_graphique_sect_graphiques'] == ['Latitude/Longitude'] %}
+                                               disabled
+                                                    {% endif %}{% endif %}
+                                        >
+                                        Minimum<br>
+                                    </div>
+                                    <input type="hidden"
+                                           name="stats_graphique_sect_graphiques"
+                                           value="empty"
+                                           checked
+                                    >
                                     <br>
                                     <input type="submit" class="btn btn-success" value="Envoyer"/>
                                 </form>
@@ -172,18 +211,46 @@
                             <div class="accordion-body">
                                 <!-- Choix du type de graphique -->
                                 <form method="POST" action="{{ url_for('section_graphiques') }}">
-                                    <h3 class="dropdown-header">Choisir un indice</h3>
+                                    <h3 class="dropdown-header">Choisir un modèle</h3>
                                     <div class="dropdown-divider"></div>
-                                    <input type="radio" name="reg_graphique_sect_graphiques"
-                                           value="Régression Linéaire"
-                                           {% if session['reg_graphique_sect_graphiques'] == ['Régression Linéaire'] %}checked{% endif %}
-                                           required>
-                                    Regression Linéaire<br>
-                                    <input type="radio" name="reg_graphique_sect_graphiques"
-                                           value="Régression polynomiale"
-                                           {% if session['reg_graphique_sect_graphiques'] == ['Régression polynomiale'] %}checked{% endif %}
-                                           required>
-                                    Régression polynomiale<br>
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input"
+                                               name="reg_graphique_sect_graphiques"
+                                               value="Régression Linéaire"
+                                                {% if 'reg_graphique_sect_graphiques' in session %}
+                                                    {% if session['reg_graphique_sect_graphiques'] %}
+                                               {% if 'Régression Linéaire' in session['reg_graphique_sect_graphiques'] %}checked
+                                               {% endif %}
+                                                    {% endif %}
+                                                {% endif %}
+                                                {% if 'type_graphique_sect_graphiques' in session %}
+                                                    {% if session['type_graphique_sect_graphiques'] == ['Histogramme'] or session['type_graphique_sect_graphiques'] == ['Latitude/Longitude'] %}
+                                               disabled
+                                                    {% endif %}{% endif %}
+                                        >
+                                        Regression Linéaire<br>
+                                    </div>
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input"
+                                               name="reg_graphique_sect_graphiques"
+                                               value="Régression polynomiale"
+                                                {% if 'reg_graphique_sect_graphiques' in session %}
+                                                    {% if session['reg_graphique_sect_graphiques'] %}
+                                               {% if 'Régression polynomiale' in session['reg_graphique_sect_graphiques'] %}checked
+                                               {% endif %}{% endif %}
+                                                {% endif %}
+                                                {% if 'type_graphique_sect_graphiques' in session %}
+                                                    {% if session['type_graphique_sect_graphiques'] == ['Histogramme'] or session['type_graphique_sect_graphiques'] == ['Latitude/Longitude'] %}
+                                               disabled
+                                                    {% endif %}{% endif %}
+                                        >
+                                        Régression polynomiale<br>
+                                    </div>
+                                    <input type="hidden"
+                                           name="reg_graphique_sect_graphiques"
+                                           value="empty"
+                                           checked
+                                    >
                                     <br>
                                     <input type="submit" class="btn btn-success" value="Envoyer"/>
                                 </form>
@@ -194,18 +261,28 @@
             </div>
             <div class="col-2"></div>
         </div>
+    </div><br>
+
+    <div class="center-block">
+        <div id='chart' class='chart center-block'></div>
     </div>
 
 
+
+    {% if fig %}
+        <script type='text/javascript'>
+            var graphs = {{fig | safe}};
+            Plotly.plot('chart', graphs, {});
+        </script>
+    {% endif %}
+
     <!--test-->
     <br><br><br><br><br><br>
-    {%  for accordion_choice in ['selected_abscisse_col_sect_graphiques', 'selected_ordonnee_col_sect_graphiques', 'type_graphique_sect_graphiques', 'stats_graphique_sect_graphiques', 'reg_graphique_sect_graphiques'] %}
-    {% if accordion_choice in session.keys() %}
-        {{ session[accordion_choice] }}
-    {% endif %}
+    {% for accordion_choice in ['selected_abscisse_col_sect_graphiques', 'selected_ordonnee_col_sect_graphiques', 'type_graphique_sect_graphiques', 'stats_graphique_sect_graphiques', 'reg_graphique_sect_graphiques'] %}
+        {% if accordion_choice in session.keys() %}
+            {{ session[accordion_choice] }}
+        {% endif %}
     {% endfor %}
     <br><br>
-
-
 
 {% endblock %}

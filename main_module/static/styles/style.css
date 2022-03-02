@@ -106,3 +106,8 @@ img {
    margin-right:auto;
    display:block;
 }
+
+.accordion-body{
+    max-height: 40vh;
+    overflow-y: auto;
+}

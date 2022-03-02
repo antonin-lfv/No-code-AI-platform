@@ -9,3 +9,15 @@ flask-wtf
 WTForms~=3.0.1
 flask-nav
 jsons
+
+xlrd
+sklearn
+umap-learn
+more-itertools
+graphviz
+scikit-learn
+Pillow
+umap
+six
+pip
+requests
