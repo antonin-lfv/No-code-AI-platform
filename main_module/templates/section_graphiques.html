@@ -263,17 +263,24 @@
         </div>
     </div><br>
 
-    <div class="center-block">
-        <div id='chart' class='chart center-block'></div>
-    </div>
+    {% if not erreur %}
+        <div class="center-block">
+            <div id='chart' class='chart center-block'></div>
+        </div>
+        {% if fig %}
+            <script type='text/javascript'>
+                var graphs = {{fig | safe}};
+                Plotly.plot('chart', graphs, {});
+            </script>
+        {% endif %}
+    {% endif %}
 
 
-
-    {% if fig %}
-        <script type='text/javascript'>
-            var graphs = {{fig | safe}};
-            Plotly.plot('chart', graphs, {});
-        </script>
+    {% if erreur %}
+        <!--Dataset vide-->
+        <div class="alert alert-danger" role="alert">
+            Le dataset après dropna() est vide !
+        </div>
     {% endif %}
 
     <!--test-->

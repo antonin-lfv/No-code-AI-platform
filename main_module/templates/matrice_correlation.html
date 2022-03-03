@@ -35,7 +35,8 @@
                             <div class="dropdown-divider"></div>
                             {% for colonne in all_col %}
                                 <input type="radio" name="couleur_matrice" value="{{ colonne }}"
-                                       {% if session['couleur_matrice'] == colonne %}checked{% endif %}> {{ colonne }}<br>
+                                       {% if session['couleur_matrice'] == colonne %}checked{% endif %}> {{ colonne }}
+                                <br>
                             {% endfor %}
                             <br>
                             <input type="submit" class="btn btn-success" value="Envoyer"/>
@@ -48,16 +49,25 @@
     <br><br>
 
 
-    <div class="center-block">
-        <div id='chart' class='chart center-block'></div>
-    </div>
+    {% if not erreur %}
+        <div class="center-block">
+            <div id='chart' class='chart center-block'></div>
+        </div>
 
+        {% if fig %}
+            <script type='text/javascript'>
+                var graphs = {{fig | safe}};
+                Plotly.plot('chart', graphs, {});
+            </script>
+        {% endif %}
 
-
-    {% if fig %}
-        <script type='text/javascript'>
-            var graphs = {{fig | safe}};
-            Plotly.plot('chart', graphs, {});
-        </script>
     {% endif %}
+
+    {% if erreur %}
+        <!--Dataset vide-->
+        <div class="alert alert-danger" role="alert">
+            Le dataset après dropna() est vide !
+        </div>
+    {% endif %}
+
 {% endblock %}

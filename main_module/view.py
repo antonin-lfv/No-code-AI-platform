@@ -101,43 +101,46 @@ def matrice_correlation():
         nom_col = col_numeric(df)
         all_col = df.columns.values
         df_sans_NaN = pd.concat([df[col] for col in all_col], axis=1).dropna()
-        if request.method == "POST":
-            selected_nom_col_matrice_corr = request.form.keys()
-            couleur_matrice = request.form.get('couleur_matrice')
+        if len(df_sans_NaN) > 0:
+            if request.method == "POST":
+                selected_nom_col_matrice_corr = request.form.keys()
+                couleur_matrice = request.form.get('couleur_matrice')
 
-            if couleur_matrice:
-                session['selected_nom_col_matrice_corr'] = list(selected_nom_col_matrice_corr)[:-1]
-                session['couleur_matrice'] = str(couleur_matrice)
-                fig = px.scatter_matrix(df_sans_NaN,
-                                        dimensions=col_numeric(df_sans_NaN[session['selected_nom_col_matrice_corr']]),
-                                        color=session['couleur_matrice'])
-            else:
-                session['selected_nom_col_matrice_corr'] = list(selected_nom_col_matrice_corr)
-                fig = px.scatter_matrix(df_sans_NaN,
-                                        dimensions=col_numeric(df_sans_NaN[session['selected_nom_col_matrice_corr']]))
+                if couleur_matrice:
+                    session['selected_nom_col_matrice_corr'] = list(selected_nom_col_matrice_corr)[:-1]
+                    session['couleur_matrice'] = str(couleur_matrice)
+                    fig = px.scatter_matrix(df_sans_NaN,
+                                            dimensions=col_numeric(df_sans_NaN[session['selected_nom_col_matrice_corr']]),
+                                            color=session['couleur_matrice'])
+                else:
+                    session['selected_nom_col_matrice_corr'] = list(selected_nom_col_matrice_corr)
+                    fig = px.scatter_matrix(df_sans_NaN,
+                                            dimensions=col_numeric(df_sans_NaN[session['selected_nom_col_matrice_corr']]))
 
-        elif 'selected_nom_col_matrice_corr' in session.keys():
-            if 'couleur_matrice' in session.keys():
-                fig = px.scatter_matrix(df_sans_NaN,
-                                        dimensions=col_numeric(df_sans_NaN[session['selected_nom_col_matrice_corr']]),
-                                        color=session['couleur_matrice'])
+            elif 'selected_nom_col_matrice_corr' in session.keys():
+                if 'couleur_matrice' in session.keys():
+                    fig = px.scatter_matrix(df_sans_NaN,
+                                            dimensions=col_numeric(df_sans_NaN[session['selected_nom_col_matrice_corr']]),
+                                            color=session['couleur_matrice'])
+                else:
+                    fig = px.scatter_matrix(df_sans_NaN,
+                                            dimensions=col_numeric(df_sans_NaN[session['selected_nom_col_matrice_corr']]))
             else:
-                fig = px.scatter_matrix(df_sans_NaN,
-                                        dimensions=col_numeric(df_sans_NaN[session['selected_nom_col_matrice_corr']]))
+                fig = None
+            if fig:
+                fig.update_layout(width=700, height=500, margin=dict(l=40, r=50, b=40, t=40), font=dict(size=10))
+                fig.update_layout({"xaxis" + str(i + 1): dict(showticklabels=False) for i in
+                                   range(len(col_numeric(df_sans_NaN[session['selected_nom_col_matrice_corr']])))})
+                fig.update_layout({"yaxis" + str(i + 1): dict(showticklabels=False) for i in
+                                   range(len(col_numeric(df_sans_NaN[session['selected_nom_col_matrice_corr']])))})
+                fig.update_traces(marker=dict(size=4))
+                fig.update_traces(diagonal_visible=False)
+                fig.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)')
+                fig = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+
+            return render_template("matrice_correlation.html", nom_col=nom_col, fig=fig, all_col=all_col, erreur=None)
         else:
-            fig = None
-        if fig:
-            fig.update_layout(width=700, height=500, margin=dict(l=40, r=50, b=40, t=40), font=dict(size=10))
-            fig.update_layout({"xaxis" + str(i + 1): dict(showticklabels=False) for i in
-                               range(len(col_numeric(df_sans_NaN[session['selected_nom_col_matrice_corr']])))})
-            fig.update_layout({"yaxis" + str(i + 1): dict(showticklabels=False) for i in
-                               range(len(col_numeric(df_sans_NaN[session['selected_nom_col_matrice_corr']])))})
-            fig.update_traces(marker=dict(size=4))
-            fig.update_traces(diagonal_visible=False)
-            fig.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)')
-            fig = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
-
-        return render_template("matrice_correlation.html", nom_col=nom_col, fig=fig, all_col=all_col)
+            return render_template("matrice_correlation.html", nom_col=nom_col, all_col=all_col, erreur=True)
     else:
         return render_template("waiting_for_data.html")
 
@@ -147,6 +150,7 @@ def section_graphiques():
     if '_choix_dataset' in session.keys():
         df = dico_dataset[session['_choix_dataset']]
         choix_col = col_numeric(df) + col_temporal(df)
+        fig, erreur = None, None
         for accordion_choice in ['selected_abscisse_col_sect_graphiques', 'selected_ordonnee_col_sect_graphiques',
                                  'type_graphique_sect_graphiques', 'stats_graphique_sect_graphiques',
                                  'reg_graphique_sect_graphiques']:
@@ -184,98 +188,96 @@ def section_graphiques():
         if session['selected_abscisse_col_sect_graphiques'] != 'empty' and session['selected_ordonnee_col_sect_graphiques'] != 'empty':
             df = dico_dataset[session['_choix_dataset']]
             df_sans_NaN = pd.concat([df[session['selected_abscisse_col_sect_graphiques']].reset_index(drop=True), df[session['selected_ordonnee_col_sect_graphiques']].reset_index(drop=True)], axis=1).dropna()
-            # ajouter erreur si le df_sans_NaN est vide !
+            if len(df_sans_NaN) > 0:
+                if session['type_graphique_sect_graphiques'] == 'Latitude/Longitude':
+                    fig = go.Figure()
+                    fig.add_scattermapbox(
+                        mode="markers",
+                        lon=df_sans_NaN[session['selected_abscisse_col_sect_graphiques']],
+                        lat=df_sans_NaN[session['selected_ordonnee_col_sect_graphiques']],
+                        marker={'size': 10,
+                                'color': 'firebrick',
+                                })
+                    fig.update_layout(
+                        margin={'l': 0, 't': 0, 'b': 0, 'r': 0},
+                        mapbox={
+                            'center': {'lon': -80, 'lat': 40},
+                            'style': "stamen-terrain",
+                            'zoom': 1})
 
-            if session['type_graphique_sect_graphiques'] == 'Latitude/Longitude':
-                fig = go.Figure()
-                fig.add_scattermapbox(
-                    mode="markers",
-                    lon=df_sans_NaN[session['selected_abscisse_col_sect_graphiques']],
-                    lat=df_sans_NaN[session['selected_ordonnee_col_sect_graphiques']],
-                    marker={'size': 10,
-                            'color': 'firebrick',
-                            })
-                fig.update_layout(
-                    margin={'l': 0, 't': 0, 'b': 0, 'r': 0},
-                    mapbox={
-                        'center': {'lon': -80, 'lat': 40},
-                        'style': "stamen-terrain",
-                        'zoom': 1})
+                elif session['type_graphique_sect_graphiques'] == 'Histogramme':
+                    fig = px.histogram(df_sans_NaN, x=session['selected_abscisse_col_sect_graphiques'], y=session['selected_ordonnee_col_sect_graphiques'])
 
-            elif session['type_graphique_sect_graphiques'] == 'Histogramme':
-                fig = px.histogram(df_sans_NaN, x=session['selected_abscisse_col_sect_graphiques'], y=session['selected_ordonnee_col_sect_graphiques'])
+                else:
+                    # Courbe ou points
+                    fig = go.Figure()
+                    type_graphe = {
+                        "Courbe": 'lines',
+                        "Points": 'markers'
+                    }
+                    fig.add_scatter(x=df_sans_NaN[session['selected_abscisse_col_sect_graphiques']],
+                                    y=df_sans_NaN[session['selected_ordonnee_col_sect_graphiques']],
+                                    mode=type_graphe[session['type_graphique_sect_graphiques']], name='', showlegend=False)
 
+                    if 'Régression Linéaire' in session['reg_graphique_sect_graphiques']:
+                        # regression linaire
+                        X = df_sans_NaN[session['selected_abscisse_col_sect_graphiques']].values.reshape(-1, 1)
+                        model = LinearRegression()
+                        model.fit(X, df_sans_NaN[session['selected_ordonnee_col_sect_graphiques']])
+                        x_range = np.linspace(X.min(), X.max(), len(df_sans_NaN[session['selected_ordonnee_col_sect_graphiques']]))
+                        y_range = model.predict(x_range.reshape(-1, 1))
+                        fig.add_scatter(x=x_range, y=y_range, name='Regression linéaire', mode='lines',
+                                        marker=dict(color='red'))
+                        # #################
+                    if 'Régression polynomiale' in session['reg_graphique_sect_graphiques']:
+                        # regression polynomiale
+                        X = df_sans_NaN[session['selected_abscisse_col_sect_graphiques']].values.reshape(-1, 1)
+                        x_range = np.linspace(X.min(), X.max(), 100).reshape(-1, 1)
+                        poly = PolynomialFeatures(5)  # ajouter un slider pour choisir !
+                        poly.fit(X)
+                        X_poly = poly.transform(X)
+                        x_range_poly = poly.transform(x_range)
+                        model = LinearRegression(fit_intercept=False)
+                        model.fit(X_poly, df_sans_NaN[session['selected_ordonnee_col_sect_graphiques']])
+                        y_poly = model.predict(x_range_poly)
+                        fig.add_scatter(x=x_range.squeeze(), y=y_poly, name='Polynomial Features',
+                                        marker=dict(color='green'))
+                        # #################
+
+                    if 'Moyenne' in session['stats_graphique_sect_graphiques']:
+                        # Moyenne #
+                        fig.add_hline(y=df_sans_NaN[session['selected_ordonnee_col_sect_graphiques']].mean(),
+                                      line_dash="dot",
+                                      annotation_text="moyenne : {}".format(
+                                          round(df_sans_NaN[session['selected_ordonnee_col_sect_graphiques']].mean(), 1)),
+                                      annotation_position="bottom left",
+                                      line_width=2, line=dict(color='black'),
+                                      annotation=dict(font_size=10))
+                        # #################
+                        pass
+                    if 'Minimum' in session['stats_graphique_sect_graphiques']:
+                        # Minimum #
+                        fig.add_hline(y=df_sans_NaN[session['selected_ordonnee_col_sect_graphiques']].min(),
+                                      line_dash="dot",
+                                      annotation_text="minimum : {}".format(
+                                          round(df_sans_NaN[session['selected_ordonnee_col_sect_graphiques']].min(), 1)),
+                                      annotation_position="bottom left",
+                                      line_width=2, line=dict(color='black'),
+                                      annotation=dict(font_size=10))
+                        # #################
+                        pass
+                    if 'Maximum' in session['stats_graphique_sect_graphiques']:
+                        # Maximum #
+                        fig.add_hline(y=df_sans_NaN[session['selected_ordonnee_col_sect_graphiques']].max(),
+                                      line_dash="dot",
+                                      annotation_text="maximum : {}".format(
+                                          round(df_sans_NaN[session['selected_ordonnee_col_sect_graphiques']].max(), 1)),
+                                      annotation_position="top left",
+                                      line_width=2, line=dict(color='black'),
+                                      annotation=dict(font_size=10))
+                        # #################
             else:
-                # Courbe ou points
-                fig = go.Figure()
-                type_graphe = {
-                    "Courbe": 'lines',
-                    "Points": 'markers'
-                }
-                fig.add_scatter(x=df_sans_NaN[session['selected_abscisse_col_sect_graphiques']],
-                                y=df_sans_NaN[session['selected_ordonnee_col_sect_graphiques']],
-                                mode=type_graphe[session['type_graphique_sect_graphiques']], name='', showlegend=False)
-
-                if 'Régression Linéaire' in session['reg_graphique_sect_graphiques']:
-                    # regression linaire
-                    X = df_sans_NaN[session['selected_abscisse_col_sect_graphiques']].values.reshape(-1, 1)
-                    model = LinearRegression()
-                    model.fit(X, df_sans_NaN[session['selected_ordonnee_col_sect_graphiques']])
-                    x_range = np.linspace(X.min(), X.max(), len(df_sans_NaN[session['selected_ordonnee_col_sect_graphiques']]))
-                    y_range = model.predict(x_range.reshape(-1, 1))
-                    fig.add_scatter(x=x_range, y=y_range, name='Regression linéaire', mode='lines',
-                                    marker=dict(color='red'))
-                    # #################
-                if 'Régression polynomiale' in session['reg_graphique_sect_graphiques']:
-                    # regression polynomiale
-                    X = df_sans_NaN[session['selected_abscisse_col_sect_graphiques']].values.reshape(-1, 1)
-                    x_range = np.linspace(X.min(), X.max(), 100).reshape(-1, 1)
-                    poly = PolynomialFeatures(5)  # ajouter un slider pour choisir !
-                    poly.fit(X)
-                    X_poly = poly.transform(X)
-                    x_range_poly = poly.transform(x_range)
-                    model = LinearRegression(fit_intercept=False)
-                    model.fit(X_poly, df_sans_NaN[session['selected_ordonnee_col_sect_graphiques']])
-                    y_poly = model.predict(x_range_poly)
-                    fig.add_scatter(x=x_range.squeeze(), y=y_poly, name='Polynomial Features',
-                                    marker=dict(color='green'))
-                    # #################
-
-                if 'Moyenne' in session['stats_graphique_sect_graphiques']:
-                    # Moyenne #
-                    fig.add_hline(y=df_sans_NaN[session['selected_ordonnee_col_sect_graphiques']].mean(),
-                                  line_dash="dot",
-                                  annotation_text="moyenne : {}".format(
-                                      round(df_sans_NaN[session['selected_ordonnee_col_sect_graphiques']].mean(), 1)),
-                                  annotation_position="bottom left",
-                                  line_width=2, line=dict(color='black'),
-                                  annotation=dict(font_size=10))
-                    # #################
-                    pass
-                if 'Minimum' in session['stats_graphique_sect_graphiques']:
-                    # Minimum #
-                    fig.add_hline(y=df_sans_NaN[session['selected_ordonnee_col_sect_graphiques']].min(),
-                                  line_dash="dot",
-                                  annotation_text="minimum : {}".format(
-                                      round(df_sans_NaN[session['selected_ordonnee_col_sect_graphiques']].min(), 1)),
-                                  annotation_position="bottom left",
-                                  line_width=2, line=dict(color='black'),
-                                  annotation=dict(font_size=10))
-                    # #################
-                    pass
-                if 'Maximum' in session['stats_graphique_sect_graphiques']:
-                    # Maximum #
-                    fig.add_hline(y=df_sans_NaN[session['selected_ordonnee_col_sect_graphiques']].max(),
-                                  line_dash="dot",
-                                  annotation_text="maximum : {}".format(
-                                      round(df_sans_NaN[session['selected_ordonnee_col_sect_graphiques']].max(), 1)),
-                                  annotation_position="top left",
-                                  line_width=2, line=dict(color='black'),
-                                  annotation=dict(font_size=10))
-                    # #################
-
-        else:
-            fig = None
+                erreur = True
 
         if fig:
             fig.update_xaxes(title_text=str(session['selected_abscisse_col_sect_graphiques']))
@@ -289,9 +291,10 @@ def section_graphiques():
             )
             fig.update_layout(width=1000, height=500, margin=dict(l=40, r=50, b=40, t=40), font=dict(size=10))
             fig = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+
         return render_template("section_graphiques.html",
                                all_col=choix_col, fig=fig,
-                               row_data=list(df.values.tolist()), zip=zip)
+                               row_data=list(df.values.tolist()), zip=zip, erreur=erreur)
     else:
         return render_template("waiting_for_data.html")
 
