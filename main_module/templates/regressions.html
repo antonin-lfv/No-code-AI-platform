@@ -2,4 +2,92 @@
 
 {% block content %}
 
+    <div class="container">
+        <br><br><br><br>
+
+        <div class="row">
+            <div class="col-2"></div>
+            <div class="col-4">
+                <div class="accordion" id="accordion1">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="flush-headingOne">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#flush-collapseOne" aria-expanded="false"
+                                    aria-controls="flush-collapseOne">
+                                Features
+                            </button>
+                        </h2>
+                        <div id="flush-collapseOne" class="accordion-collapse collapse"
+                             aria-labelledby="flush-headingOne" data-bs-parent="#accordion1">
+                            <div class="accordion-body">
+                                <!-- Choix de l'abscisse et de l'ordonnée -->
+                                <form method="POST" action="{{ url_for('regressions') }}">
+                                    <h3 class="dropdown-header">Les features</h3>
+                                    <div class="dropdown-divider"></div>
+                                    {% for colonne in choix_col %}
+                                        <input type="checkbox" name="selected_features_regressions"
+                                               value="{{ colonne }}"
+                                                {% if 'selected_features_regressions' in session %}
+                                               {% if colonne in session['selected_features_regressions'] %}checked
+                                               {% endif %}
+                                                {% endif %}
+                                               >
+                                        {{ colonne }}<br>
+                                    {% endfor %}
+                                    <br>
+                                    <input type="submit" class="btn btn-success" value="Envoyer"/>
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-4">
+                <div class="accordion" id="accordion2">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="flush-headingTwo">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#flush-collapseTwo" aria-expanded="false"
+                                    aria-controls="flush-collapseTwo">
+                                Target
+                            </button>
+                        </h2>
+                        <div id="flush-collapseTwo" class="accordion-collapse collapse"
+                             aria-labelledby="flush-headingTwo" data-bs-parent="#accordion2">
+                            <div class="accordion-body">
+                                <!-- Choix de l'abscisse et de l'ordonnée -->
+                                <form method="POST" action="{{ url_for('regressions') }}">
+                                    <h3 class="dropdown-header">La target</h3>
+                                    <div class="dropdown-divider"></div>
+                                    {% for colonne in choix_col %}
+                                        <input type="radio" name="selected_target_regressions"
+                                               value="{{ colonne }}"
+                                                {% if 'selected_target_regressions' in session %}
+                                               {% if session['selected_target_regressions'] == colonne %}checked
+                                               {% endif %}
+                                                {% endif %}
+                                               >
+                                        {{ colonne }}<br>
+                                    {% endfor %}
+                                    <br>
+                                    <input type="submit" class="btn btn-success" value="Envoyer"/>
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-2"></div>
+        </div>
+    </div><br>
+
+    {% for id in ['selected_features_regressions', 'selected_target_regressions'] %}
+        {% if id in session %}
+            {{ session[id] }}
+    {% endif %}
+    {% endfor %}
+
 {% endblock %}

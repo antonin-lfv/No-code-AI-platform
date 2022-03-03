@@ -44,7 +44,7 @@ dico_dataset = {
 @app.route('/')
 def home():
     # pour clear les objets enregistrés sur la session dès qu'on revient au menu
-    # session.clear()
+    session.clear()
     return render_template('home.html')
 
 
@@ -52,7 +52,7 @@ def home():
 def dataset():
     _choix_dataset = None
     if request.method == "POST":
-        session.clear()
+        # session.clear()
         _choix_dataset = request.form.get('dataset')
         session['_choix_dataset'] = _choix_dataset
         if session['_choix_dataset'] in dico_dataset.keys():
@@ -289,12 +289,11 @@ def section_graphiques():
                 paper_bgcolor='rgba(0,0,0,0)',
                 plot_bgcolor='rgba(0,0,0,0)',
             )
-            fig.update_layout(width=1000, height=500, margin=dict(l=40, r=50, b=40, t=40), font=dict(size=10))
+            fig.update_layout(width=1000, height=500, font=dict(size=10))
             fig = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
 
         return render_template("section_graphiques.html",
-                               all_col=choix_col, fig=fig,
-                               row_data=list(df.values.tolist()), zip=zip, erreur=erreur)
+                               all_col=choix_col, fig=fig, erreur=erreur)
     else:
         return render_template("waiting_for_data.html")
 
@@ -303,9 +302,19 @@ def section_graphiques():
 def regressions():
     if '_choix_dataset' in session.keys():
         df = dico_dataset[session['_choix_dataset']]
-        return render_template("regressions.html", column_names=df.columns.values,
-                               row_data=list(df.values.tolist()),
-                               zip=zip)
+        choix_col = col_numeric(df)
+        fig, erreur = None, None
+
+        if request.method == "POST":
+            if request.form.getlist('selected_features_regressions'):
+                session['selected_features_regressions'] = request.form.getlist('selected_features_regressions')
+            if request.form.getlist('selected_target_regressions'):
+                session['selected_target_regressions'] = request.form.getlist('selected_target_regressions')[0]
+
+
+        return render_template("regressions.html", choix_col=choix_col,
+                               fig=fig, erreur=erreur)
+
     else:
         return render_template("waiting_for_data.html")
 

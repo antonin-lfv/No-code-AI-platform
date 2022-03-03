@@ -283,13 +283,4 @@
         </div>
     {% endif %}
 
-    <!--test-->
-    <br><br><br><br><br><br>
-    {% for accordion_choice in ['selected_abscisse_col_sect_graphiques', 'selected_ordonnee_col_sect_graphiques', 'type_graphique_sect_graphiques', 'stats_graphique_sect_graphiques', 'reg_graphique_sect_graphiques'] %}
-        {% if accordion_choice in session.keys() %}
-            {{ session[accordion_choice] }}
-        {% endif %}
-    {% endfor %}
-    <br><br>
-
 {% endblock %}
