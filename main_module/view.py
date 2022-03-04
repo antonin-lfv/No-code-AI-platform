@@ -110,21 +110,25 @@ def matrice_correlation():
                     session['selected_nom_col_matrice_corr'] = list(selected_nom_col_matrice_corr)[:-1]
                     session['couleur_matrice'] = str(couleur_matrice)
                     fig = px.scatter_matrix(df_sans_NaN,
-                                            dimensions=col_numeric(df_sans_NaN[session['selected_nom_col_matrice_corr']]),
+                                            dimensions=col_numeric(
+                                                df_sans_NaN[session['selected_nom_col_matrice_corr']]),
                                             color=session['couleur_matrice'])
                 else:
                     session['selected_nom_col_matrice_corr'] = list(selected_nom_col_matrice_corr)
                     fig = px.scatter_matrix(df_sans_NaN,
-                                            dimensions=col_numeric(df_sans_NaN[session['selected_nom_col_matrice_corr']]))
+                                            dimensions=col_numeric(
+                                                df_sans_NaN[session['selected_nom_col_matrice_corr']]))
 
             elif 'selected_nom_col_matrice_corr' in session.keys():
                 if 'couleur_matrice' in session.keys():
                     fig = px.scatter_matrix(df_sans_NaN,
-                                            dimensions=col_numeric(df_sans_NaN[session['selected_nom_col_matrice_corr']]),
+                                            dimensions=col_numeric(
+                                                df_sans_NaN[session['selected_nom_col_matrice_corr']]),
                                             color=session['couleur_matrice'])
                 else:
                     fig = px.scatter_matrix(df_sans_NaN,
-                                            dimensions=col_numeric(df_sans_NaN[session['selected_nom_col_matrice_corr']]))
+                                            dimensions=col_numeric(
+                                                df_sans_NaN[session['selected_nom_col_matrice_corr']]))
             else:
                 fig = None
             if fig:
@@ -185,9 +189,12 @@ def section_graphiques():
                     # Si il y a au moins une valeur différente de empty
                     session['reg_graphique_sect_graphiques'] = session['reg_graphique_sect_graphiques'][:-1]
 
-        if session['selected_abscisse_col_sect_graphiques'] != 'empty' and session['selected_ordonnee_col_sect_graphiques'] != 'empty':
+        if session['selected_abscisse_col_sect_graphiques'] != 'empty' and session[
+            'selected_ordonnee_col_sect_graphiques'] != 'empty':
             df = dico_dataset[session['_choix_dataset']]
-            df_sans_NaN = pd.concat([df[session['selected_abscisse_col_sect_graphiques']].reset_index(drop=True), df[session['selected_ordonnee_col_sect_graphiques']].reset_index(drop=True)], axis=1).dropna()
+            df_sans_NaN = pd.concat([df[session['selected_abscisse_col_sect_graphiques']].reset_index(drop=True),
+                                     df[session['selected_ordonnee_col_sect_graphiques']].reset_index(drop=True)],
+                                    axis=1).dropna()
             if len(df_sans_NaN) > 0:
                 if session['type_graphique_sect_graphiques'] == 'Latitude/Longitude':
                     fig = go.Figure()
@@ -206,7 +213,8 @@ def section_graphiques():
                             'zoom': 1})
 
                 elif session['type_graphique_sect_graphiques'] == 'Histogramme':
-                    fig = px.histogram(df_sans_NaN, x=session['selected_abscisse_col_sect_graphiques'], y=session['selected_ordonnee_col_sect_graphiques'])
+                    fig = px.histogram(df_sans_NaN, x=session['selected_abscisse_col_sect_graphiques'],
+                                       y=session['selected_ordonnee_col_sect_graphiques'])
 
                 else:
                     # Courbe ou points
@@ -217,14 +225,16 @@ def section_graphiques():
                     }
                     fig.add_scatter(x=df_sans_NaN[session['selected_abscisse_col_sect_graphiques']],
                                     y=df_sans_NaN[session['selected_ordonnee_col_sect_graphiques']],
-                                    mode=type_graphe[session['type_graphique_sect_graphiques']], name='', showlegend=False)
+                                    mode=type_graphe[session['type_graphique_sect_graphiques']], name='',
+                                    showlegend=False)
 
                     if 'Régression Linéaire' in session['reg_graphique_sect_graphiques']:
                         # regression linaire
                         X = df_sans_NaN[session['selected_abscisse_col_sect_graphiques']].values.reshape(-1, 1)
                         model = LinearRegression()
                         model.fit(X, df_sans_NaN[session['selected_ordonnee_col_sect_graphiques']])
-                        x_range = np.linspace(X.min(), X.max(), len(df_sans_NaN[session['selected_ordonnee_col_sect_graphiques']]))
+                        x_range = np.linspace(X.min(), X.max(),
+                                              len(df_sans_NaN[session['selected_ordonnee_col_sect_graphiques']]))
                         y_range = model.predict(x_range.reshape(-1, 1))
                         fig.add_scatter(x=x_range, y=y_range, name='Regression linéaire', mode='lines',
                                         marker=dict(color='red'))
@@ -249,7 +259,8 @@ def section_graphiques():
                         fig.add_hline(y=df_sans_NaN[session['selected_ordonnee_col_sect_graphiques']].mean(),
                                       line_dash="dot",
                                       annotation_text="moyenne : {}".format(
-                                          round(df_sans_NaN[session['selected_ordonnee_col_sect_graphiques']].mean(), 1)),
+                                          round(df_sans_NaN[session['selected_ordonnee_col_sect_graphiques']].mean(),
+                                                1)),
                                       annotation_position="bottom left",
                                       line_width=2, line=dict(color='black'),
                                       annotation=dict(font_size=10))
@@ -260,7 +271,8 @@ def section_graphiques():
                         fig.add_hline(y=df_sans_NaN[session['selected_ordonnee_col_sect_graphiques']].min(),
                                       line_dash="dot",
                                       annotation_text="minimum : {}".format(
-                                          round(df_sans_NaN[session['selected_ordonnee_col_sect_graphiques']].min(), 1)),
+                                          round(df_sans_NaN[session['selected_ordonnee_col_sect_graphiques']].min(),
+                                                1)),
                                       annotation_position="bottom left",
                                       line_width=2, line=dict(color='black'),
                                       annotation=dict(font_size=10))
@@ -271,7 +283,8 @@ def section_graphiques():
                         fig.add_hline(y=df_sans_NaN[session['selected_ordonnee_col_sect_graphiques']].max(),
                                       line_dash="dot",
                                       annotation_text="maximum : {}".format(
-                                          round(df_sans_NaN[session['selected_ordonnee_col_sect_graphiques']].max(), 1)),
+                                          round(df_sans_NaN[session['selected_ordonnee_col_sect_graphiques']].max(),
+                                                1)),
                                       annotation_position="top left",
                                       line_width=2, line=dict(color='black'),
                                       annotation=dict(font_size=10))
@@ -304,16 +317,92 @@ def regressions():
         df = dico_dataset[session['_choix_dataset']]
         choix_col = col_numeric(df)
         fig, erreur = None, None
-
+        session["figures"] = []
         if request.method == "POST":
             if request.form.getlist('selected_features_regressions'):
                 session['selected_features_regressions'] = request.form.getlist('selected_features_regressions')
             if request.form.getlist('selected_target_regressions'):
                 session['selected_target_regressions'] = request.form.getlist('selected_target_regressions')[0]
 
+            if 'selected_target_regressions' in session and 'selected_features_regressions' in session:
+                if session['selected_target_regressions'] in session['selected_features_regressions'] and session[
+                    'selected_target_regressions'] is not None:
+                    erreur = 1
 
-        return render_template("regressions.html", choix_col=choix_col,
-                               fig=fig, erreur=erreur)
+        if 'selected_features_regressions' in session and 'selected_target_regressions' in session:
+            if not erreur:
+                # # On a tout ce qu'il faut
+                print([session['selected_features_regressions'] + [session['selected_target_regressions']]])
+                df_sans_NaN = pd.concat([df[col].reset_index(drop=True) for col in [
+                    session['selected_features_regressions'] + [session['selected_target_regressions']]]],
+                                        axis=1).dropna()
+                if len(df_sans_NaN) > 0:
+                    # # Début des régressions
+                    try:
+                        # # On applique les modèles si il n'y a pas d'erreurs
+
+                        # Data pour tous les modèles
+                        X_train, X_test, y_train, y_test = train_test_split(
+                            df_sans_NaN[session['selected_features_regressions']].values,
+                            df_sans_NaN[session['selected_target_regressions']], test_size=0.4, random_state=4)
+                        X_train, X_test, y_train, y_test = scale(X_train), scale(X_test), scale(y_train), scale(y_test)
+
+                        # ###############################################################################
+
+                        # st.markdown('<p class="section">Régression linéaire</p>', unsafe_allow_html=True)
+                        # Modèle
+                        model = LinearRegression()
+                        model.fit(X_train, y_train)
+                        pred_train = model.predict(X_train)
+                        pred_test = model.predict(X_test)
+                        # Métrique train set
+                        MSE_reg_train = mean_squared_error(y_train, pred_train)
+                        RMSE_reg_train = np.sqrt(MSE_reg_train)
+                        MAE_reg_train = mean_absolute_error(y_train, pred_train)
+                        r2_reg_train = r2_score(y_train, pred_train)
+                        # Métrique test set
+                        MSE_reg_test = mean_squared_error(y_test, pred_test)
+                        RMSE_reg_test = np.sqrt(MSE_reg_test)
+                        MAE_reg_test = mean_absolute_error(y_test, pred_test)
+                        r2_reg_test = r2_score(y_test, pred_test)
+                        # Affichage métriques
+                        session["reg_lineaire"] = []
+                        session["reg_lineaire"].append([round(MSE_reg_test, 3), round(MSE_reg_test - MSE_reg_train, 3)])
+                        session["reg_lineaire"].append([round(RMSE_reg_test, 3), round(RMSE_reg_test - RMSE_reg_train, 3)])
+                        session["reg_lineaire"].append([round(MAE_reg_test, 3), round(MAE_reg_test - MAE_reg_train, 3)])
+                        session["reg_lineaire"].append([round(r2_reg_test, 3), round(r2_reg_test - r2_reg_train, 3)])
+                        # Learning curves
+                        N, train_score, val_score = learning_curve(model, X_train, y_train,
+                                                                   train_sizes=np.linspace(0.1, 1.0, 10), cv=5)
+                        fig = go.Figure()
+                        fig.add_scatter(x=N, y=train_score.mean(axis=1), name='train', marker=dict(color='deepskyblue'))
+                        fig.add_scatter(x=N, y=val_score.mean(axis=1), name='validation', marker=dict(color='red'))
+                        fig.update_xaxes(title_text="Données de validation")
+                        fig.update_yaxes(title_text="Score")
+                        fig.update_layout(
+                            template='simple_white',
+                            font=dict(size=10),
+                            autosize=False,
+                            width=900, height=450,
+                            margin=dict(l=40, r=40, b=40, t=40),
+                            paper_bgcolor='rgba(0,0,0,0)',
+                            plot_bgcolor='rgba(0,0,0,0)',
+                            title={'text': "<b>Learning curves</b>",
+                                   'y': 0.9,
+                                   'x': 0.5,
+                                   'xanchor': 'center',
+                                   'yanchor': 'top'
+                                   }
+                        )
+                        session["figures"].append(json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder))
+                    except:
+                        erreur = 3
+
+                else:
+                    ## Dataset vide
+                    erreur = 2
+
+        return render_template("regressions.html", choix_col=choix_col, erreur=erreur, zip=zip)
 
     else:
         return render_template("waiting_for_data.html")

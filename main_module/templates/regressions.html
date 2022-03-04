@@ -31,7 +31,7 @@
                                                {% if colonne in session['selected_features_regressions'] %}checked
                                                {% endif %}
                                                 {% endif %}
-                                               >
+                                        >
                                         {{ colonne }}<br>
                                     {% endfor %}
                                     <br>
@@ -68,7 +68,7 @@
                                                {% if session['selected_target_regressions'] == colonne %}checked
                                                {% endif %}
                                                 {% endif %}
-                                               >
+                                        >
                                         {{ colonne }}<br>
                                     {% endfor %}
                                     <br>
@@ -84,10 +84,96 @@
         </div>
     </div><br>
 
-    {% for id in ['selected_features_regressions', 'selected_target_regressions'] %}
+
+    {% if not erreur and session["figures"] != [] %}
+        <br>
+        <br>
+        <br>
+        <div class="center-block">
+            <h3 class="text-center">Régression linéaire</h3><br>
+            <div id='chart1' class='chart center-block'></div>
+        </div>
+
+        <br>
+        <br>
+        <div class="center-block">
+            <h3 class="text-center">Régression polynomiale</h3><br>
+            <div id='chart2' class='chart center-block'></div>
+        </div>
+
+        <br>
+        <br>
+        <div class="center-block">
+            <h3 class="text-center">Régression de poisson</h3><br>
+            <div id='chart3' class='chart center-block'></div>
+        </div>
+
+        <br>
+        <br>
+        <div class="center-block">
+            <h3 class="text-center">Elastic net</h3><br>
+            <div id='chart4' class='chart center-block'></div>
+        </div>
+
+        <br>
+        <br>
+        <div class="center-block">
+            <h3 class="text-center">Ridge</h3><br>
+            <div id='chart5' class='chart center-block'></div>
+        </div>
+
+        <br>
+        <br>
+        <div class="center-block">
+            <h3 class="text-center">Lasso</h3><br>
+            <div id='chart6' class='chart center-block'></div>
+        </div>
+
+        {{ session["reg_lineaire"] }}
+
+        {% for figure, indexfig in zip(session["figures"], ['1', '2', '3', '4', '5', '6']) %}
+            <script type='text/javascript'>
+                var graphs = {{figure | safe}};
+                Plotly.plot('chart' +{{indexfig}}, graphs, {});
+            </script>
+        {% endfor %}
+    {% endif %}
+
+    <!--test-->
+    {% for id in ['selected_features_regressions', 'selected_target_regressions', 'list_metrics_linear_regressions'] %}
         {% if id in session %}
             {{ session[id] }}
-    {% endif %}
+        {% endif %}
     {% endfor %}
+
+    {% if erreur == 1 %}
+        <br>
+        <div class="center-block">
+            <!--target dans features-->
+            <div class="alert alert-danger" role="alert">
+                La target ne doit pas appartenir aux features !
+            </div>
+        </div>
+    {% endif %}
+
+    {% if erreur == 2 %}
+        <br>
+        <div class="center-block">
+            <!--Dataset vide-->
+            <div class="alert alert-danger" role="alert">
+                Le dataset après dropna() est vide !
+            </div>
+        </div>
+    {% endif %}
+
+    {% if erreur == 3 %}
+        <br>
+        <div class="center-block">
+            <!--erreur modèles-->
+            <div class="alert alert-danger" role="alert">
+                Impossible d'effectuer les régressions avec ces données
+            </div>
+        </div>
+    {% endif %}
 
 {% endblock %}
