@@ -349,8 +349,7 @@ def regressions():
 
                         # ###############################################################################
 
-                        # st.markdown('<p class="section">Régression linéaire</p>', unsafe_allow_html=True)
-                        # Modèle
+                        # Modèle régression linéaire
                         model = LinearRegression()
                         model.fit(X_train, y_train)
                         pred_train = model.predict(X_train)
@@ -368,7 +367,8 @@ def regressions():
                         # Affichage métriques
                         session["reg_lineaire"] = []
                         session["reg_lineaire"].append([round(MSE_reg_test, 3), round(MSE_reg_test - MSE_reg_train, 3)])
-                        session["reg_lineaire"].append([round(RMSE_reg_test, 3), round(RMSE_reg_test - RMSE_reg_train, 3)])
+                        session["reg_lineaire"].append(
+                            [round(RMSE_reg_test, 3), round(RMSE_reg_test - RMSE_reg_train, 3)])
                         session["reg_lineaire"].append([round(MAE_reg_test, 3), round(MAE_reg_test - MAE_reg_train, 3)])
                         session["reg_lineaire"].append([round(r2_reg_test, 3), round(r2_reg_test - r2_reg_train, 3)])
                         # Learning curves
@@ -376,6 +376,262 @@ def regressions():
                                                                    train_sizes=np.linspace(0.1, 1.0, 10), cv=5)
                         fig = go.Figure()
                         fig.add_scatter(x=N, y=train_score.mean(axis=1), name='train', marker=dict(color='deepskyblue'))
+                        fig.add_scatter(x=N, y=val_score.mean(axis=1), name='validation', marker=dict(color='red'))
+                        fig.update_xaxes(title_text="Données de validation")
+                        fig.update_yaxes(title_text="Score")
+                        fig.update_layout(
+                            template='simple_white',
+                            font=dict(size=10),
+                            autosize=False,
+                            width=900, height=450,
+                            margin=dict(l=40, r=40, b=40, t=40),
+                            paper_bgcolor='rgba(0,0,0,0)',
+                            plot_bgcolor='rgba(0,0,0,0)',
+                            title={'text': "<b>Learning curves</b>",
+                                   'y': 0.9,
+                                   'x': 0.5,
+                                   'xanchor': 'center',
+                                   'yanchor': 'top'
+                                   }
+                        )
+                        session["figures"].append(json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder))
+
+                        # ###############################################################################
+
+                        # Modèle régression polynomiale
+                        model1 = PolynomialFeatures(degree=4)
+                        x_poly = model1.fit_transform(X_train)
+                        model2 = LinearRegression(fit_intercept=False)
+                        model2.fit(x_poly, y_train)
+                        y_poly_pred_train = model2.predict(x_poly)
+                        y_poly_pred_test = model2.predict(model1.fit_transform(X_test))
+                        # Métrique train set
+                        MSE_reg_train = mean_squared_error(y_train, y_poly_pred_train)
+                        RMSE_reg_train = np.sqrt(MSE_reg_train)
+                        MAE_reg_train = mean_absolute_error(y_train, y_poly_pred_train)
+                        r2_reg_train = r2_score(y_train, y_poly_pred_train)
+                        # Métrique test set
+                        MSE_reg_test = mean_squared_error(y_test, y_poly_pred_test)
+                        RMSE_reg_test = np.sqrt(MSE_reg_test)
+                        MAE_reg_test = mean_absolute_error(y_test, y_poly_pred_test)
+                        r2_reg_test = r2_score(y_test, y_poly_pred_test)
+                        # Affichage métriques
+                        session["reg_poly"] = []
+                        session["reg_poly"].append([round(MSE_reg_test, 3), round(MSE_reg_test - MSE_reg_train, 3)])
+                        session["reg_poly"].append([round(RMSE_reg_test, 3), round(RMSE_reg_test - RMSE_reg_train, 3)])
+                        session["reg_poly"].append([round(MAE_reg_test, 3), round(MAE_reg_test - MAE_reg_train, 3)])
+                        session["reg_poly"].append([round(r2_reg_test, 3), round(r2_reg_test - r2_reg_train, 3)])
+                        # Learning curves
+                        N, train_score, val_score = learning_curve(model2, X_train, y_train,
+                                                                   train_sizes=np.linspace(0.1, 1.0, 10), cv=5)
+                        fig = go.Figure()
+                        fig.add_scatter(x=N, y=train_score.mean(axis=1), name='train', marker=dict(color='deepskyblue'))
+                        fig.add_scatter(x=N, y=val_score.mean(axis=1), name='validation', marker=dict(color='red'))
+                        fig.update_xaxes(title_text="Données de validation")
+                        fig.update_yaxes(title_text="Score")
+                        fig.update_layout(
+                            template='simple_white',
+                            font=dict(size=10),
+                            autosize=False,
+                            width=900, height=450,
+                            margin=dict(l=40, r=40, b=40, t=40),
+                            paper_bgcolor='rgba(0,0,0,0)',
+                            plot_bgcolor='rgba(0,0,0,0)',
+                            title={'text': "<b>Learning curves</b>",
+                                   'y': 0.9,
+                                   'x': 0.5,
+                                   'xanchor': 'center',
+                                   'yanchor': 'top'
+                                   }
+                        )
+                        session["figures"].append(json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder))
+
+                        # ###############################################################################
+
+                        if np.issubdtype(y_train.dtype, int) and np.any(y_train < 0):
+                            # Modèle régression de poisson
+                            model = PoissonRegressor()
+                            model.fit(X_train, y_train)
+                            pred_train = model.predict(X_train)
+                            pred_test = model.predict(X_test)
+                            # Métrique train set
+                            MSE_reg_train = mean_squared_error(y_train, pred_train)
+                            RMSE_reg_train = np.sqrt(MSE_reg_train)
+                            MAE_reg_train = mean_absolute_error(y_train, pred_train)
+                            r2_reg_train = r2_score(y_train, pred_train)
+                            # Métrique test set
+                            MSE_reg_test = mean_squared_error(y_test, pred_test)
+                            RMSE_reg_test = np.sqrt(MSE_reg_test)
+                            MAE_reg_test = mean_absolute_error(y_test, pred_test)
+                            r2_reg_test = r2_score(y_test, pred_test)
+                            # Affichage métriques
+                            session["reg_poisson"] = []
+                            session["reg_poisson"].append(
+                                [round(MSE_reg_test, 3), round(MSE_reg_test - MSE_reg_train, 3)])
+                            session["reg_poisson"].append(
+                                [round(RMSE_reg_test, 3), round(RMSE_reg_test - RMSE_reg_train, 3)])
+                            session["reg_poisson"].append(
+                                [round(MAE_reg_test, 3), round(MAE_reg_test - MAE_reg_train, 3)])
+                            session["reg_poisson"].append([round(r2_reg_test, 3), round(r2_reg_test - r2_reg_train, 3)])
+                            # Learning curves
+                            N, train_score, val_score = learning_curve(model, X_train, y_train,
+                                                                       train_sizes=np.linspace(0.1, 1.0, 10), cv=5)
+                            fig = go.Figure()
+                            fig.add_scatter(x=N, y=train_score.mean(axis=1), name='train',
+                                            marker=dict(color='deepskyblue'))
+                            fig.add_scatter(x=N, y=val_score.mean(axis=1), name='validation', marker=dict(color='red'))
+                            fig.update_xaxes(title_text="Données de validation")
+                            fig.update_yaxes(title_text="Score")
+                            fig.update_layout(
+                                template='simple_white',
+                                font=dict(size=10),
+                                autosize=False,
+                                width=900, height=450,
+                                margin=dict(l=40, r=40, b=40, t=40),
+                                paper_bgcolor='rgba(0,0,0,0)',
+                                plot_bgcolor='rgba(0,0,0,0)',
+                                title={'text': "<b>Learning curves</b>",
+                                       'y': 0.9,
+                                       'x': 0.5,
+                                       'xanchor': 'center',
+                                       'yanchor': 'top'
+                                       }
+                            )
+                            session["figures"].append(json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder))
+                        else:
+                            # Régression de poisson impossible
+                            session["figures"].append('erreur')
+
+                        # ###############################################################################
+
+                        # Modèle Elastic net
+                        model = ElasticNet()
+                        model.fit(X_train, y_train)
+                        pred_train = model.predict(X_train)
+                        pred_test = model.predict(X_test)
+                        # Métrique train set
+                        MSE_reg_train = mean_squared_error(y_train, pred_train)
+                        RMSE_reg_train = np.sqrt(MSE_reg_train)
+                        MAE_reg_train = mean_absolute_error(y_train, pred_train)
+                        r2_reg_train = r2_score(y_train, pred_train)
+                        # Métrique test set
+                        MSE_reg_test = mean_squared_error(y_test, pred_test)
+                        RMSE_reg_test = np.sqrt(MSE_reg_test)
+                        MAE_reg_test = mean_absolute_error(y_test, pred_test)
+                        r2_reg_test = r2_score(y_test, pred_test)
+                        # Affichage métriques
+                        session["reg_elastic_net"] = []
+                        session["reg_elastic_net"].append(
+                            [round(MSE_reg_test, 3), round(MSE_reg_test - MSE_reg_train, 3)])
+                        session["reg_elastic_net"].append(
+                            [round(RMSE_reg_test, 3), round(RMSE_reg_test - RMSE_reg_train, 3)])
+                        session["reg_elastic_net"].append(
+                            [round(MAE_reg_test, 3), round(MAE_reg_test - MAE_reg_train, 3)])
+                        session["reg_elastic_net"].append([round(r2_reg_test, 3), round(r2_reg_test - r2_reg_train, 3)])
+                        # Learning curves
+                        N, train_score, val_score = learning_curve(model, X_train, y_train,
+                                                                   train_sizes=np.linspace(0.1, 1.0, 10), cv=5)
+                        fig = go.Figure()
+                        fig.add_scatter(x=N, y=train_score.mean(axis=1), name='train',
+                                        marker=dict(color='deepskyblue'))
+                        fig.add_scatter(x=N, y=val_score.mean(axis=1), name='validation', marker=dict(color='red'))
+                        fig.update_xaxes(title_text="Données de validation")
+                        fig.update_yaxes(title_text="Score")
+                        fig.update_layout(
+                            template='simple_white',
+                            font=dict(size=10),
+                            autosize=False,
+                            width=900, height=450,
+                            margin=dict(l=40, r=40, b=40, t=40),
+                            paper_bgcolor='rgba(0,0,0,0)',
+                            plot_bgcolor='rgba(0,0,0,0)',
+                            title={'text': "<b>Learning curves</b>",
+                                   'y': 0.9,
+                                   'x': 0.5,
+                                   'xanchor': 'center',
+                                   'yanchor': 'top'
+                                   }
+                        )
+                        session["figures"].append(json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder))
+
+                        # ###############################################################################
+
+                        # Modèle Ridge
+                        model = Ridge()
+                        model.fit(X_train, y_train)
+                        pred_train = model.predict(X_train)
+                        pred_test = model.predict(X_test)
+                        # Métrique train set
+                        MSE_reg_train = mean_squared_error(y_train, pred_train)
+                        RMSE_reg_train = np.sqrt(MSE_reg_train)
+                        MAE_reg_train = mean_absolute_error(y_train, pred_train)
+                        r2_reg_train = r2_score(y_train, pred_train)
+                        # Métrique test set
+                        MSE_reg_test = mean_squared_error(y_test, pred_test)
+                        RMSE_reg_test = np.sqrt(MSE_reg_test)
+                        MAE_reg_test = mean_absolute_error(y_test, pred_test)
+                        r2_reg_test = r2_score(y_test, pred_test)
+                        # Affichage métriques
+                        session["reg_ridge"] = []
+                        session["reg_ridge"].append([round(MSE_reg_test, 3), round(MSE_reg_test - MSE_reg_train, 3)])
+                        session["reg_ridge"].append([round(RMSE_reg_test, 3), round(RMSE_reg_test - RMSE_reg_train, 3)])
+                        session["reg_ridge"].append([round(MAE_reg_test, 3), round(MAE_reg_test - MAE_reg_train, 3)])
+                        session["reg_ridge"].append([round(r2_reg_test, 3), round(r2_reg_test - r2_reg_train, 3)])
+                        # Learning curves
+                        N, train_score, val_score = learning_curve(model, X_train, y_train,
+                                                                   train_sizes=np.linspace(0.1, 1.0, 10), cv=5)
+                        fig = go.Figure()
+                        fig.add_scatter(x=N, y=train_score.mean(axis=1), name='train',
+                                        marker=dict(color='deepskyblue'))
+                        fig.add_scatter(x=N, y=val_score.mean(axis=1), name='validation', marker=dict(color='red'))
+                        fig.update_xaxes(title_text="Données de validation")
+                        fig.update_yaxes(title_text="Score")
+                        fig.update_layout(
+                            template='simple_white',
+                            font=dict(size=10),
+                            autosize=False,
+                            width=900, height=450,
+                            margin=dict(l=40, r=40, b=40, t=40),
+                            paper_bgcolor='rgba(0,0,0,0)',
+                            plot_bgcolor='rgba(0,0,0,0)',
+                            title={'text': "<b>Learning curves</b>",
+                                   'y': 0.9,
+                                   'x': 0.5,
+                                   'xanchor': 'center',
+                                   'yanchor': 'top'
+                                   }
+                        )
+                        session["figures"].append(json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder))
+
+                        # ###############################################################################
+
+                        # Modèle lasso
+                        model = Lasso()
+                        model.fit(X_train, y_train)
+                        pred_train = model.predict(X_train)
+                        pred_test = model.predict(X_test)
+                        # Métrique train set
+                        MSE_reg_train = mean_squared_error(y_train, pred_train)
+                        RMSE_reg_train = np.sqrt(MSE_reg_train)
+                        MAE_reg_train = mean_absolute_error(y_train, pred_train)
+                        r2_reg_train = r2_score(y_train, pred_train)
+                        # Métrique test set
+                        MSE_reg_test = mean_squared_error(y_test, pred_test)
+                        RMSE_reg_test = np.sqrt(MSE_reg_test)
+                        MAE_reg_test = mean_absolute_error(y_test, pred_test)
+                        r2_reg_test = r2_score(y_test, pred_test)
+                        # Affichage métriques
+                        session["reg_lasso"] = []
+                        session["reg_lasso"].append([round(MSE_reg_test, 3), round(MSE_reg_test - MSE_reg_train, 3)])
+                        session["reg_lasso"].append([round(RMSE_reg_test, 3), round(RMSE_reg_test - RMSE_reg_train, 3)])
+                        session["reg_lasso"].append([round(MAE_reg_test, 3), round(MAE_reg_test - MAE_reg_train, 3)])
+                        session["reg_lasso"].append([round(r2_reg_test, 3), round(r2_reg_test - r2_reg_train, 3)])
+                        # Learning curves
+                        N, train_score, val_score = learning_curve(model, X_train, y_train,
+                                                                   train_sizes=np.linspace(0.1, 1.0, 10), cv=5)
+                        fig = go.Figure()
+                        fig.add_scatter(x=N, y=train_score.mean(axis=1), name='train',
+                                        marker=dict(color='deepskyblue'))
                         fig.add_scatter(x=N, y=val_score.mean(axis=1), name='validation', marker=dict(color='red'))
                         fig.update_xaxes(title_text="Données de validation")
                         fig.update_yaxes(title_text="Score")
