@@ -652,10 +652,11 @@ def regressions():
                         )
                         session["figures"].append(json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder))
                     except:
+                        # Régressions impossibles
                         erreur = 3
 
                 else:
-                    ## Dataset vide
+                    # Dataset vide
                     erreur = 2
 
         return render_template("regressions.html", choix_col=choix_col, erreur=erreur, zip=zip)
