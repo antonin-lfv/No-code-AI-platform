@@ -7,7 +7,7 @@
         <div class="row">
             <div class="col-1"></div>
             <div class="col-3"><br><br><br>
-                <div class="accordion" id="accordion1">
+                <div class="accordion shadow" id="accordion1">
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="flush-headingOne">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
@@ -38,19 +38,19 @@
 
                 <br><br>
                 {% if session['_choix_dataset'] == 'iris' %}
-                    <div class="alert alert-success" role="alert">
+                    <div class="alert alert-success shadow" role="alert">
                         Vous avez choisi le Dataset des Iris
                     </div>
                 {% elif session['_choix_dataset'] == 'penguins' %}
-                    <div class="alert alert-success" role="alert">
+                    <div class="alert alert-success shadow" role="alert">
                         Vous avez choisi le Dataset des Penguins
                     </div>
                 {% elif session['_choix_dataset'] == 'voitures' %}
-                    <div class="alert alert-success" role="alert">
+                    <div class="alert alert-success shadow" role="alert">
                         Vous avez choisi le Dataset du prix des voitures
                     </div>
                 {% elif session['_choix_dataset'] == 'custom' %}
-                    <div class="alert alert-success" role="alert">
+                    <div class="alert alert-success shadow" role="alert">
                         This is a info alert—check it out!
                     </div>
                 {% else %}
@@ -80,8 +80,8 @@
                     <div style="height: 300px; box-sizing: border-box;">
                         <!-- Afficher le dataset -->
                         <br><br>
-                        <div class="d-flex justify-content-center">
-                            <table>
+                        <div class="">
+                            <table class="table table-hover table-bordered justify-content-center d-flex">
                                 <tr>
                                     {% for col in column_names %}
                                         <th>{{ col }}</th>
