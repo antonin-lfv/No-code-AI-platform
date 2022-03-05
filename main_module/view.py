@@ -327,7 +327,7 @@ def regressions():
             if 'selected_target_regressions' in session and 'selected_features_regressions' in session:
                 if session['selected_target_regressions'] in session['selected_features_regressions'] and session[
                     'selected_target_regressions'] is not None:
-                    erreur = 1
+                    erreur = True
 
         if 'selected_features_regressions' in session and 'selected_target_regressions' in session:
             if not erreur:
@@ -375,8 +375,8 @@ def regressions():
                         N, train_score, val_score = learning_curve(model, X_train, y_train,
                                                                    train_sizes=np.linspace(0.1, 1.0, 10), cv=5)
                         fig = go.Figure()
-                        fig.add_scatter(x=N, y=train_score.mean(axis=1), name='train', marker=dict(color='deepskyblue'))
-                        fig.add_scatter(x=N, y=val_score.mean(axis=1), name='validation', marker=dict(color='red'))
+                        fig.add_scatter(x=N, y=train_score.mean(axis=1), name='train', marker=dict(color='royalblue'))
+                        fig.add_scatter(x=N, y=val_score.mean(axis=1), name='validation', marker=dict(color='coral'))
                         fig.update_xaxes(title_text="Données de validation")
                         fig.update_yaxes(title_text="Score")
                         fig.update_layout(
@@ -425,8 +425,8 @@ def regressions():
                         N, train_score, val_score = learning_curve(model2, X_train, y_train,
                                                                    train_sizes=np.linspace(0.1, 1.0, 10), cv=5)
                         fig = go.Figure()
-                        fig.add_scatter(x=N, y=train_score.mean(axis=1), name='train', marker=dict(color='deepskyblue'))
-                        fig.add_scatter(x=N, y=val_score.mean(axis=1), name='validation', marker=dict(color='red'))
+                        fig.add_scatter(x=N, y=train_score.mean(axis=1), name='train', marker=dict(color='royalblue'))
+                        fig.add_scatter(x=N, y=val_score.mean(axis=1), name='validation', marker=dict(color='coral'))
                         fig.update_xaxes(title_text="Données de validation")
                         fig.update_yaxes(title_text="Score")
                         fig.update_layout(
@@ -478,8 +478,9 @@ def regressions():
                                                                        train_sizes=np.linspace(0.1, 1.0, 10), cv=5)
                             fig = go.Figure()
                             fig.add_scatter(x=N, y=train_score.mean(axis=1), name='train',
-                                            marker=dict(color='deepskyblue'))
-                            fig.add_scatter(x=N, y=val_score.mean(axis=1), name='validation', marker=dict(color='red'))
+                                            marker=dict(color='royalblue'))
+                            fig.add_scatter(x=N, y=val_score.mean(axis=1), name='validation',
+                                            marker=dict(color='coral'))
                             fig.update_xaxes(title_text="Données de validation")
                             fig.update_yaxes(title_text="Score")
                             fig.update_layout(
@@ -532,9 +533,8 @@ def regressions():
                         N, train_score, val_score = learning_curve(model, X_train, y_train,
                                                                    train_sizes=np.linspace(0.1, 1.0, 10), cv=5)
                         fig = go.Figure()
-                        fig.add_scatter(x=N, y=train_score.mean(axis=1), name='train',
-                                        marker=dict(color='deepskyblue'))
-                        fig.add_scatter(x=N, y=val_score.mean(axis=1), name='validation', marker=dict(color='red'))
+                        fig.add_scatter(x=N, y=train_score.mean(axis=1), name='train', marker=dict(color='royalblue'))
+                        fig.add_scatter(x=N, y=val_score.mean(axis=1), name='validation', marker=dict(color='coral'))
                         fig.update_xaxes(title_text="Données de validation")
                         fig.update_yaxes(title_text="Score")
                         fig.update_layout(
@@ -581,9 +581,8 @@ def regressions():
                         N, train_score, val_score = learning_curve(model, X_train, y_train,
                                                                    train_sizes=np.linspace(0.1, 1.0, 10), cv=5)
                         fig = go.Figure()
-                        fig.add_scatter(x=N, y=train_score.mean(axis=1), name='train',
-                                        marker=dict(color='deepskyblue'))
-                        fig.add_scatter(x=N, y=val_score.mean(axis=1), name='validation', marker=dict(color='red'))
+                        fig.add_scatter(x=N, y=train_score.mean(axis=1), name='train', marker=dict(color='royalblue'))
+                        fig.add_scatter(x=N, y=val_score.mean(axis=1), name='validation', marker=dict(color='coral'))
                         fig.update_xaxes(title_text="Données de validation")
                         fig.update_yaxes(title_text="Score")
                         fig.update_layout(
@@ -630,9 +629,8 @@ def regressions():
                         N, train_score, val_score = learning_curve(model, X_train, y_train,
                                                                    train_sizes=np.linspace(0.1, 1.0, 10), cv=5)
                         fig = go.Figure()
-                        fig.add_scatter(x=N, y=train_score.mean(axis=1), name='train',
-                                        marker=dict(color='deepskyblue'))
-                        fig.add_scatter(x=N, y=val_score.mean(axis=1), name='validation', marker=dict(color='red'))
+                        fig.add_scatter(x=N, y=train_score.mean(axis=1), name='train', marker=dict(color='royalblue'))
+                        fig.add_scatter(x=N, y=val_score.mean(axis=1), name='validation', marker=dict(color='coral'))
                         fig.update_xaxes(title_text="Données de validation")
                         fig.update_yaxes(title_text="Score")
                         fig.update_layout(
@@ -653,11 +651,11 @@ def regressions():
                         session["figures"].append(json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder))
                     except:
                         # Régressions impossibles
-                        erreur = 3
+                        erreur = True
 
                 else:
                     # Dataset vide
-                    erreur = 2
+                    erreur = True
 
         return render_template("regressions.html", choix_col=choix_col, erreur=erreur, zip=zip)
 

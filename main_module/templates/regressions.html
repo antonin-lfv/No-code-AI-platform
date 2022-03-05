@@ -90,8 +90,19 @@
         <br>
         <br>
         <div class="center-block">
-            <h3 class="text-center">Régression linéaire</h3><br>
-                    {{ session["reg_lineaire"] }}
+            <h3 class="text-center">Régression linéaire</h3><br><br>
+            <!--Metrics-->
+            <div class="text-center">
+            {% for value, metric in zip(session["reg_lineaire"], ["MSE", "RMSE", "MAE", "R2"]) %}
+                <button type="button" class="btn {% if value[1] <= 0 and metric != "R2" %}btn-outline-success{% else %}btn-outline-danger{% endif %} position-relative">
+                    {{ metric }} = {{ value[0] }}
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill {% if value[1] <= 0 and metric != "R2" %}bg-success{% else %}bg-danger{% endif %}">
+                    {% if value[1] > 0 %}+{% endif %}{{ value[1] }}
+                  </span>
+                </button>&nbsp &nbsp
+            {% endfor %}
+            </div>
+            <br>
             <div id='chart1' class='chart center-block'></div>
         </div>
         <br>
@@ -99,21 +110,47 @@
         <br>
         <br>
         <br>
+
+
         <div class="center-block">
-            <h3 class="text-center">Régression polynomiale</h3><br>
-            {{ session["reg_poly"] }}
+            <h3 class="text-center">Régression polynomiale</h3><br><br>
+            <!--Metrics-->
+            <div class="text-center">
+            {% for value, metric in zip(session["reg_poly"], ["MSE", "RMSE", "MAE", "R2"]) %}
+                <button type="button" class="btn {% if value[1] <= 0 and metric != "R2" %}btn-outline-success{% else %}btn-outline-danger{% endif %} position-relative">
+                    {{ metric }} = {{ value[0] }}
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill {% if value[1] <= 0 and metric != "R2" %}bg-success{% else %}bg-danger{% endif %}">
+                    {% if value[1] > 0 %}+{% endif %}{{ value[1] }}
+                  </span>
+                </button>&nbsp &nbsp
+            {% endfor %}
+            </div>
+            <br>
             <div id='chart2' class='chart center-block'></div>
         </div>
         <br>
         <br>
         <br>
+
+
         {% if session["figures"][2] != 'erreur' %}
             <!--Si la régression de poisson est possible-->
             <br>
             <br>
             <div class="center-block">
-                <h3 class="text-center">Régression de poisson</h3><br>
-                {{ session["reg_poisson"] }}
+                <h3 class="text-center">Régression de poisson</h3><br><br>
+            <!--Metrics-->
+            <div class="text-center">
+            {% for value, metric in zip(session["reg_poison"], ["MSE", "RMSE", "MAE", "R2"]) %}
+                <button type="button" class="btn {% if value[1] <= 0 and metric != "R2" %}btn-outline-success{% else %}btn-outline-danger{% endif %} position-relative">
+                    {{ metric }} = {{ value[0] }}
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill {% if value[1] <= 0 and metric != "R2" %}bg-success{% else %}bg-danger{% endif %}">
+                    {% if value[1] > 0 %}+{% endif %}{{ value[1] }}
+                  </span>
+                </button>&nbsp &nbsp
+            {% endfor %}
+            </div>
+            <br>
                 <div id='chart3' class='chart center-block'></div>
             </div>
             <br>        <br>
@@ -123,18 +160,42 @@
         <br>
         <br>
         <div class="center-block">
-            <h3 class="text-center">Elastic net</h3><br>
-            {{ session["reg_elastic_net"] }}
+            <h3 class="text-center">Elastic net</h3><br><br>
+            <!--Metrics-->
+            <div class="text-center">
+            {% for value, metric in zip(session["reg_elastic_net"], ["MSE", "RMSE", "MAE", "R2"]) %}
+                <button type="button" class="btn {% if value[1] <= 0 and metric != "R2" %}btn-outline-success{% else %}btn-outline-danger{% endif %} position-relative">
+                    {{ metric }} = {{ value[0] }}
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill {% if value[1] <= 0 and metric != "R2" %}bg-success{% else %}bg-danger{% endif %}">
+                    {% if value[1] > 0 %}+{% endif %}{{ value[1] }}
+                  </span>
+                </button>&nbsp &nbsp
+            {% endfor %}
+            </div>
+            <br>
             <div id='chart4' class='chart center-block'></div>
         </div>
-        <br>        <br>
+        <br>
+        <br>
+        <br>
+        <br>
         <br>
 
-        <br>
-        <br>
+
         <div class="center-block">
-            <h3 class="text-center">Ridge</h3><br>
-            {{ session["reg_ridge"] }}
+            <h3 class="text-center">Ridge</h3><br><br>
+            <!--Metrics-->
+            <div class="text-center">
+            {% for value, metric in zip(session["reg_ridge"], ["MSE", "RMSE", "MAE", "R2"]) %}
+                <button type="button" class="btn {% if value[1] <= 0 and metric != "R2" %}btn-outline-success{% else %}btn-outline-danger{% endif %} position-relative">
+                    {{ metric }} = {{ value[0] }}
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill {% if value[1] <= 0 and metric != "R2" %}bg-success{% else %}bg-danger{% endif %}">
+                    {% if value[1] > 0 %}+{% endif %}{{ value[1] }}
+                  </span>
+                </button>&nbsp &nbsp
+            {% endfor %}
+            </div>
+            <br>
             <div id='chart5' class='chart center-block'></div>
         </div>
         <br>        <br>
@@ -143,8 +204,19 @@
         <br>
         <br>
         <div class="center-block">
-            <h3 class="text-center">Lasso</h3><br>
-            {{ session["reg_lasso"] }}
+            <h3 class="text-center">Lasso</h3><br><br>
+            <!--Metrics-->
+            <div class="text-center">
+            {% for value, metric in zip(session["reg_lasso"], ["MSE", "RMSE", "MAE", "R2"]) %}
+                <button type="button" class="btn {% if value[1] <= 0 and metric != "R2" %}btn-outline-success{% else %}btn-outline-danger{% endif %} position-relative">
+                    {{ metric }} = {{ value[0] }}
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill {% if value[1] <= 0 and metric != "R2" %}bg-success{% else %}bg-danger{% endif %}">
+                    {% if value[1] > 0 %}+{% endif %}{{ value[1] }}
+                  </span>
+                </button>&nbsp &nbsp
+            {% endfor %}
+            </div>
+            <br>
             <div id='chart6' class='chart center-block'></div>
         </div>        <br>
         <br>
@@ -160,34 +232,21 @@
         {% endfor %}
     {% endif %}
 
-    {% if erreur == 1 %}
+    {% if erreur %}
         <br>
         <div class="center-block">
             <!--target dans features-->
             <div class="alert alert-danger shadow" role="alert">
-                La target ne doit pas appartenir aux features !
+                Erreurs possibles : <br>
+                - La target appartient aux features<br>
+                - Le dataset après dropna() est vide<br>
+                - Les régressions ont échoué avec ces données<br>
             </div>
         </div>
     {% endif %}
 
-    {% if erreur == 2 %}
-        <br>
-        <div class="center-block">
-            <!--Dataset vide-->
-            <div class="alert alert-danger shadow" role="alert">
-                Le dataset après dropna() est vide !
-            </div>
-        </div>
-    {% endif %}
+    {{ session["selected_target_regressions"] }}
+    {{ session["selected_features_regressions"] }}
 
-    {% if erreur == 3 %}
-        <br>
-        <div class="center-block">
-            <!--erreur modèles-->
-            <div class="alert alert-danger shadow" role="alert">
-                Impossible d'effectuer les régressions avec ces données
-            </div>
-        </div>
-    {% endif %}
 
 {% endblock %}
