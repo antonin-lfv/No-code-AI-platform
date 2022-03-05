@@ -2,6 +2,139 @@
 
 {% block content %}
 
-<br><p class="grand_titre">KNN : k-nearest neighbors</p>
+    <br>
+
+    <div class="container">
+        <br><br>
+
+        <div class="row">
+            <div class="col-1"></div>
+            <div class="col-5">
+                <p class="grand_titre">KNN : k-nearest neighbors</p><br>
+                <!--Choix target + features-->
+                <div class="accordion shadow" id="accordion1">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="flush-headingOne">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#flush-collapseOne" aria-expanded="false"
+                                    aria-controls="flush-collapseOne">
+                                Features + target
+                            </button>
+                        </h2>
+                        <div id="flush-collapseOne" class="accordion-collapse collapse"
+                             aria-labelledby="flush-headingOne" data-bs-parent="#accordion1">
+                            <div class="accordion-body">
+                                <!-- Choix des features et target -->
+                                <form method="POST" action="{{ url_for('KNN') }}">
+                                    <h3 class="dropdown-header">Features et target</h3>
+                                    <div class="dropdown-divider"></div>
+                                    {% for colonne in choix_col %}
+                                        <input type="checkbox" name="selected_col_knn"
+                                               value="{{ colonne }}"
+                                                {% if 'selected_col_knn' in session %}
+                                               {% if colonne in session['selected_col_knn'] %}checked
+                                               {% endif %}
+                                                {% endif %}
+                                        >
+                                        {{ colonne }}<br>
+                                    {% endfor %}
+                                    <br>
+                                    <input type="submit" class="btn btn-success" value="Envoyer"/>
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                </div><br><br>
+
+                {% if len(session['selected_col_knn']) > 1 %}
+                <!--Encodage-->
+                <div class="accordion shadow" id="accordion2">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="flush-headingTwo">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#flush-collapseTwo" aria-expanded="false"
+                                    aria-controls="flush-collapseTwo">
+                                Données à encoder
+                            </button>
+                        </h2>
+                        <div id="flush-collapseTwo" class="accordion-collapse collapse"
+                             aria-labelledby="flush-headingTwo" data-bs-parent="#accordion2">
+                            <div class="accordion-body">
+                                <!-- Encodage -->
+                                <form method="POST" action="{{ url_for('KNN') }}">
+                                    <h3 class="dropdown-header">Colonnes à encoder</h3>
+                                    <div class="dropdown-divider"></div>
+                                    {% for colonne in session['selected_col_knn'] %}
+                                        <input type="checkbox" name="selected_col_encode_knn"
+                                               value="{{ colonne }}"
+                                                {% if 'selected_col_encode_knn' in session %}
+                                               {% if colonne in session['selected_col_encode_knn'] %}checked
+                                               {% endif %}
+                                                {% endif %}
+                                        >
+                                        {{ colonne }}<br>
+                                    {% endfor %}
+                                    <br>
+                                    <input type="submit" class="btn btn-success" value="Envoyer"/>
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                </div><br><br>
+
+                <!--Target-->
+                <div class="accordion shadow" id="accordion3">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="flush-headingThree">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#flush-collapseThree" aria-expanded="false"
+                                    aria-controls="flush-collapseThree">
+                                Target
+                            </button>
+                        </h2>
+                        <div id="flush-collapseThree" class="accordion-collapse collapse"
+                             aria-labelledby="flush-headingThree" data-bs-parent="#accordion3">
+                            <div class="accordion-body">
+                                <!-- target -->
+                                <form method="POST" action="{{ url_for('KNN') }}">
+                                    <h3 class="dropdown-header">Choix de la target</h3>
+                                    <div class="dropdown-divider"></div>
+                                    {% for colonne in session['selected_target_knn'] %}
+                                        <input type="checkbox" name="selected_col_encode_knn"
+                                               value="{{ colonne }}"
+                                                {% if 'selected_target_knn' in session %}
+                                               {% if colonne in session['selected_target_knn'] %}checked
+                                               {% endif %}
+                                                {% endif %}
+                                        >
+                                        {{ colonne }}<br>
+                                    {% endfor %}
+                                    <br>
+                                    <input type="submit" class="btn btn-success" value="Envoyer"/>
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <br>
+    <br>
+
+    {% if 'selected_col_knn' in session %}
+        {{ session['selected_col_knn'] }}
+    {% endif %}
+        {% if 'selected_col_encode_knn' in session %}
+        {{ session['selected_col_encode_knn'] }}
+    {% endif %}
+        {% if 'selected_target_knn' in session %}
+        {{ session['selected_target_knn'] }}
+    {% endif %}
 
 {% endblock %}

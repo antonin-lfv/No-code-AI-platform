@@ -325,8 +325,7 @@ def regressions():
                 session['selected_target_regressions'] = request.form.getlist('selected_target_regressions')[0]
 
             if 'selected_target_regressions' in session and 'selected_features_regressions' in session:
-                if session['selected_target_regressions'] in session['selected_features_regressions'] and session[
-                    'selected_target_regressions'] is not None:
+                if session['selected_target_regressions'] in session['selected_features_regressions'] and session['selected_target_regressions'] is not None:
                     erreur = True
 
         if 'selected_features_regressions' in session and 'selected_target_regressions' in session:
@@ -667,9 +666,17 @@ def regressions():
 def KNN():
     if '_choix_dataset' in session.keys():
         df = dico_dataset[session['_choix_dataset']]
-        return render_template("KNN.html", column_names=df.columns.values,
-                               row_data=list(df.values.tolist()),
-                               zip=zip)
+        choix_col, col_num = df.columns.values, col_numeric(df)
+        session['selected_col_knn'] = []
+        if request.method == "POST":
+            if request.form.getlist('selected_col_knn'):
+                session['selected_col_knn'] = request.form.getlist('selected_col_knn')
+            if request.form.getlist('selected_col_encode_knn'):
+                session['selected_col_encode_knn'] = request.form.getlist('selected_col_encode_knn')
+            if request.form.getlist('selected_target_knn'):
+                session['selected_target_knn'] = request.form.getlist('selected_target_knn')
+
+        return render_template("KNN.html", zip=zip, choix_col=choix_col, len=len)
     else:
         return render_template("waiting_for_data.html")
 
