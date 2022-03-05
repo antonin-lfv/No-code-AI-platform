@@ -97,7 +97,7 @@ img {
 }
 
 .dropdown-menu {
-    max-height: 40vh;
+    max-height: 50vh;
     overflow-y: auto;
 }
 
@@ -108,6 +108,6 @@ img {
 }
 
 .accordion-body{
-    max-height: 40vh;
+    max-height: 50vh;
     overflow-y: auto;
 }

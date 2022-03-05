@@ -6,16 +6,20 @@
         <br>
         <div class="row">
             <div class="col-1"></div>
-            <div class="col-6"><br><br>
-                <!-- split button -->
-                <div class="btn-group">
-                    <button type="button" class="btn btn-primary btn-lg ">Choisir des données</button>
-                    <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split btn-lg "
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <span class="sr-only"></span>
-                    </button>
-                    <div class="dropdown-menu p-4">
-                        <form method="POST" action="{{ url_for('dataset') }}">
+            <div class="col-3"><br><br><br>
+                <div class="accordion" id="accordion1">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="flush-headingOne">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#flush-collapseOne" aria-expanded="false"
+                                    aria-controls="flush-collapseOne">
+                                Choisir un dataset
+                            </button>
+                        </h2>
+                        <div id="flush-collapseOne" class="accordion-collapse collapse"
+                             aria-labelledby="flush-headingOne" data-bs-parent="#accordion1">
+                            <div class="accordion-body">
+                                <form method="POST" action="{{ url_for('dataset') }}">
                             <h1 class="dropdown-header"><strong>Choix du dataset</strong></h1>
                             <div class="dropdown-divider"></div>
                             <fieldset>
@@ -26,6 +30,9 @@
                             <input type="submit" class="btn btn-success" value="Envoyer"/>
                             </fieldset>
                         </form>
+
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -49,8 +56,9 @@
                 {% else %}
                 {% endif %}
             </div>
-            <div class="col-1"></div>
+            <div class="col-4"></div>
             <div class="col-1">
+                <br>
                 <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
                 <lottie-player src="https://assets9.lottiefiles.com/packages/lf20_zidar9jm.json"
                                background="transparent"

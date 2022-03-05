@@ -52,7 +52,7 @@ def home():
 def dataset():
     _choix_dataset = None
     if request.method == "POST":
-        # session.clear()
+        session.clear()
         _choix_dataset = request.form.get('dataset')
         session['_choix_dataset'] = _choix_dataset
         if session['_choix_dataset'] in dico_dataset.keys():

@@ -6,41 +6,48 @@
         <br>
         <div class="row">
             <div class="col-1"></div>
-            <div class="col-6"><br><br>
-                <!-- split button -->
-                <div class="btn-group">
-                    <button type="button" class="btn btn-primary btn-lg " data-toggle="tooltip" data-placement="top"
-                            title="La séléction est sauvegardés même si vous changez d'onglet">Choix des features
-                    </button>
-                    <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split btn-lg "
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <span class="sr-only"></span>
-                    </button>
-                    <div class="dropdown-menu p-4">
-                        <form method="POST" action="{{ url_for('matrice_correlation') }}">
-                            <h3 class="dropdown-header">Colonnes</h3>
-                            <div class="dropdown-divider"></div>
-                            {% for colonne in nom_col %}
-                                <div class="form-check">
-                                    <input type="checkbox" class="form-check-input" id="dropdownCheck2"
-                                           name="{{ colonne }}"
-                                           {% if colonne in session['selected_nom_col_matrice_corr'] %}checked{% endif %}>
-                                    <label class="form-check-label" for="dropdownCheck2">
+            <div class="col-3"><br><br>
+
+                <div class="accordion" id="accordion1">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="flush-headingOne">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#flush-collapseOne" aria-expanded="false"
+                                    aria-controls="flush-collapseOne">
+                                Choix des features
+                            </button>
+                        </h2>
+                        <div id="flush-collapseOne" class="accordion-collapse collapse"
+                             aria-labelledby="flush-headingOne" data-bs-parent="#accordion1">
+                            <div class="accordion-body">
+                                <form method="POST" action="{{ url_for('matrice_correlation') }}">
+                                    <h3 class="dropdown-header">Colonnes</h3>
+                                    <div class="dropdown-divider"></div>
+                                    {% for colonne in nom_col %}
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input" id="dropdownCheck2"
+                                                   name="{{ colonne }}"
+                                                   {% if colonne in session['selected_nom_col_matrice_corr'] %}checked{% endif %}>
+                                            <label class="form-check-label" for="dropdownCheck2">
+                                                {{ colonne }}
+                                            </label>
+                                        </div>
+                                    {% endfor %}
+                                    <br>
+                                    <h3 class="dropdown-header">Couleurs</h3>
+                                    <div class="dropdown-divider"></div>
+                                    {% for colonne in all_col %}
+                                        <input type="radio" name="couleur_matrice" value="{{ colonne }}"
+                                               {% if session['couleur_matrice'] == colonne %}checked{% endif %}>
                                         {{ colonne }}
-                                    </label>
-                                </div>
-                            {% endfor %}
-                            <br>
-                            <h3 class="dropdown-header">Couleurs</h3>
-                            <div class="dropdown-divider"></div>
-                            {% for colonne in all_col %}
-                                <input type="radio" name="couleur_matrice" value="{{ colonne }}"
-                                       {% if session['couleur_matrice'] == colonne %}checked{% endif %}> {{ colonne }}
-                                <br>
-                            {% endfor %}
-                            <br>
-                            <input type="submit" class="btn btn-success" value="Envoyer"/>
-                        </form>
+                                        <br>
+                                    {% endfor %}
+                                    <br>
+                                    <input type="submit" class="btn btn-success" value="Envoyer"/>
+                                </form>
+
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
