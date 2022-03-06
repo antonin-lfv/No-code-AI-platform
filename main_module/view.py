@@ -666,17 +666,159 @@ def regressions():
 def KNN():
     if '_choix_dataset' in session.keys():
         df = dico_dataset[session['_choix_dataset']]
-        choix_col, col_num = df.columns.values, col_numeric(df)
-        session['selected_col_knn'] = []
+        choix_col = df.columns.values
+        erreur, message_encode, meilleur_k_knn, message_ROC = None, [], None, None
+        if 'selected_col_knn' not in session:
+            session['selected_col_knn'] = []
+        if 'col_numeriques_knn_avec_encode' not in session:
+            session["col_numeriques_knn_avec_encode"] = []
+        if 'selected_target_knn' not in session:
+            session["selected_target_knn"] = []
+
         if request.method == "POST":
             if request.form.getlist('selected_col_knn'):
                 session['selected_col_knn'] = request.form.getlist('selected_col_knn')
+                session['selected_col_encode_knn'], session["col_numeriques_knn_avec_encode"], session['selected_target_knn'] = [], [], []
+                session["col_numeriques_knn_avec_encode"] = col_numeric(df[session['selected_col_knn']])
             if request.form.getlist('selected_col_encode_knn'):
-                session['selected_col_encode_knn'] = request.form.getlist('selected_col_encode_knn')
+                session['selected_col_encode_knn'] = request.form.getlist('selected_col_encode_knn')[:-1]
+                session["col_numeriques_knn_avec_encode"] = list(set(col_numeric(df[session['selected_col_knn']]) + session['selected_col_encode_knn']))
+                session['selected_target_knn'] = []
             if request.form.getlist('selected_target_knn'):
                 session['selected_target_knn'] = request.form.getlist('selected_target_knn')
 
-        return render_template("KNN.html", zip=zip, choix_col=choix_col, len=len)
+        if len(session['selected_col_knn']) > 1:
+            df_ml = df[session['selected_col_knn']]
+            df_ml = df_ml.dropna(axis=0)
+            if len(df_ml) > 0:
+                if session['selected_col_encode_knn']:
+                    # Encodage
+                    for col in session['selected_col_encode_knn']:
+                        message_encode.append("Colonne " + col + "  :  " + str(df_ml[col].unique().tolist()) + " -> " + str(np.arange(len(df_ml[col].unique()))))
+                        df_ml[col].replace(df_ml[col].unique(), np.arange(len(df_ml[col].unique())), inplace=True)
+                if session['selected_target_knn']:
+                    try:
+                        # KNN
+                        y_knn = df_ml[session['selected_target_knn'][0]]  # target
+                        X_knn = df_ml.drop(session['selected_target_knn'], axis=1)  # features
+                        X_train, X_test, y_train, y_test = train_test_split(X_knn, y_knn, test_size=0.4, random_state=4)
+                        # Gridsearchcv
+                        params = {'n_neighbors': np.arange(1, 20)}
+                        grid = GridSearchCV(KNeighborsClassifier(), param_grid=params, cv=4)
+                        grid.fit(X_train.values, y_train.values.ravel())
+                        best_k = grid.best_params_['n_neighbors']
+                        best_model_knn = grid.best_estimator_
+                        best_model_knn.fit(X_knn.values, y_knn.values.ravel())  # on entraine le modèle
+
+                        # Meilleurs hyper params
+                        meilleur_k_knn = f'Après un GridSearchCV on prendra k = {best_k} voisins'
+
+                        # Évaluation du modèle
+                        y_pred_test = best_model_knn.predict(X_test.values)
+                        y_pred_train = best_model_knn.predict(X_train.values)
+                        if len(y_knn.unique()) > 2:
+                            # average='micro' car nos label contiennent plus de 2 classes
+                            # Test set
+                            precis_test = precision_score(y_test, y_pred_test, average='micro')
+                            rappel_test = recall_score(y_test, y_pred_test, average='micro')
+                            F1_test = f1_score(y_test, y_pred_test, average='micro')
+                            accur_test = accuracy_score(y_test, y_pred_test)
+                            # Train set
+                            precis_train = precision_score(y_train, y_pred_train, average='micro')
+                            rappel_train = recall_score(y_train, y_pred_train, average='micro')
+                            F1_train = f1_score(y_train, y_pred_train, average='micro')
+                            accur_train = accuracy_score(y_train, y_pred_train)
+                            session["knn_metrics"] = []
+                            session["knn_metrics"].append([round(precis_test, 3), round(precis_test - precis_train, 3)])
+                            session["knn_metrics"].append([round(rappel_test, 3), round(rappel_test - rappel_train, 3)])
+                            session["knn_metrics"].append([round(F1_test, 3), round(F1_test - F1_train, 3)])
+                            session["knn_metrics"].append([round(accur_test, 3), round(accur_test - accur_train, 3)])
+
+                        else:
+                            # label binaire
+                            # Test set
+                            precis_test = precision_score(y_test, y_pred_test)
+                            rappel_test = recall_score(y_test, y_pred_test)
+                            F1_test = f1_score(y_test, y_pred_test)
+                            accur_test = accuracy_score(y_test, y_pred_test)
+                            # Train set
+                            precis_train = precision_score(y_train, y_pred_train)
+                            rappel_train = recall_score(y_train, y_pred_train)
+                            F1_train = f1_score(y_train, y_pred_train)
+                            accur_train = accuracy_score(y_train, y_pred_train)
+                            session["knn_metrics"] = []
+                            session["knn_metrics"].append([round(precis_test, 3), round(precis_test - precis_train, 3)])
+                            session["knn_metrics"].append([round(rappel_test, 3), round(rappel_test - rappel_train, 3)])
+                            session["knn_metrics"].append([round(F1_test, 3), round(F1_test - F1_train, 3)])
+                            session["knn_metrics"].append([round(accur_test, 3), round(accur_test - accur_train, 3)])
+
+                            fpr, tpr, thresholds = roc_curve(y_test, y_pred_test)
+                            message_ROC = f'Area Under the Curve (AUC) = {round(auc(fpr, tpr), 4)}'
+                            fig = px.area(
+                                x=fpr, y=tpr,
+                                labels=dict(x='False Positive Rate', y='True Positive Rate'),
+                                width=500, height=500,
+                            )
+                            fig.add_shape(
+                                type='line', line=dict(dash='dash'),
+                                x0=0, x1=1, y0=0, y1=1
+                            )
+
+                            fig.update_yaxes(scaleanchor="x", scaleratio=1)
+                            fig.update_xaxes(constrain='domain')
+                            fig.update_layout(
+                                font=dict(size=10),
+                                autosize=False,
+                                paper_bgcolor='rgba(0,0,0,0)',
+                                plot_bgcolor='rgba(0,0,0,0)',
+                                width=900, height=450,
+                                margin=dict(l=40, r=40, b=40, t=40),
+                            )
+                            session["figure_roc_knn"] = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+
+                        # Learning curve
+                        N, train_score, val_score = learning_curve(best_model_knn, X_train, y_train,
+                                                                   train_sizes=np.linspace(0.2,
+                                                                                           1.0,
+                                                                                           10),
+                                                                   cv=3, random_state=4)
+                        fig = go.Figure()
+                        fig.add_scatter(x=N, y=train_score.mean(axis=1), name='train',
+                                        marker=dict(color='deepskyblue'))
+                        fig.add_scatter(x=N, y=val_score.mean(axis=1), name='validation',
+                                        marker=dict(color='red'))
+                        fig.update_layout(
+                            showlegend=True,
+                            template='simple_white',
+                            font=dict(size=10),
+                            autosize=False,
+                            width=900, height=450,
+                            margin=dict(l=40, r=40, b=40, t=40),
+                            paper_bgcolor='rgba(0,0,0,0)',
+                            plot_bgcolor='rgba(0,0,0,0)',
+                        )
+                        session["figure_learning_curves_knn"] = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+
+                        """# Faire une prédiction
+                        features = []
+                        for col in X_test.columns.tolist():
+                            col = st.text_input(col)
+                            features.append(col)
+                        if "" not in features:
+                            prediction_knn = best_model_knn.predict(np.array(features, dtype=float).reshape(1, -1))
+                            with sub_col_prediction_knn:
+                                st.write("##")
+                                st.success(
+                                    f'Prédiction de la target {st.session_state.target} avec les données entrées : **{str(df_origine[st.session_state.target].unique()[int(prediction_knn[0])])}**')
+                                st.write("##")"""
+                    except:
+                        # KNN impossible
+                        erreur = True
+            else:
+                # Dataset vide
+                erreur = True
+
+        return render_template("KNN.html", zip=zip, choix_col=choix_col, len=len, erreur=erreur, message_encode=message_encode, meilleur_k_knn=meilleur_k_knn, message_ROC=message_ROC)
     else:
         return render_template("waiting_for_data.html")
 

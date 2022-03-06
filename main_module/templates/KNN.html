@@ -8,9 +8,9 @@
         <br><br>
 
         <div class="row">
-            <div class="col-1"></div>
-            <div class="col-5">
-                <p class="grand_titre">KNN : k-nearest neighbors</p><br>
+            <div class="col-3"></div>
+            <div class="col-6">
+                <p class="grand_titre">KNN : k-nearest neighbors</p><br><br>
                 <!--Choix target + features-->
                 <div class="accordion shadow" id="accordion1">
                     <div class="accordion-item">
@@ -76,6 +76,11 @@
                                         {{ colonne }}<br>
                                     {% endfor %}
                                     <br>
+                                    <input type="hidden"
+                                           name="selected_col_encode_knn"
+                                           value="empty"
+                                           checked
+                                    >
                                     <input type="submit" class="btn btn-success" value="Envoyer"/>
                                 </form>
 
@@ -99,10 +104,10 @@
                             <div class="accordion-body">
                                 <!-- target -->
                                 <form method="POST" action="{{ url_for('KNN') }}">
-                                    <h3 class="dropdown-header">Choix de la target</h3>
+                                    <h3 class="dropdown-header">Choix de la target - Si la colonne qui vous intéresse n'apparait pas, c'est qu'il faut l'encoder</h3>
                                     <div class="dropdown-divider"></div>
-                                    {% for colonne in session['selected_target_knn'] %}
-                                        <input type="checkbox" name="selected_col_encode_knn"
+                                    {% for colonne in session['col_numeriques_knn_avec_encode'] %}
+                                        <input type="radio" name="selected_target_knn"
                                                value="{{ colonne }}"
                                                 {% if 'selected_target_knn' in session %}
                                                {% if colonne in session['selected_target_knn'] %}checked
@@ -127,14 +132,64 @@
     <br>
     <br>
 
-    {% if 'selected_col_knn' in session %}
-        {{ session['selected_col_knn'] }}
+    {% if not erreur and session['selected_target_knn'] != [] %}
+        {% if meilleur_k_knn %}
+            <br>
+            <div class="center-block">
+                <!--target dans features-->
+                <div class="alert alert-success shadow" role="alert">
+                    {{ meilleur_k_knn }}
+                </div>
+            </div>
+        {% endif %}<br><br><br>
+
+        <div class="center-block">
+                <h3 class="text-center">Métriques</h3><br><br>
+                <div class="text-center">
+                    {% for value, metric in zip(session["knn_metrics"], ["Précision", "Rappel", "F1", "Accuracy"]) %}
+                        <button type="button" class="btn {% if value[1] <= 0 %}btn-outline-success{% else %}btn-outline-danger{% endif %} position-relative">
+                            {{ metric }} = {{ value[0] }}
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill {% if value[1] <= 0 %}bg-success{% else %}bg-danger{% endif %}">
+                            {% if value[1] > 0 %}+{% endif %}{{ value[1] }}
+                          </span>
+                        </button>&nbsp &nbsp
+                    {% endfor %}
+                </div>
+        </div><br>
+        <br><br>
+        {% if "figure_roc_knn" in session %}
+            <h3 class="text-center">ROC curve</h3><br><br>
+            {{ message_ROC }}
+            <div id='chart_roc' class='chart center-block'></div>
+            <script type='text/javascript'>
+                    var graphs = {{session["figure_roc_knn"] | safe}};
+                    Plotly.plot('chart_roc', graphs, {});
+            </script>
+        {% endif %}
+        <br><br>
+
+        {% if "figure_learning_curves_knn" in session %}
+            <h3 class="text-center">Learning curves</h3><br>
+            <div id='chart_learning_curves' class='chart center-block'></div>
+            <script type='text/javascript'>
+                    var graphs = {{session["figure_learning_curves_knn"] | safe}};
+                    Plotly.plot('chart_learning_curves', graphs, {});
+            </script>
+        {% endif %}
     {% endif %}
-        {% if 'selected_col_encode_knn' in session %}
-        {{ session['selected_col_encode_knn'] }}
-    {% endif %}
-        {% if 'selected_target_knn' in session %}
-        {{ session['selected_target_knn'] }}
+
+
+    {% if erreur %}
+        <br>
+        <div class="center-block">
+            <!--target dans features-->
+            <div class="alert alert-danger shadow" role="alert">
+                Erreurs possibles : <br>
+                - Le dataset après dropna() est vide<br>
+                - Le modèle a échoué avec ces données<br>
+                - Target non valide<br>
+            </div>
+        </div>
     {% endif %}
 
 {% endblock %}
