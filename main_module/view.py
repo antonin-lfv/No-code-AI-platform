@@ -327,11 +327,10 @@ def regressions():
             if 'selected_target_regressions' in session and 'selected_features_regressions' in session:
                 if session['selected_target_regressions'] in session['selected_features_regressions'] and session['selected_target_regressions'] is not None:
                     erreur = True
-
+        print(erreur)
         if 'selected_features_regressions' in session and 'selected_target_regressions' in session:
             if not erreur:
                 # # On a tout ce qu'il faut
-                print([session['selected_features_regressions'] + [session['selected_target_regressions']]])
                 df_sans_NaN = pd.concat([df[col].reset_index(drop=True) for col in [
                     session['selected_features_regressions'] + [session['selected_target_regressions']]]],
                                         axis=1).dropna()
