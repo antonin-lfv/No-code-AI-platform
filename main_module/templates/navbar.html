@@ -52,7 +52,7 @@
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                         <li><a class="dropdown-item" href="{{ url_for('KNN') }}">KNN</a></li>
-                        <li><a class="dropdown-item" href="{{ url_for('KMeans') }}">K-Means</a></li>
+                        <li><a class="dropdown-item" href="{{ url_for('KMeans_page') }}">K-Means</a></li>
                         <li><a class="dropdown-item" href="{{ url_for('SVM') }}">SVM</a></li>
                         <li><a class="dropdown-item" href="{{ url_for('decision_tree') }}">Decision Tree</a></li>
                     </ul>
@@ -60,16 +60,16 @@
 
 
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle {% if 'PCA' in request.endpoint or 'UMAP' in request.endpoint or 'TSNE' in request.endpoint %}active{% endif %}"
+                    <a class="nav-link dropdown-toggle {% if 'PCA_page' in request.endpoint or 'UMAP_page' in request.endpoint or 'TSNE_page' in request.endpoint %}active{% endif %}"
                        id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Réduction de dimension
-                        {% if 'PCA' in request.endpoint or 'UMAP' in request.endpoint or 'TSNE' in request.endpoint %}
+                        {% if 'PCA_page' in request.endpoint or 'UMAP_page' in request.endpoint or 'TSNE_page' in request.endpoint %}
                             {{ request.endpoint }}{% endif %}
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <li><a class="dropdown-item" href="{{ url_for('PCA') }}">PCA</a></li>
-                        <li><a class="dropdown-item" href="{{ url_for('UMAP') }}">UMAP</a></li>
-                        <li><a class="dropdown-item" href="{{ url_for('TSNE') }}">t-SNE</a></li>
+                        <li><a class="dropdown-item" href="{{ url_for('PCA_page') }}">PCA_page</a></li>
+                        <li><a class="dropdown-item" href="{{ url_for('UMAP_page') }}">UMAP</a></li>
+                        <li><a class="dropdown-item" href="{{ url_for('TSNE_page') }}">t-SNE</a></li>
                     </ul>
                 </li>
             </ul>

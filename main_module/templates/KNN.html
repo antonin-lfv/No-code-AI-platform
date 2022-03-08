@@ -45,85 +45,95 @@
                             </div>
                         </div>
                     </div>
-                </div><br><br>
+                </div>
+                <br><br>
 
                 {% if len(session['selected_col_knn']) > 1 %}
-                <!--Encodage-->
-                <div class="accordion shadow" id="accordion2">
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="flush-headingTwo">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#flush-collapseTwo" aria-expanded="false"
-                                    aria-controls="flush-collapseTwo">
-                                Données à encoder
-                            </button>
-                        </h2>
-                        <div id="flush-collapseTwo" class="accordion-collapse collapse"
-                             aria-labelledby="flush-headingTwo" data-bs-parent="#accordion2">
-                            <div class="accordion-body">
-                                <!-- Encodage -->
-                                <form method="POST" action="{{ url_for('KNN') }}">
-                                    <h3 class="dropdown-header">Colonnes à encoder</h3>
-                                    <div class="dropdown-divider"></div>
-                                    {% for colonne in session['selected_col_knn'] %}
-                                        <input type="checkbox" name="selected_col_encode_knn"
-                                               value="{{ colonne }}"
-                                                {% if 'selected_col_encode_knn' in session %}
-                                               {% if colonne in session['selected_col_encode_knn'] %}checked
-                                               {% endif %}
-                                                {% endif %}
+                    <!--Encodage-->
+                    <div class="accordion shadow" id="accordion2">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="flush-headingTwo">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#flush-collapseTwo" aria-expanded="false"
+                                        aria-controls="flush-collapseTwo">
+                                    Données à encoder
+                                </button>
+                            </h2>
+                            <div id="flush-collapseTwo" class="accordion-collapse collapse"
+                                 aria-labelledby="flush-headingTwo" data-bs-parent="#accordion2">
+                                <div class="accordion-body">
+                                    <!-- Encodage -->
+                                    <form method="POST" action="{{ url_for('KNN') }}">
+                                        <h3 class="dropdown-header">Colonnes à encoder</h3>
+                                        <div class="dropdown-divider"></div>
+                                        {% for colonne in session['selected_col_knn'] %}
+                                            <input type="checkbox" name="selected_col_encode_knn"
+                                                   value="{{ colonne }}"
+                                                    {% if 'selected_col_encode_knn' in session %}
+                                                   {% if colonne in session['selected_col_encode_knn'] %}checked
+                                                   {% endif %}
+                                                    {% endif %}
+                                            >
+                                            {{ colonne }}<br>
+                                        {% endfor %}
+                                        <br>
+                                        {% if message_encode %}
+                                             <div class="dropdown-divider"></div>
+                                            <h3 class="dropdown-header">Encodage</h3><br>
+                                            {% for mec in message_encode %}
+                                                <p>{{ mec }}</p>
+                                            {% endfor %}
+                                        {% endif %}
+                                        <br>
+                                        <input type="hidden"
+                                               name="selected_col_encode_knn"
+                                               value="empty"
+                                               checked
                                         >
-                                        {{ colonne }}<br>
-                                    {% endfor %}
-                                    <br>
-                                    <input type="hidden"
-                                           name="selected_col_encode_knn"
-                                           value="empty"
-                                           checked
-                                    >
-                                    <input type="submit" class="btn btn-success" value="Envoyer"/>
-                                </form>
+                                        <input type="submit" class="btn btn-success" value="Envoyer"/>
+                                    </form>
 
+                                </div>
+                            </div>
+                        </div>
+                    </div><br><br>
+
+                    <!--Target-->
+                    <div class="accordion shadow" id="accordion3">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="flush-headingThree">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#flush-collapseThree" aria-expanded="false"
+                                        aria-controls="flush-collapseThree">
+                                    Target
+                                </button>
+                            </h2>
+                            <div id="flush-collapseThree" class="accordion-collapse collapse"
+                                 aria-labelledby="flush-headingThree" data-bs-parent="#accordion3">
+                                <div class="accordion-body">
+                                    <!-- target -->
+                                    <form method="POST" action="{{ url_for('KNN') }}">
+                                        <h3 class="dropdown-header">Choix de la target - Si la colonne qui vous
+                                            intéresse n'apparait pas, c'est qu'il faut l'encoder</h3>
+                                        <div class="dropdown-divider"></div>
+                                        {% for colonne in session['col_numeriques_knn_avec_encode'] %}
+                                            <input type="radio" name="selected_target_knn"
+                                                   value="{{ colonne }}"
+                                                    {% if 'selected_target_knn' in session %}
+                                                   {% if colonne in session['selected_target_knn'] %}checked
+                                                   {% endif %}
+                                                    {% endif %}
+                                            >
+                                            {{ colonne }}<br>
+                                        {% endfor %}
+                                        <br>
+                                        <input type="submit" class="btn btn-success" value="Envoyer"/>
+                                    </form>
+
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div><br><br>
-
-                <!--Target-->
-                <div class="accordion shadow" id="accordion3">
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="flush-headingThree">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#flush-collapseThree" aria-expanded="false"
-                                    aria-controls="flush-collapseThree">
-                                Target
-                            </button>
-                        </h2>
-                        <div id="flush-collapseThree" class="accordion-collapse collapse"
-                             aria-labelledby="flush-headingThree" data-bs-parent="#accordion3">
-                            <div class="accordion-body">
-                                <!-- target -->
-                                <form method="POST" action="{{ url_for('KNN') }}">
-                                    <h3 class="dropdown-header">Choix de la target - Si la colonne qui vous intéresse n'apparait pas, c'est qu'il faut l'encoder</h3>
-                                    <div class="dropdown-divider"></div>
-                                    {% for colonne in session['col_numeriques_knn_avec_encode'] %}
-                                        <input type="radio" name="selected_target_knn"
-                                               value="{{ colonne }}"
-                                                {% if 'selected_target_knn' in session %}
-                                               {% if colonne in session['selected_target_knn'] %}checked
-                                               {% endif %}
-                                                {% endif %}
-                                        >
-                                        {{ colonne }}<br>
-                                    {% endfor %}
-                                    <br>
-                                    <input type="submit" class="btn btn-success" value="Envoyer"/>
-                                </form>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 {% endif %}
             </div>
         </div>
@@ -144,26 +154,28 @@
         {% endif %}<br><br><br>
 
         <div class="center-block">
-                <h3 class="text-center">Métriques</h3><br><br>
-                <div class="text-center">
-                    {% for value, metric in zip(session["knn_metrics"], ["Précision", "Rappel", "F1", "Accuracy"]) %}
-                        <button type="button" class="btn {% if value[1] <= 0 %}btn-outline-success{% else %}btn-outline-danger{% endif %} position-relative">
-                            {{ metric }} = {{ value[0] }}
-                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill {% if value[1] <= 0 %}bg-success{% else %}bg-danger{% endif %}">
+            <h3 class="text-center">Métriques</h3><br><br>
+            <div class="text-center">
+                {% for value, metric in zip(session["knn_metrics"], ["Précision", "Rappel", "F1", "Accuracy"]) %}
+                    <button type="button"
+                            class="btn {% if value[1] <= 0 %}btn-outline-success{% else %}btn-outline-danger{% endif %} position-relative">
+                        {{ metric }} = {{ value[0] }}
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill {% if value[1] <= 0 %}bg-success{% else %}bg-danger{% endif %}">
                             {% if value[1] > 0 %}+{% endif %}{{ value[1] }}
                           </span>
-                        </button>&nbsp &nbsp
-                    {% endfor %}
-                </div>
+                    </button>&nbsp &nbsp
+                {% endfor %}
+            </div>
         </div><br>
         <br><br>
+
         {% if figure_roc_knn %}
             <h3 class="text-center">ROC curve</h3><br><br>
             {{ message_ROC }}
             <div id='chart_roc' class='chart center-block'></div>
             <script type='text/javascript'>
-                    var graphs = {{ figure_roc_knn | safe}};
-                    Plotly.plot('chart_roc', graphs, {});
+                var graphs = {{ figure_roc_knn | safe}};
+                Plotly.plot('chart_roc', graphs, {});
             </script>
         {% endif %}
         <br><br>
@@ -172,10 +184,52 @@
             <h3 class="text-center">Learning curves</h3><br>
             <div id='chart_learning_curves' class='chart center-block'></div>
             <script type='text/javascript'>
-                    var graphs = {{ figure_learning_curves_knn | safe}};
-                    Plotly.plot('chart_learning_curves', graphs, {});
+                var graphs = {{ figure_learning_curves_knn | safe}};
+                Plotly.plot('chart_learning_curves', graphs, {});
             </script>
         {% endif %}
+
+        <br><br><br><br>
+        <hr style="width: 60%" class="center-block">
+
+        <!-- Test du modèle -->
+        <div class="container">
+            <div class="row">
+                <div class="col-3"></div>
+                <div class="col-6">
+                    <br><br><br>
+                    <h3 class="text-center">Prédiction avec ce modèle</h3><br><br>
+                    <form method="POST" action="{{ url_for('KNN') }}">
+                        {% for col in session['for_prediction'] %}
+                            <div class="form-group center-block">
+                                <label for="inputvalue">{{ col }}</label>
+                                <input type="text" class="form-control" id="inputvalue"
+                                       placeholder="Entrez une valeur pour {{ col }}" name="predictions" required>
+                            </div><br>
+                        {% endfor %}
+                        <button type="submit" class="btn btn-primary shadow">Prédiction</button>
+                    </form>
+                    <br><br>
+                </div>
+            </div>
+        </div>
+
+
+        {% if message_prediction_knn == "erreur" %}
+            <div class="center-block">
+                <div class="alert alert-danger shadow" role="alert">
+                    Les données entrées ne sont pas valides
+                </div>
+            </div>
+        {% elif message_prediction_knn != "" %}
+            <div class="center-block">
+                <div class="alert alert-success shadow" role="alert">
+                    {{ message_prediction_knn }}
+                </div>
+            </div>
+        {% endif %}
+
+
     {% endif %}
 
 

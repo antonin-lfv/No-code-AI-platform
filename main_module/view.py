@@ -668,12 +668,17 @@ def KNN():
         choix_col = df.columns.values
         erreur, message_encode, meilleur_k_knn, message_ROC = None, [], None, None
         figure_roc_knn, figure_learning_curves_knn = None, None
+        message_prediction_knn = ""
         if 'selected_col_knn' not in session:
             session['selected_col_knn'] = []
         if 'col_numeriques_knn_avec_encode' not in session:
             session["col_numeriques_knn_avec_encode"] = []
         if 'selected_target_knn' not in session:
             session["selected_target_knn"] = []
+        if 'for_prediction' not in session:
+            session['for_prediction'] = []
+        if 'predictions' not in session:
+            session['predictions'] = []
 
         if request.method == "POST":
             if request.form.getlist('selected_col_knn'):
@@ -686,10 +691,16 @@ def KNN():
                 session['selected_target_knn'] = []
             if request.form.getlist('selected_target_knn'):
                 session['selected_target_knn'] = request.form.getlist('selected_target_knn')
+                temp = session['selected_col_knn'].copy()
+                temp.remove(session['selected_target_knn'][0])
+                session['for_prediction'] = temp
+            if request.form.getlist('predictions'):
+                session['predictions'] = request.form.getlist('predictions')
 
         if len(session['selected_col_knn']) > 1:
             df_ml = df[session['selected_col_knn']]
             df_ml = df_ml.dropna(axis=0)
+            df_origine = df_ml.copy()
             if len(df_ml) > 0:
                 if session['selected_col_encode_knn']:
                     # Encodage
@@ -799,18 +810,14 @@ def KNN():
                         )
                         figure_learning_curves_knn = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
 
-                        """# Faire une prédiction
-                        features = []
-                        for col in X_test.columns.tolist():
-                            col = st.text_input(col)
-                            features.append(col)
-                        if "" not in features:
-                            prediction_knn = best_model_knn.predict(np.array(features, dtype=float).reshape(1, -1))
-                            with sub_col_prediction_knn:
-                                st.write("##")
-                                st.success(
-                                    f'Prédiction de la target {st.session_state.target} avec les données entrées : **{str(df_origine[st.session_state.target].unique()[int(prediction_knn[0])])}**')
-                                st.write("##")"""
+                        # Faire une prédiction
+                        if session['predictions']:
+                            try:
+                                prediction_knn = best_model_knn.predict(np.array(session['predictions'], dtype=float).reshape(1, -1))
+                                message_prediction_knn = f'Prédiction de la target {session["selected_target_knn"][0]} avec les données entrées : {str(df_origine[session["selected_target_knn"][0]].unique()[int(prediction_knn[0])])}'
+                            except:
+                                message_prediction_knn = "erreur"
+
                     except:
                         # KNN impossible
                         erreur = True
@@ -818,18 +825,77 @@ def KNN():
                 # Dataset vide
                 erreur = True
 
-        return render_template("KNN.html", zip=zip, choix_col=choix_col, len=len, erreur=erreur, message_encode=message_encode, meilleur_k_knn=meilleur_k_knn, message_ROC=message_ROC, figure_roc_knn=figure_roc_knn, figure_learning_curves_knn=figure_learning_curves_knn)
+        return render_template("KNN.html", zip=zip, choix_col=choix_col, len=len, erreur=erreur, message_encode=message_encode, meilleur_k_knn=meilleur_k_knn, message_ROC=message_ROC, figure_roc_knn=figure_roc_knn,
+                               figure_learning_curves_knn=figure_learning_curves_knn, message_prediction_knn=message_prediction_knn)
     else:
         return render_template("waiting_for_data.html")
 
 
 @app.route('/KMeans', methods=['GET', 'POST'])
-def KMeans():
+def KMeans_page():
     if '_choix_dataset' in session.keys():
-        df = dico_dataset[session['_choix_dataset']]
-        return render_template("KMeans.html", column_names=df.columns.values,
-                               row_data=list(df.values.tolist()),
-                               zip=zip)
+        data = dico_dataset[session['_choix_dataset']]
+        figure_kmeans, erreur = None, None
+        choix_col = col_numeric(data)
+        if 'selected_col_kmeans' not in session:
+            session['selected_col_kmeans'] = []
+        if 'cluster_kmeans' not in session:
+            session['cluster_kmeans'] = None
+
+        if request.method == "POST":
+            if request.form.getlist('selected_col_kmeans'):
+                session['selected_col_kmeans'] = request.form.getlist('selected_col_kmeans')
+            if request.form.getlist('cluster_kmeans'):
+                session['cluster_kmeans'] = request.form.getlist('cluster_kmeans')[0]
+
+        if len(session['selected_col_kmeans']) > 1 and session['cluster_kmeans']:
+            if int(session['cluster_kmeans']) < 25 and int(session['cluster_kmeans']) > 0:
+                df_ml = data[session['selected_col_kmeans']].dropna(axis=0)
+                if len(df_ml) > 0:
+                    X = df_ml[session['selected_col_kmeans']]  # features
+                    #try:
+                    # PCA
+                    model = PCA(n_components=2)
+                    model.fit(X)
+                    x_pca = model.transform(X)
+                    df = pd.concat([pd.Series(x_pca[:, 0]).reset_index(drop=True),
+                                    pd.Series(x_pca[:, 1]).reset_index(drop=True)], axis=1)
+                    df.columns = ["x", "y"]
+
+                    # K-Means
+                    X_pca_kmeans = df
+                    modele = KMeans(n_clusters=int(session['cluster_kmeans']))
+                    modele.fit(X_pca_kmeans)
+                    y_kmeans = modele.predict(X_pca_kmeans)
+                    df["class"] = pd.Series(y_kmeans)
+
+                    fig = px.scatter(df, x=X_pca_kmeans['x'], y=X_pca_kmeans['y'], color="class",
+                                     )
+                    fig.update_layout(
+                        showlegend=True,
+                        template='simple_white',
+                        font=dict(size=10),
+                        autosize=False,
+                        width=900, height=450,
+                        margin=dict(l=40, r=40, b=40, t=40),
+                        paper_bgcolor='rgba(0,0,0,0)',
+                        plot_bgcolor='rgba(0,0,0,0)',
+                        title="K-Means avec " + str(session['cluster_kmeans']) + " Clusters",
+                    )
+                    fig.update(layout_coloraxis_showscale=False)
+                    centers = modele.cluster_centers_
+                    fig.add_scatter(x=centers[:, 0], y=centers[:, 1], mode='markers',
+                                    marker=dict(color='black', size=15), opacity=0.5, name='Centroïdes')
+                    figure_kmeans = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+
+                    #except:
+                        #erreur = True
+                else:
+                    erreur = True
+            else:
+                erreur = True
+
+        return render_template("KMeans.html", zip=zip, choix_col=choix_col, erreur=erreur, figure_kmeans=figure_kmeans)
     else:
         return render_template("waiting_for_data.html")
 
@@ -837,10 +903,98 @@ def KMeans():
 @app.route('/SVM', methods=['GET', 'POST'])
 def SVM():
     if '_choix_dataset' in session.keys():
-        df = dico_dataset[session['_choix_dataset']]
-        return render_template("SVM.html", column_names=df.columns.values,
-                               row_data=list(df.values.tolist()),
-                               zip=zip)
+        data = dico_dataset[session['_choix_dataset']]
+        figure_svm, erreur = None, None
+        choix_col = col_numeric(data)
+        all_col = data.columns.values
+        if 'selected_features_svm' not in session:
+            session['selected_features_svm'] = []
+        if 'selected_target_svm' not in session:
+            session['selected_target_svm'] = None
+        if 'selected_classes_svm' not in session:
+            session['selected_classes_svm'] = []
+
+        if request.method == "POST":
+            if request.form.getlist('selected_features_svm'):
+                session['selected_features_svm'] = request.form.getlist('selected_features_svm')
+            if request.form.getlist('selected_target_svm'):
+                session['selected_target_svm'] = request.form.getlist('selected_target_svm')[0]
+            if request.form.getlist('selected_classes_svm'):
+                session['selected_classes_svm'] = request.form.getlist('selected_classes_svm')
+
+        if session['selected_target_svm']:
+            choix_classe = data[session['selected_target_svm']].unique().tolist()
+        else:
+            choix_classe = None
+
+        if len(session['selected_features_svm']) == 2 and session['selected_target_svm'] and session['selected_target_svm'] not in session['selected_features_svm'] and len(session['selected_classes_svm']) == 2:
+            target, features = session['selected_target_svm'], session['selected_features_svm']
+            df = data[[target] + features]
+            df.dropna(axis=0, inplace=True)
+            if len(df[target].unique().tolist()) > 1:
+                df = df.loc[(df[target] == session['selected_classes_svm'][0]) | (
+                            df[target] == session['selected_classes_svm'][1])]
+                y = df[target]
+                X = df[features]
+
+                fig = px.scatter(df, x=features[0], y=features[1], color=target,
+                                 color_continuous_scale=px.colors.diverging.Picnic)
+                fig.update(layout_coloraxis_showscale=False)
+
+                model = SVC(kernel='linear', C=1E10)
+                model.fit(X, y)
+
+                # Support Vectors
+                fig.add_scatter(x=model.support_vectors_[:, 0],
+                                y=model.support_vectors_[:, 1],
+                                mode='markers',
+                                name="Support vectors",
+                                marker=dict(size=12,
+                                            line=dict(width=1,
+                                                      color='DarkSlateGrey'
+                                                      ),
+                                            color='rgba(0,0,0,0)'),
+                                )
+
+                # hyperplan
+                w = model.coef_[0]
+                a = -w[0] / w[1]
+                xx = np.linspace(df[features[0]].min(), df[features[0]].max())
+                yy = a * xx - (model.intercept_[0]) / w[1]
+                fig.add_scatter(x=xx, y=yy, line=dict(color='black', width=2),
+                                name='Hyperplan')
+
+                # Hyperplans up et down
+                b = model.support_vectors_[0]
+                yy_down = a * xx + (b[1] - a * b[0])
+                fig.add_scatter(x=xx, y=yy_down,
+                                line=dict(color='black', width=1, dash='dot'),
+                                name='Marges')
+                b = model.support_vectors_[-1]
+                yy_up = a * xx + (b[1] - a * b[0])
+                fig.add_scatter(x=xx, y=yy_up,
+                                line=dict(color='black', width=1, dash='dot'),
+                                showlegend=False)
+                fig.update_layout(
+                    showlegend=True,
+                    template='simple_white',
+                    font=dict(size=10),
+                    autosize=False,
+                    width=900, height=450,
+                    margin=dict(l=40, r=40, b=40, t=40),
+                    paper_bgcolor='rgba(0,0,0,0)',
+                    plot_bgcolor='rgba(0,0,0,0)',
+                )
+                figure_svm = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+
+            else:
+                erreur = True
+
+        elif session['selected_features_svm'] and session['selected_target_svm'] and session['selected_classes_svm']:
+            erreur = True
+
+        return render_template("SVM.html", choix_col=choix_col, all_col=all_col, erreur=erreur, choix_classe=choix_classe,
+                               figure_svm=figure_svm,zip=zip)
     else:
         return render_template("waiting_for_data.html")
 
@@ -849,15 +1003,17 @@ def SVM():
 def decision_tree():
     if '_choix_dataset' in session.keys():
         df = dico_dataset[session['_choix_dataset']]
-        return render_template("decision_tree.html", column_names=df.columns.values,
-                               row_data=list(df.values.tolist()),
+        figure_tree, erreur = None, None
+        choix_col = col_numeric(df)
+        all_col = data.columns.values
+        return render_template("decision_tree.html", choix_col=choix_col, all_col=all_col, figure_tree=figure_tree,
                                zip=zip)
     else:
         return render_template("waiting_for_data.html")
 
 
 @app.route('/PCA', methods=['GET', 'POST'])
-def PCA():
+def PCA_page():
     if '_choix_dataset' in session.keys():
         df = dico_dataset[session['_choix_dataset']]
         return render_template("PCA.html", column_names=df.columns.values,
@@ -868,7 +1024,7 @@ def PCA():
 
 
 @app.route('/UMAP', methods=['GET', 'POST'])
-def UMAP():
+def UMAP_page():
     if '_choix_dataset' in session.keys():
         df = dico_dataset[session['_choix_dataset']]
         return render_template("UMAP.html", column_names=df.columns.values,
@@ -879,7 +1035,7 @@ def UMAP():
 
 
 @app.route('/TSNE', methods=['GET', 'POST'])
-def TSNE():
+def TSNE_page():
     if '_choix_dataset' in session.keys():
         df = dico_dataset[session['_choix_dataset']]
         return render_template("TSNE.html", column_names=df.columns.values,
