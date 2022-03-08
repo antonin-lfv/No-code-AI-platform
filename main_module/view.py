@@ -1002,12 +1002,75 @@ def SVM():
 @app.route('/decision_tree', methods=['GET', 'POST'])
 def decision_tree():
     if '_choix_dataset' in session.keys():
-        df = dico_dataset[session['_choix_dataset']]
-        figure_tree, erreur = None, None
-        choix_col = col_numeric(df)
+        data = dico_dataset[session['_choix_dataset']]
+        figure_tree, erreur, dot_data = None, None, None
+        choix_col = col_numeric(data)
         all_col = data.columns.values
-        return render_template("decision_tree.html", choix_col=choix_col, all_col=all_col, figure_tree=figure_tree,
-                               zip=zip)
+
+        if 'selected_features_tree' not in session:
+            session['selected_features_tree'] = []
+        if 'selected_target_tree' not in session:
+            session['selected_target_tree'] = None
+
+        if request.method == "POST":
+            if request.form.getlist('selected_features_tree'):
+                session['selected_features_tree'] = request.form.getlist('selected_features_tree')
+            if request.form.getlist('selected_target_tree'):
+                session['selected_target_tree'] = request.form.getlist('selected_target_tree')[0]
+
+        if len(session['selected_features_tree']) == 2 and session['selected_target_tree'] and session['selected_target_tree'] not in session['selected_features_tree']:
+            target = session['selected_target_tree']
+            features = session['selected_features_tree']
+            df = data[[target] + features].dropna(axis=0)
+            if len(df) > 0:
+                try:
+                    X_train, X_test, y_train, y_test = train_test_split(df[features], df[target], random_state=0)
+                    clf = DecisionTreeClassifier(random_state=0)
+                    clf.fit(X_train, y_train)
+                    if len(pd.unique(df[target])) > 2:
+                        average = 'macro'
+                    else:
+                        average = 'binary'
+
+                    # metrics on train
+                    y_pred_train = clf.predict(X_train)
+                    accur_train = accuracy_score(y_train, y_pred_train)
+                    precis_train = precision_score(y_train, y_pred_train, average=average)
+                    rappel_train = recall_score(y_train, y_pred_train, average=average)
+                    F1_train = f1_score(y_train, y_pred_train, average=average)
+
+                    # metrics on test
+                    y_pred_test = clf.predict(X_test)
+                    accur_test = accuracy_score(y_test, y_pred_test)
+                    precis_test = precision_score(y_test, y_pred_test, average=average)
+                    rappel_test = recall_score(y_test, y_pred_test, average=average)
+                    F1_test = f1_score(y_test, y_pred_test, average=average)
+
+                    session["decision_tree_metrics"] = []
+                    session["decision_tree_metrics"].append([round(precis_test, 3), round(precis_test - precis_train, 3)])
+                    session["decision_tree_metrics"].append([round(rappel_test, 3), round(rappel_test - rappel_train, 3)])
+                    session["decision_tree_metrics"].append([round(F1_test, 3), round(F1_test - F1_train, 3)])
+                    session["decision_tree_metrics"].append([round(accur_test, 3), round(accur_test - accur_train, 3)])
+                    # DOT data
+                    dot_data = export_graphviz(clf, out_file=None,
+                                               feature_names=features,
+                                               class_names=target,
+                                               filled=True,
+                                               )
+                    # Draw graph
+                    # st.graphviz_chart(dot_data, use_container_width=False)
+
+                except:
+                    erreur = True
+
+            else:
+                erreur = True
+
+        elif session['selected_features_tree'] and session['selected_target_tree']:
+            erreur = True
+
+        return render_template("decision_tree.html", choix_col=choix_col, all_col=all_col, figure_tree=figure_tree, erreur=erreur,
+                               zip=zip, dot_data=dot_data)
     else:
         return render_template("waiting_for_data.html")
 

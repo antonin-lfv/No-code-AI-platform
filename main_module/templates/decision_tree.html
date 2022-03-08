@@ -1,7 +1,121 @@
 {% extends 'base.html' %}
 
 {% block content %}
+    <br>
 
-<br><p class="grand_titre">Decision Tree</p>
+    <div class="container">
+        <br><br>
+
+        <div class="row">
+            <div class="col-3"></div>
+            <div class="col-6">
+                <p class="grand_titre">Decision Tree</p><br><br>
+                <!--Choix features-->
+                <div class="accordion shadow" id="accordion1">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="flush-headingOne">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#flush-collapseOne" aria-expanded="false"
+                                    aria-controls="flush-collapseOne">
+                                Choisir 2 features
+                            </button>
+                        </h2>
+                        <div id="flush-collapseOne" class="accordion-collapse collapse"
+                             aria-labelledby="flush-headingOne" data-bs-parent="#accordion1">
+                            <div class="accordion-body">
+                                <!-- Choix des features -->
+                                <form method="POST" action="{{ url_for('decision_tree') }}">
+                                    <h3 class="dropdown-header">Features</h3>
+                                    <div class="dropdown-divider"></div>
+                                    {% for colonne in choix_col %}
+                                        <input type="checkbox" name="selected_features_tree"
+                                               value="{{ colonne }}"
+                                                {% if 'selected_features_tree' in session %}
+                                               {% if colonne in session['selected_features_tree'] %}checked
+                                               {% endif %}
+                                                {% endif %}
+                                        >
+                                        {{ colonne }}<br>
+                                    {% endfor %}
+                                    <br>
+                                    <input type="submit" class="btn btn-success" value="Envoyer"/>
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br><br>
+                <!--Choix target-->
+                <div class="accordion shadow" id="accordion2">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="flush-headingTwo">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#flush-collapseTwo" aria-expanded="false"
+                                    aria-controls="flush-collapseTwo">
+                                Target
+                            </button>
+                        </h2>
+                        <div id="flush-collapseTwo" class="accordion-collapse collapse"
+                             aria-labelledby="flush-headingTwo" data-bs-parent="#accordion2">
+                            <div class="accordion-body">
+                                <!-- Choix target -->
+                                <form method="POST" action="{{ url_for('decision_tree') }}">
+                                    <h3 class="dropdown-header">Target</h3>
+                                    <div class="dropdown-divider"></div>
+                                    {% for colonne in all_col %}
+                                        <input type="radio" name="selected_target_tree"
+                                               value="{{ colonne }}"
+                                                {% if session['selected_target_tree'] %}
+                                               {% if colonne in session['selected_target_tree'] %}checked
+                                               {% endif %}
+                                                {% endif %}
+                                        >
+                                        {{ colonne }}<br>
+                                    {% endfor %}
+                                    <br>
+                                    <input type="submit" class="btn btn-success" value="Envoyer"/>
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <br>
+            </div>
+        </div>
+    </div><br>
+
+    {% if 'decision_tree_metrics' in session and not erreur %}
+        <!--Metrics-->
+        <div class="text-center">
+            {% for value, metric in zip(session["decision_tree_metrics"], ["Précision", "Rappel", "F1", "Accuracy"]) %}
+                <button type="button"
+                        class="btn {% if value[1] <= 0 %}btn-outline-success{% else %}btn-outline-danger{% endif %} position-relative">
+                    {{ metric }} = {{ value[0] }}
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill {% if value[1] <= 0 %}bg-success{% else %}bg-danger{% endif %}">
+                        {% if value[1] > 0 %}+{% endif %}{{ value[1] }}
+                      </span>
+                </button>&nbsp &nbsp
+            {% endfor %}
+        </div>
+    {% endif %}
+
+
+
+    {% if erreur %}
+        <br>
+        <div class="center-block">
+            <div class="alert alert-danger shadow" role="alert">
+                Erreurs possibles : <br>
+                - Le dataset après dropna() est vide<br>
+                - Le nombre de features saisi est incorrecte<br>
+                - La target appartient aux features<br>
+                - La target est une variable continue
+            </div>
+        </div>
+    {% endif %}
+    <br>
 
 {% endblock %}
