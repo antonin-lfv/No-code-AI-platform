@@ -85,7 +85,7 @@
     </div><br>
 
 
-    {% if not erreur and session["figures"] != [] %}
+    {% if not erreur and figures != [] %}
         <br>
         <br>
         <br>
@@ -133,7 +133,7 @@
         <br>
 
 
-        {% if session["figures"][2] != 'erreur' %}
+        {% if figures[2] != 'erreur' %}
             <!--Si la régression de poisson est possible-->
             <br>
             <br>
@@ -222,7 +222,7 @@
         <br>
         <br>
 
-        {% for figure, indexfig in zip(session["figures"], ['1', '2', '3', '4', '5', '6']) %}
+        {% for figure, indexfig in zip(figures, ['1', '2', '3', '4', '5', '6']) %}
             {% if figure != 'erreur' %}
                 <script type='text/javascript'>
                     var graphs = {{figure | safe}};

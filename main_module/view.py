@@ -317,7 +317,7 @@ def regressions():
         df = dico_dataset[session['_choix_dataset']]
         choix_col = col_numeric(df)
         fig, erreur = None, None
-        session["figures"] = []
+        figures = []
         if request.method == "POST":
             if request.form.getlist('selected_features_regressions'):
                 session['selected_features_regressions'] = request.form.getlist('selected_features_regressions')
@@ -327,7 +327,7 @@ def regressions():
             if 'selected_target_regressions' in session and 'selected_features_regressions' in session:
                 if session['selected_target_regressions'] in session['selected_features_regressions'] and session['selected_target_regressions'] is not None:
                     erreur = True
-        print(erreur)
+
         if 'selected_features_regressions' in session and 'selected_target_regressions' in session:
             if not erreur:
                 # # On a tout ce qu'il faut
@@ -392,7 +392,7 @@ def regressions():
                                    'yanchor': 'top'
                                    }
                         )
-                        session["figures"].append(json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder))
+                        figures.append(json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder))
 
                         # ###############################################################################
 
@@ -442,7 +442,7 @@ def regressions():
                                    'yanchor': 'top'
                                    }
                         )
-                        session["figures"].append(json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder))
+                        figures.append(json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder))
 
                         # ###############################################################################
 
@@ -496,10 +496,10 @@ def regressions():
                                        'yanchor': 'top'
                                        }
                             )
-                            session["figures"].append(json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder))
+                            figures.append(json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder))
                         else:
                             # Régression de poisson impossible
-                            session["figures"].append('erreur')
+                            figures.append('erreur')
 
                         # ###############################################################################
 
@@ -550,7 +550,7 @@ def regressions():
                                    'yanchor': 'top'
                                    }
                         )
-                        session["figures"].append(json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder))
+                        figures.append(json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder))
 
                         # ###############################################################################
 
@@ -598,7 +598,7 @@ def regressions():
                                    'yanchor': 'top'
                                    }
                         )
-                        session["figures"].append(json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder))
+                        figures.append(json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder))
 
                         # ###############################################################################
 
@@ -646,7 +646,7 @@ def regressions():
                                    'yanchor': 'top'
                                    }
                         )
-                        session["figures"].append(json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder))
+                        figures.append(json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder))
                     except:
                         # Régressions impossibles
                         erreur = True
@@ -655,7 +655,7 @@ def regressions():
                     # Dataset vide
                     erreur = True
 
-        return render_template("regressions.html", choix_col=choix_col, erreur=erreur, zip=zip)
+        return render_template("regressions.html", choix_col=choix_col, erreur=erreur, zip=zip, figures=figures)
 
     else:
         return render_template("waiting_for_data.html")
@@ -667,6 +667,7 @@ def KNN():
         df = dico_dataset[session['_choix_dataset']]
         choix_col = df.columns.values
         erreur, message_encode, meilleur_k_knn, message_ROC = None, [], None, None
+        figure_roc_knn, figure_learning_curves_knn = None, None
         if 'selected_col_knn' not in session:
             session['selected_col_knn'] = []
         if 'col_numeriques_knn_avec_encode' not in session:
@@ -773,7 +774,7 @@ def KNN():
                                 width=900, height=450,
                                 margin=dict(l=40, r=40, b=40, t=40),
                             )
-                            session["figure_roc_knn"] = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+                            figure_roc_knn = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
 
                         # Learning curve
                         N, train_score, val_score = learning_curve(best_model_knn, X_train, y_train,
@@ -796,7 +797,7 @@ def KNN():
                             paper_bgcolor='rgba(0,0,0,0)',
                             plot_bgcolor='rgba(0,0,0,0)',
                         )
-                        session["figure_learning_curves_knn"] = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+                        figure_learning_curves_knn = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
 
                         """# Faire une prédiction
                         features = []
@@ -817,7 +818,7 @@ def KNN():
                 # Dataset vide
                 erreur = True
 
-        return render_template("KNN.html", zip=zip, choix_col=choix_col, len=len, erreur=erreur, message_encode=message_encode, meilleur_k_knn=meilleur_k_knn, message_ROC=message_ROC)
+        return render_template("KNN.html", zip=zip, choix_col=choix_col, len=len, erreur=erreur, message_encode=message_encode, meilleur_k_knn=meilleur_k_knn, message_ROC=message_ROC, figure_roc_knn=figure_roc_knn, figure_learning_curves_knn=figure_learning_curves_knn)
     else:
         return render_template("waiting_for_data.html")
 

@@ -157,22 +157,22 @@
                 </div>
         </div><br>
         <br><br>
-        {% if "figure_roc_knn" in session %}
+        {% if figure_roc_knn %}
             <h3 class="text-center">ROC curve</h3><br><br>
             {{ message_ROC }}
             <div id='chart_roc' class='chart center-block'></div>
             <script type='text/javascript'>
-                    var graphs = {{session["figure_roc_knn"] | safe}};
+                    var graphs = {{ figure_roc_knn | safe}};
                     Plotly.plot('chart_roc', graphs, {});
             </script>
         {% endif %}
         <br><br>
 
-        {% if "figure_learning_curves_knn" in session %}
+        {% if figure_learning_curves_knn %}
             <h3 class="text-center">Learning curves</h3><br>
             <div id='chart_learning_curves' class='chart center-block'></div>
             <script type='text/javascript'>
-                    var graphs = {{session["figure_learning_curves_knn"] | safe}};
+                    var graphs = {{ figure_learning_curves_knn | safe}};
                     Plotly.plot('chart_learning_curves', graphs, {});
             </script>
         {% endif %}
