@@ -92,9 +92,9 @@
         <div class="text-center">
             {% for value, metric in zip(session["decision_tree_metrics"], ["Précision", "Rappel", "F1", "Accuracy"]) %}
                 <button type="button"
-                        class="btn {% if value[1] <= 0 %}btn-outline-success{% else %}btn-outline-danger{% endif %} position-relative">
+                        class="btn {% if value[1] >= 0 %}btn-outline-success{% else %}btn-outline-danger{% endif %} position-relative">
                     {{ metric }} = {{ value[0] }}
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill {% if value[1] <= 0 %}bg-success{% else %}bg-danger{% endif %}">
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill {% if value[1] >= 0 %}bg-success{% else %}bg-danger{% endif %}">
                         {% if value[1] > 0 %}+{% endif %}{{ value[1] }}
                       </span>
                 </button>&nbsp &nbsp
