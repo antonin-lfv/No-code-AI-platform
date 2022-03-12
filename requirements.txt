@@ -13,11 +13,11 @@ jsons
 xlrd
 sklearn
 umap-learn
+umap
 more-itertools
 graphviz
 scikit-learn
 Pillow
-umap
 six
 pip
 requests

@@ -6,7 +6,6 @@ import plotly.graph_objects as go
 import plotly
 import numpy as np
 import pandas as pd
-import umap
 import wtforms.widgets
 from flask import Flask, request, redirect, abort, render_template, session, flash
 from flask_bootstrap import Bootstrap
@@ -24,7 +23,7 @@ from sklearn import metrics
 from sklearn.metrics import *
 from sklearn.cluster import KMeans
 from sklearn.svm import SVC
-import umap
+import umap.umap_ as umap
 from scipy.spatial import distance
 
 from main_module.static.utils import *
