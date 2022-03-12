@@ -64,10 +64,10 @@
                        id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Réduction de dimension
                         {% if 'PCA_page' in request.endpoint or 'UMAP_page' in request.endpoint or 'TSNE_page' in request.endpoint %}
-                            {{ request.endpoint }}{% endif %}
+                            {{ request.endpoint[:-5] }}{% endif %}
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <li><a class="dropdown-item" href="{{ url_for('PCA_page') }}">PCA_page</a></li>
+                        <li><a class="dropdown-item" href="{{ url_for('PCA_page') }}">PCA</a></li>
                         <li><a class="dropdown-item" href="{{ url_for('UMAP_page') }}">UMAP</a></li>
                         <li><a class="dropdown-item" href="{{ url_for('TSNE_page') }}">t-SNE</a></li>
                     </ul>
