@@ -1,5 +1,5 @@
 # Importations
-
+os.environ['KMP_WARNINGS'] = 'off'
 import plotly.express as px
 import plotly.graph_objects as go
 import plotly
