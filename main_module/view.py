@@ -5,6 +5,7 @@ import plotly.graph_objects as go
 import plotly
 import numpy as np
 import pandas as pd
+import umap
 import wtforms.widgets
 from flask import Flask, request, redirect, abort, render_template, session, flash
 from flask_bootstrap import Bootstrap
@@ -1079,9 +1080,84 @@ def decision_tree():
 def PCA_page():
     if '_choix_dataset' in session.keys():
         df = dico_dataset[session['_choix_dataset']]
-        return render_template("PCA.html", column_names=df.columns.values,
-                               row_data=list(df.values.tolist()),
-                               zip=zip)
+        choix_col = df.columns.values
+        erreur, message_encode, figure_pca = None, [], None
+        if 'selected_col_pca' not in session:
+            session['selected_col_pca'] = []
+        if 'col_numeriques_pca_avec_encode' not in session:
+            session["col_numeriques_pca_avec_encode"] = []
+        if 'selected_target_pca' not in session:
+            session["selected_target_pca"] = []
+
+        if request.method == "POST":
+            if request.form.getlist('selected_col_pca'):
+                session['selected_col_pca'] = request.form.getlist('selected_col_pca')
+                session['selected_col_encode_pca'], session["col_numeriques_pca_avec_encode"], session[
+                    'selected_target_pca'] = [], [], []
+                session["col_numeriques_pca_avec_encode"] = col_numeric(df[session['selected_col_pca']])
+            if request.form.getlist('selected_col_encode_pca'):
+                session['selected_col_encode_pca'] = request.form.getlist('selected_col_encode_pca')[:-1]
+                session["col_numeriques_pca_avec_encode"] = list(
+                    set(col_numeric(df[session['selected_col_pca']]) + session['selected_col_encode_pca']))
+                session['selected_target_pca'] = []
+            if request.form.getlist('selected_target_pca'):
+                session['selected_target_pca'] = request.form.getlist('selected_target_pca')
+                temp = session['selected_col_pca'].copy()
+                temp.remove(session['selected_target_pca'][0])
+
+        if len(session['selected_col_pca']) > 1:
+            df_ml = df[session['selected_col_pca']]
+            df_ml = df_ml.dropna(axis=0)
+            df_origine = df_ml.copy()
+            if len(df_ml) > 0:
+                if session['selected_col_encode_pca']:
+                    # Encodage
+                    for col in session['selected_col_encode_pca']:
+                        message_encode.append(
+                            "Colonne " + col + "  :  " + str(df_ml[col].unique().tolist()) + " -> " + str(
+                                np.arange(len(df_ml[col].unique()))))
+                        df_ml[col].replace(df_ml[col].unique(), np.arange(len(df_ml[col].unique())), inplace=True)
+                if session['selected_target_pca']:
+                    try:
+                        # PCA
+                        model = PCA(n_components=2)
+                        y = df_ml[session['selected_target_pca']]  # target
+                        X = df_ml.drop(session['selected_target_pca'], axis=1)  # features
+                        model.fit(X)
+                        x_pca = model.transform(X)
+                        # résultats points
+                        data = pd.concat([pd.Series(x_pca[:, 0]).reset_index(drop=True),
+                                                         pd.Series(x_pca[:, 1]).reset_index(drop=True),
+                                                         pd.Series(df_origine[
+                                                                       session['selected_target_pca'][0]]).reset_index(
+                                                             drop=True)], axis=1)
+                        data.columns = ["x", "y", str(session['selected_target_pca'][0])]
+                        fig = px.scatter(data, x="x", y="y",
+                                         color=str(session['selected_target_pca'][0]),
+                                         labels={'color': '{}'.format(str(session['selected_target_pca'][0]))},
+                                         color_discrete_sequence=px.colors.qualitative.Plotly)
+                        fig.update_layout(
+                            showlegend=True,
+                            template='simple_white',
+                            font=dict(size=10),
+                            autosize=False,
+                            width=900, height=450,
+                            margin=dict(l=40, r=40, b=40, t=40),
+                            paper_bgcolor='rgba(0,0,0,0)',
+                            plot_bgcolor='rgba(0,0,0,0)',
+                        )
+                        fig.update(layout_coloraxis_showscale=False)
+                        figure_pca = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+
+                    except:
+                        # PCA impossible
+                        erreur = True
+            else:
+                # Dataset vide
+                erreur = True
+
+        return render_template("PCA.html", zip=zip, choix_col=choix_col, len=len, erreur=erreur,
+                                   message_encode=message_encode, figure_pca=figure_pca)
     else:
         return render_template("waiting_for_data.html")
 
@@ -1090,9 +1166,84 @@ def PCA_page():
 def UMAP_page():
     if '_choix_dataset' in session.keys():
         df = dico_dataset[session['_choix_dataset']]
-        return render_template("UMAP.html", column_names=df.columns.values,
-                               row_data=list(df.values.tolist()),
-                               zip=zip)
+        choix_col = df.columns.values
+        erreur, message_encode, figure_umap = None, [], None
+        if 'selected_col_umap' not in session:
+            session['selected_col_umap'] = []
+        if 'col_numeriques_umap_avec_encode' not in session:
+            session["col_numeriques_umap_avec_encode"] = []
+        if 'selected_target_umap' not in session:
+            session["selected_target_umap"] = []
+
+        if request.method == "POST":
+            if request.form.getlist('selected_col_umap'):
+                session['selected_col_umap'] = request.form.getlist('selected_col_umap')
+                session['selected_col_encode_umap'], session["col_numeriques_umap_avec_encode"], session[
+                    'selected_target_umap'] = [], [], []
+                session["col_numeriques_umap_avec_encode"] = col_numeric(df[session['selected_col_umap']])
+            if request.form.getlist('selected_col_encode_umap'):
+                session['selected_col_encode_umap'] = request.form.getlist('selected_col_encode_umap')[:-1]
+                session["col_numeriques_umap_avec_encode"] = list(
+                    set(col_numeric(df[session['selected_col_umap']]) + session['selected_col_encode_umap']))
+                session['selected_target_umap'] = []
+            if request.form.getlist('selected_target_umap'):
+                session['selected_target_umap'] = request.form.getlist('selected_target_umap')
+                temp = session['selected_col_umap'].copy()
+                temp.remove(session['selected_target_umap'][0])
+
+        if len(session['selected_col_umap']) > 1:
+            df_ml = df[session['selected_col_umap']]
+            df_ml = df_ml.dropna(axis=0)
+            df_origine = df_ml.copy()
+            if len(df_ml) > 0:
+                if session['selected_col_encode_umap']:
+                    # Encodage
+                    for col in session['selected_col_encode_umap']:
+                        message_encode.append(
+                            "Colonne " + col + "  :  " + str(df_ml[col].unique().tolist()) + " -> " + str(
+                                np.arange(len(df_ml[col].unique()))))
+                        df_ml[col].replace(df_ml[col].unique(), np.arange(len(df_ml[col].unique())), inplace=True)
+                if session['selected_target_umap']:
+                    try:
+                        # umap
+                        model = umap.UMAP()
+                        y = df_ml[session['selected_target_umap']]  # target
+                        X = df_ml.drop(session['selected_target_umap'], axis=1)  # features
+                        model.fit(X)
+                        x_umap = model.transform(X)
+                        # résultats points
+                        data = pd.concat([pd.Series(x_umap[:, 0]).reset_index(drop=True),
+                                                         pd.Series(x_umap[:, 1]).reset_index(drop=True),
+                                                         pd.Series(df_origine[
+                                                                       session['selected_target_umap'][0]]).reset_index(
+                                                             drop=True)], axis=1)
+                        data.columns = ["x", "y", str(session['selected_target_umap'][0])]
+                        fig = px.scatter(data, x="x", y="y",
+                                         color=str(session['selected_target_umap'][0]),
+                                         labels={'color': '{}'.format(str(session['selected_target_umap'][0]))},
+                                         color_discrete_sequence=px.colors.qualitative.Plotly)
+                        fig.update_layout(
+                            showlegend=True,
+                            template='simple_white',
+                            font=dict(size=10),
+                            autosize=False,
+                            width=900, height=450,
+                            margin=dict(l=40, r=40, b=40, t=40),
+                            paper_bgcolor='rgba(0,0,0,0)',
+                            plot_bgcolor='rgba(0,0,0,0)',
+                        )
+                        fig.update(layout_coloraxis_showscale=False)
+                        figure_umap = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+
+                    except:
+                        # umap impossible
+                        erreur = True
+            else:
+                # Dataset vide
+                erreur = True
+
+        return render_template("UMAP.html", zip=zip, choix_col=choix_col, len=len, erreur=erreur,
+                                   message_encode=message_encode, figure_umap=figure_umap)
     else:
         return render_template("waiting_for_data.html")
 
@@ -1101,9 +1252,83 @@ def UMAP_page():
 def TSNE_page():
     if '_choix_dataset' in session.keys():
         df = dico_dataset[session['_choix_dataset']]
-        return render_template("TSNE.html", column_names=df.columns.values,
-                               row_data=list(df.values.tolist()),
-                               zip=zip)
+        choix_col = df.columns.values
+        erreur, message_encode, figure_tsne = None, [], None
+        if 'selected_col_tsne' not in session:
+            session['selected_col_tsne'] = []
+        if 'col_numeriques_tsne_avec_encode' not in session:
+            session["col_numeriques_tsne_avec_encode"] = []
+        if 'selected_target_tsne' not in session:
+            session["selected_target_tsne"] = []
+
+        if request.method == "POST":
+            if request.form.getlist('selected_col_tsne'):
+                session['selected_col_tsne'] = request.form.getlist('selected_col_tsne')
+                session['selected_col_encode_tsne'], session["col_numeriques_tsne_avec_encode"], session[
+                    'selected_target_tsne'] = [], [], []
+                session["col_numeriques_tsne_avec_encode"] = col_numeric(df[session['selected_col_tsne']])
+            if request.form.getlist('selected_col_encode_tsne'):
+                session['selected_col_encode_tsne'] = request.form.getlist('selected_col_encode_tsne')[:-1]
+                session["col_numeriques_tsne_avec_encode"] = list(
+                    set(col_numeric(df[session['selected_col_tsne']]) + session['selected_col_encode_tsne']))
+                session['selected_target_tsne'] = []
+            if request.form.getlist('selected_target_tsne'):
+                session['selected_target_tsne'] = request.form.getlist('selected_target_tsne')
+                temp = session['selected_col_tsne'].copy()
+                temp.remove(session['selected_target_tsne'][0])
+
+        if len(session['selected_col_tsne']) > 1:
+            df_ml = df[session['selected_col_tsne']]
+            df_ml = df_ml.dropna(axis=0)
+            df_origine = df_ml.copy()
+            if len(df_ml) > 0:
+                if session['selected_col_encode_tsne']:
+                    # Encodage
+                    for col in session['selected_col_encode_tsne']:
+                        message_encode.append(
+                            "Colonne " + col + "  :  " + str(df_ml[col].unique().tolist()) + " -> " + str(
+                                np.arange(len(df_ml[col].unique()))))
+                        df_ml[col].replace(df_ml[col].unique(), np.arange(len(df_ml[col].unique())), inplace=True)
+                if session['selected_target_tsne']:
+                    try:
+                        # tsne
+                        model = TSNE(n_components=2, random_state=0)
+                        y = df_ml[session['selected_target_tsne']]  # target
+                        X = df_ml.drop(session['selected_target_tsne'], axis=1)  # features
+                        x_tsne = model.fit_transform(X, )
+                        # résultats points
+                        data = pd.concat([pd.Series(x_tsne[:, 0]).reset_index(drop=True),
+                                                         pd.Series(x_tsne[:, 1]).reset_index(drop=True),
+                                                         pd.Series(df_origine[
+                                                                       session['selected_target_tsne'][0]]).reset_index(
+                                                             drop=True)], axis=1)
+                        data.columns = ["x", "y", str(session['selected_target_tsne'][0])]
+                        fig = px.scatter(data, x="x", y="y",
+                                         color=str(session['selected_target_tsne'][0]),
+                                         labels={'color': '{}'.format(str(session['selected_target_tsne'][0]))},
+                                         color_discrete_sequence=px.colors.qualitative.Plotly)
+                        fig.update_layout(
+                            showlegend=True,
+                            template='simple_white',
+                            font=dict(size=10),
+                            autosize=False,
+                            width=900, height=450,
+                            margin=dict(l=40, r=40, b=40, t=40),
+                            paper_bgcolor='rgba(0,0,0,0)',
+                            plot_bgcolor='rgba(0,0,0,0)',
+                        )
+                        fig.update(layout_coloraxis_showscale=False)
+                        figure_tsne = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+
+                    except:
+                        # tsne impossible
+                        erreur = True
+            else:
+                # Dataset vide
+                erreur = True
+
+        return render_template("TSNE.html", zip=zip, choix_col=choix_col, len=len, erreur=erreur,
+                                   message_encode=message_encode, figure_tsne=figure_tsne)
     else:
         return render_template("waiting_for_data.html")
 
