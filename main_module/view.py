@@ -1204,40 +1204,40 @@ def UMAP_page():
                                 np.arange(len(df_ml[col].unique()))))
                         df_ml[col].replace(df_ml[col].unique(), np.arange(len(df_ml[col].unique())), inplace=True)
                 if session['selected_target_umap']:
-                    try:
-                        # umap
-                        model = umap.UMAP()
-                        y = df_ml[session['selected_target_umap']]  # target
-                        X = df_ml.drop(session['selected_target_umap'], axis=1)  # features
-                        model.fit(X)
-                        x_umap = model.transform(X)
-                        # résultats points
-                        data = pd.concat([pd.Series(x_umap[:, 0]).reset_index(drop=True),
-                                                         pd.Series(x_umap[:, 1]).reset_index(drop=True),
-                                                         pd.Series(df_origine[
-                                                                       session['selected_target_umap'][0]]).reset_index(
-                                                             drop=True)], axis=1)
-                        data.columns = ["x", "y", str(session['selected_target_umap'][0])]
-                        fig = px.scatter(data, x="x", y="y",
-                                         color=str(session['selected_target_umap'][0]),
-                                         labels={'color': '{}'.format(str(session['selected_target_umap'][0]))},
-                                         color_discrete_sequence=px.colors.qualitative.Plotly)
-                        fig.update_layout(
-                            showlegend=True,
-                            template='simple_white',
-                            font=dict(size=10),
-                            autosize=False,
-                            width=900, height=450,
-                            margin=dict(l=40, r=40, b=40, t=40),
-                            paper_bgcolor='rgba(0,0,0,0)',
-                            plot_bgcolor='rgba(0,0,0,0)',
-                        )
-                        fig.update(layout_coloraxis_showscale=False)
-                        figure_umap = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+                    #try:
+                    # umap
+                    model = umap.UMAP()
+                    y = df_ml[session['selected_target_umap']]  # target
+                    X = df_ml.drop(session['selected_target_umap'], axis=1)  # features
+                    model.fit(X)
+                    x_umap = model.transform(X)
+                    # résultats points
+                    data = pd.concat([pd.Series(x_umap[:, 0]).reset_index(drop=True),
+                                                     pd.Series(x_umap[:, 1]).reset_index(drop=True),
+                                                     pd.Series(df_origine[
+                                                                   session['selected_target_umap'][0]]).reset_index(
+                                                         drop=True)], axis=1)
+                    data.columns = ["x", "y", str(session['selected_target_umap'][0])]
+                    fig = px.scatter(data, x="x", y="y",
+                                     color=str(session['selected_target_umap'][0]),
+                                     labels={'color': '{}'.format(str(session['selected_target_umap'][0]))},
+                                     color_discrete_sequence=px.colors.qualitative.Plotly)
+                    fig.update_layout(
+                        showlegend=True,
+                        template='simple_white',
+                        font=dict(size=10),
+                        autosize=False,
+                        width=900, height=450,
+                        margin=dict(l=40, r=40, b=40, t=40),
+                        paper_bgcolor='rgba(0,0,0,0)',
+                        plot_bgcolor='rgba(0,0,0,0)',
+                    )
+                    fig.update(layout_coloraxis_showscale=False)
+                    figure_umap = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
 
-                    except:
+                    #except:
                         # umap impossible
-                        erreur = True
+                        #erreur = True
             else:
                 # Dataset vide
                 erreur = True
