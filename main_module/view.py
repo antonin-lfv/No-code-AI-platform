@@ -23,7 +23,7 @@ from sklearn import metrics
 from sklearn.metrics import *
 from sklearn.cluster import KMeans
 from sklearn.svm import SVC
-import umap.umap_ as UMAP
+import umap
 from scipy.spatial import distance
 
 from main_module.static.utils import *
