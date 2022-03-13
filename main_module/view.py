@@ -13,7 +13,7 @@ from flask_nav import Nav
 from flask_nav.elements import *
 import json
 from sklearn.linear_model import LinearRegression, PoissonRegressor, ElasticNet, Ridge, Lasso
-from sklearn.preprocessing import PolynomialFeatures, scale
+from sklearn.preprocessing import PolynomialFeatures, scale, StandardScaler
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier, export_graphviz
 from sklearn.decomposition import PCA
@@ -1121,8 +1121,10 @@ def PCA_page():
                     try:
                         # PCA
                         model = PCA(n_components=2)
+                        sc = StandardScaler()
                         y = df_ml[session['selected_target_pca']]  # target
                         X = df_ml.drop(session['selected_target_pca'], axis=1)  # features
+                        X = sc.fit_transform(X)
                         model.fit(X)
                         x_pca = model.transform(X)
                         # résultats points
@@ -1207,10 +1209,11 @@ def UMAP_page():
                     try:
                         # umap
                         model = umap.UMAP()
+                        sc = StandardScaler()
                         y = df_ml[session['selected_target_umap']]  # target
                         X = df_ml.drop(session['selected_target_umap'], axis=1)  # features
-                        model.fit(X)
-                        x_umap = model.transform(X)
+                        X = sc.fit_transform(X)
+                        x_umap = model.fit_transform(X)
                         # résultats points
                         data = pd.concat([pd.Series(x_umap[:, 0]).reset_index(drop=True),
                                                          pd.Series(x_umap[:, 1]).reset_index(drop=True),
@@ -1293,8 +1296,10 @@ def TSNE_page():
                     try:
                         # tsne
                         model = TSNE(n_components=2, random_state=0)
+                        sc = StandardScaler()
                         y = df_ml[session['selected_target_tsne']]  # target
                         X = df_ml.drop(session['selected_target_tsne'], axis=1)  # features
+                        X = sc.fit_transform(X)
                         x_tsne = model.fit_transform(X, )
                         # résultats points
                         data = pd.concat([pd.Series(x_tsne[:, 0]).reset_index(drop=True),
