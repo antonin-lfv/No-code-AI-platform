@@ -94,9 +94,9 @@
             <!--Metrics-->
             <div class="text-center">
             {% for value, metric in zip(session["reg_lineaire"], ["MSE", "RMSE", "MAE", "R2"]) %}
-                <button type="button" class="btn {% if value[1] <= 0 and metric != "R2" %}btn-outline-success{% else %}btn-outline-danger{% endif %} position-relative">
+                <button type="button" class="btn {% if value[1] <= 0 and metric != "R2" %}btn-outline-success{% elif value[1] > 0 and metric == "R2" %}btn-outline-success{% else %}btn-outline-danger{% endif %} position-relative">
                     {{ metric }} = {{ value[0] }}
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill {% if value[1] <= 0 and metric != "R2" %}bg-success{% else %}bg-danger{% endif %}">
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill {% if value[1] <= 0 and metric != "R2" %}bg-success{% elif value[1] > 0 and metric == "R2" %}bg-success{% else %}bg-danger{% endif %}">
                     {% if value[1] > 0 %}+{% endif %}{{ value[1] }}
                   </span>
                 </button>&nbsp &nbsp
@@ -117,9 +117,9 @@
             <!--Metrics-->
             <div class="text-center">
             {% for value, metric in zip(session["reg_poly"], ["MSE", "RMSE", "MAE", "R2"]) %}
-                <button type="button" class="btn {% if value[1] <= 0 and metric != "R2" %}btn-outline-success{% else %}btn-outline-danger{% endif %} position-relative">
+                <button type="button" class="btn {% if value[1] <= 0 and metric != "R2" %}btn-outline-success{% elif value[1] > 0 and metric == "R2" %}btn-outline-success{% else %}btn-outline-danger{% endif %} position-relative">
                     {{ metric }} = {{ value[0] }}
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill {% if value[1] <= 0 and metric != "R2" %}bg-success{% else %}bg-danger{% endif %}">
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill {% if value[1] <= 0 and metric != "R2" %}bg-success{% elif value[1] > 0 and metric == "R2" %}bg-success{% else %}bg-danger{% endif %}">
                     {% if value[1] > 0 %}+{% endif %}{{ value[1] }}
                   </span>
                 </button>&nbsp &nbsp
@@ -142,9 +142,9 @@
             <!--Metrics-->
             <div class="text-center">
             {% for value, metric in zip(session["reg_poison"], ["MSE", "RMSE", "MAE", "R2"]) %}
-                <button type="button" class="btn {% if value[1] <= 0 and metric != "R2" %}btn-outline-success{% else %}btn-outline-danger{% endif %} position-relative">
+                <button type="button" class="btn {% if value[1] <= 0 and metric != "R2" %}btn-outline-success{% elif value[1] > 0 and metric == "R2" %}btn-outline-success{% else %}btn-outline-danger{% endif %} position-relative">
                     {{ metric }} = {{ value[0] }}
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill {% if value[1] <= 0 and metric != "R2" %}bg-success{% else %}bg-danger{% endif %}">
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill {% if value[1] <= 0 and metric != "R2" %}bg-success{% elif value[1] > 0 and metric == "R2" %}bg-success{% else %}bg-danger{% endif %}">
                     {% if value[1] > 0 %}+{% endif %}{{ value[1] }}
                   </span>
                 </button>&nbsp &nbsp
@@ -164,9 +164,9 @@
             <!--Metrics-->
             <div class="text-center">
             {% for value, metric in zip(session["reg_elastic_net"], ["MSE", "RMSE", "MAE", "R2"]) %}
-                <button type="button" class="btn {% if value[1] <= 0 and metric != "R2" %}btn-outline-success{% else %}btn-outline-danger{% endif %} position-relative">
+                <button type="button" class="btn {% if value[1] <= 0 and metric != "R2" %}btn-outline-success{% elif value[1] > 0 and metric == "R2" %}btn-outline-success{% else %}btn-outline-danger{% endif %} position-relative">
                     {{ metric }} = {{ value[0] }}
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill {% if value[1] <= 0 and metric != "R2" %}bg-success{% else %}bg-danger{% endif %}">
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill {% if value[1] <= 0 and metric != "R2" %}bg-success{% elif value[1] > 0 and metric == "R2" %}bg-success{% else %}bg-danger{% endif %}">
                     {% if value[1] > 0 %}+{% endif %}{{ value[1] }}
                   </span>
                 </button>&nbsp &nbsp
@@ -187,9 +187,9 @@
             <!--Metrics-->
             <div class="text-center">
             {% for value, metric in zip(session["reg_ridge"], ["MSE", "RMSE", "MAE", "R2"]) %}
-                <button type="button" class="btn {% if value[1] <= 0 and metric != "R2" %}btn-outline-success{% else %}btn-outline-danger{% endif %} position-relative">
+                <button type="button" class="btn {% if value[1] <= 0 and metric != "R2" %}btn-outline-success{% elif value[1] > 0 and metric == "R2" %}btn-outline-success{% else %}btn-outline-danger{% endif %} position-relative">
                     {{ metric }} = {{ value[0] }}
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill {% if value[1] <= 0 and metric != "R2" %}bg-success{% else %}bg-danger{% endif %}">
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill {% if value[1] <= 0 and metric != "R2" %}bg-success{% elif value[1] > 0 and metric == "R2" %}bg-success{% else %}bg-danger{% endif %}">
                     {% if value[1] > 0 %}+{% endif %}{{ value[1] }}
                   </span>
                 </button>&nbsp &nbsp
@@ -208,9 +208,9 @@
             <!--Metrics-->
             <div class="text-center">
             {% for value, metric in zip(session["reg_lasso"], ["MSE", "RMSE", "MAE", "R2"]) %}
-                <button type="button" class="btn {% if value[1] <= 0 and metric != "R2" %}btn-outline-success{% else %}btn-outline-danger{% endif %} position-relative">
+                <button type="button" class="btn {% if value[1] <= 0 and metric != "R2" %}btn-outline-success{% elif value[1] > 0 and metric == "R2" %}btn-outline-success{% else %}btn-outline-danger{% endif %} position-relative">
                     {{ metric }} = {{ value[0] }}
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill {% if value[1] <= 0 and metric != "R2" %}bg-success{% else %}bg-danger{% endif %}">
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill {% if value[1] <= 0 and metric != "R2" %}bg-success{% elif value[1] > 0 and metric == "R2" %}bg-success{% else %}bg-danger{% endif %}">
                     {% if value[1] > 0 %}+{% endif %}{{ value[1] }}
                   </span>
                 </button>&nbsp &nbsp
