@@ -4,9 +4,9 @@
 
 <p align="center">
 	<a href="https://www.codacy.com/gh/antonin-lfv/No-code-AI-platform/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=antonin-lfv/No-code-AI-platform&amp;utm_campaign=Badge_Grade"><img src="https://app.codacy.com/project/badge/Grade/6487827863504f9eab2242d93b8cb77e" height="20"/></a>
-	<a><img src="http://heroku-badge.herokuapp.com/?app=angularjs-crypto&style=flat&svg=1" height="20" alt=""/></a>
+	<a href="" ><img src="http://heroku-badge.herokuapp.com/?app=angularjs-crypto&style=flat&svg=1" height="20" alt=""/></a>
 	<a href="https://github.com/antonin-lfv/No-code-AI-platform/blob/master/LICENSE"><img src="https://img.shields.io/pypi/l/ansicolortags.svg" height="20" alt=""/></a>
-    <a><img src="https://img.shields.io/badge/version-1.1.1-informational" height="20" alt=""/></a>
+    <a href="" ><img src="https://img.shields.io/badge/version-1.1.1-informational" height="20" alt=""/></a>
 </p>
 
 <p align="center">
