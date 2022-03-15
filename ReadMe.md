@@ -1,14 +1,17 @@
-<h1 align="center">No Code AI platform</h1>
+<br><h1 align="center">No Code AI platform</h1>
 
 <br/>
 
 <p align="center">
 	<a href="https://www.codacy.com/gh/antonin-lfv/No-code-AI-platform/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=antonin-lfv/No-code-AI-platform&amp;utm_campaign=Badge_Grade"><img src="https://app.codacy.com/project/badge/Grade/6487827863504f9eab2242d93b8cb77e" height="20"/></a>
-		<a><img src="http://heroku-badge.herokuapp.com/?app=angularjs-crypto&style=flat&svg=1" height="20" alt=""/></a>
+	<a><img src="http://heroku-badge.herokuapp.com/?app=angularjs-crypto&style=flat&svg=1" height="20" alt=""/></a>
+	<a><img src="https://img.shields.io/pypi/l/ansicolortags.svg" height="20" alt=""/></a>
 </p>
-<br/>
 
-[Accéder au site](https://no-code-ai-platform.herokuapp.com)
+<p align="center">
+<a><img src="https://img.shields.io/badge/Open%20with%20-Heroku-blueviolet" href="https://no-code-ai-platform.herokuapp.com" height="20" alt=""/></a>
+</p>
+<br>
 
 <br>
 
