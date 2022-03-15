@@ -1,5 +1,6 @@
 # Importations
 import os
+
 os.environ['KMP_WARNINGS'] = 'off'
 import plotly.express as px
 import plotly.graph_objects as go
@@ -17,7 +18,7 @@ from sklearn.preprocessing import PolynomialFeatures, scale, StandardScaler
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier, export_graphviz
 from sklearn.decomposition import PCA
-from sklearn.manifold import TSNE
+from sklearn.manifold import TSNE, LocallyLinearEmbedding
 from sklearn.model_selection import train_test_split, GridSearchCV, learning_curve
 from sklearn import metrics
 from sklearn.metrics import *
@@ -326,7 +327,8 @@ def regressions():
                 session['selected_target_regressions'] = request.form.getlist('selected_target_regressions')[0]
 
             if 'selected_target_regressions' in session and 'selected_features_regressions' in session:
-                if session['selected_target_regressions'] in session['selected_features_regressions'] and session['selected_target_regressions'] is not None:
+                if session['selected_target_regressions'] in session['selected_features_regressions'] and session[
+                    'selected_target_regressions'] is not None:
                     erreur = True
 
         if 'selected_features_regressions' in session and 'selected_target_regressions' in session:
@@ -684,11 +686,13 @@ def KNN():
         if request.method == "POST":
             if request.form.getlist('selected_col_knn'):
                 session['selected_col_knn'] = request.form.getlist('selected_col_knn')
-                session['selected_col_encode_knn'], session["col_numeriques_knn_avec_encode"], session['selected_target_knn'] = [], [], []
+                session['selected_col_encode_knn'], session["col_numeriques_knn_avec_encode"], session[
+                    'selected_target_knn'] = [], [], []
                 session["col_numeriques_knn_avec_encode"] = col_numeric(df[session['selected_col_knn']])
             if request.form.getlist('selected_col_encode_knn'):
                 session['selected_col_encode_knn'] = request.form.getlist('selected_col_encode_knn')[:-1]
-                session["col_numeriques_knn_avec_encode"] = list(set(col_numeric(df[session['selected_col_knn']]) + session['selected_col_encode_knn']))
+                session["col_numeriques_knn_avec_encode"] = list(
+                    set(col_numeric(df[session['selected_col_knn']]) + session['selected_col_encode_knn']))
                 session['selected_target_knn'] = []
             if request.form.getlist('selected_target_knn'):
                 session['selected_target_knn'] = request.form.getlist('selected_target_knn')
@@ -706,7 +710,9 @@ def KNN():
                 if session['selected_col_encode_knn']:
                     # Encodage
                     for col in session['selected_col_encode_knn']:
-                        message_encode.append("Colonne " + col + "  :  " + str(df_ml[col].unique().tolist()) + " -> " + str(np.arange(len(df_ml[col].unique()))))
+                        message_encode.append(
+                            "Colonne " + col + "  :  " + str(df_ml[col].unique().tolist()) + " -> " + str(
+                                np.arange(len(df_ml[col].unique()))))
                         df_ml[col].replace(df_ml[col].unique(), np.arange(len(df_ml[col].unique())), inplace=True)
                 if session['selected_target_knn']:
                     try:
@@ -814,7 +820,8 @@ def KNN():
                         # Faire une prédiction
                         if session['predictions']:
                             try:
-                                prediction_knn = best_model_knn.predict(np.array(session['predictions'], dtype=float).reshape(1, -1))
+                                prediction_knn = best_model_knn.predict(
+                                    np.array(session['predictions'], dtype=float).reshape(1, -1))
                                 message_prediction_knn = f'Prédiction de la target {session["selected_target_knn"][0]} avec les données entrées : {str(df_origine[session["selected_target_knn"][0]].unique()[int(prediction_knn[0])])}'
                             except:
                                 message_prediction_knn = "erreur"
@@ -826,8 +833,11 @@ def KNN():
                 # Dataset vide
                 erreur = True
 
-        return render_template("KNN.html", zip=zip, choix_col=choix_col, len=len, erreur=erreur, message_encode=message_encode, meilleur_k_knn=meilleur_k_knn, message_ROC=message_ROC, figure_roc_knn=figure_roc_knn,
-                               figure_learning_curves_knn=figure_learning_curves_knn, message_prediction_knn=message_prediction_knn)
+        return render_template("KNN.html", zip=zip, choix_col=choix_col, len=len, erreur=erreur,
+                               message_encode=message_encode, meilleur_k_knn=meilleur_k_knn, message_ROC=message_ROC,
+                               figure_roc_knn=figure_roc_knn,
+                               figure_learning_curves_knn=figure_learning_curves_knn,
+                               message_prediction_knn=message_prediction_knn)
     else:
         return render_template("waiting_for_data.html")
 
@@ -854,7 +864,7 @@ def KMeans_page():
                 df_ml = data[session['selected_col_kmeans']].dropna(axis=0)
                 if len(df_ml) > 0:
                     X = df_ml[session['selected_col_kmeans']]  # features
-                    #try:
+                    # try:
                     # PCA
                     model = PCA(n_components=2)
                     model.fit(X)
@@ -889,8 +899,8 @@ def KMeans_page():
                                     marker=dict(color='black', size=15), opacity=0.5, name='Centroïdes')
                     figure_kmeans = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
 
-                    #except:
-                        #erreur = True
+                    # except:
+                    # erreur = True
                 else:
                     erreur = True
             else:
@@ -928,13 +938,15 @@ def SVM():
         else:
             choix_classe = None
 
-        if len(session['selected_features_svm']) == 2 and session['selected_target_svm'] and session['selected_target_svm'] not in session['selected_features_svm'] and len(session['selected_classes_svm']) == 2:
+        if len(session['selected_features_svm']) == 2 and session['selected_target_svm'] and session[
+            'selected_target_svm'] not in session['selected_features_svm'] and len(
+                session['selected_classes_svm']) == 2:
             target, features = session['selected_target_svm'], session['selected_features_svm']
             df = data[[target] + features]
             df.dropna(axis=0, inplace=True)
             if len(df[target].unique().tolist()) > 1:
                 df = df.loc[(df[target] == session['selected_classes_svm'][0]) | (
-                            df[target] == session['selected_classes_svm'][1])]
+                        df[target] == session['selected_classes_svm'][1])]
                 y = df[target]
                 X = df[features]
 
@@ -994,8 +1006,9 @@ def SVM():
         elif session['selected_features_svm'] and session['selected_target_svm'] and session['selected_classes_svm']:
             erreur = True
 
-        return render_template("SVM.html", choix_col=choix_col, all_col=all_col, erreur=erreur, choix_classe=choix_classe,
-                               figure_svm=figure_svm,zip=zip)
+        return render_template("SVM.html", choix_col=choix_col, all_col=all_col, erreur=erreur,
+                               choix_classe=choix_classe,
+                               figure_svm=figure_svm, zip=zip)
     else:
         return render_template("waiting_for_data.html")
 
@@ -1019,7 +1032,8 @@ def decision_tree():
             if request.form.getlist('selected_target_tree'):
                 session['selected_target_tree'] = request.form.getlist('selected_target_tree')[0]
 
-        if len(session['selected_features_tree']) == 2 and session['selected_target_tree'] and session['selected_target_tree'] not in session['selected_features_tree']:
+        if len(session['selected_features_tree']) == 2 and session['selected_target_tree'] and session[
+            'selected_target_tree'] not in session['selected_features_tree']:
             target = session['selected_target_tree']
             features = session['selected_features_tree']
             df = data[[target] + features].dropna(axis=0)
@@ -1048,8 +1062,10 @@ def decision_tree():
                     F1_test = f1_score(y_test, y_pred_test, average=average)
 
                     session["decision_tree_metrics"] = []
-                    session["decision_tree_metrics"].append([round(precis_test, 3), round(precis_test - precis_train, 3)])
-                    session["decision_tree_metrics"].append([round(rappel_test, 3), round(rappel_test - rappel_train, 3)])
+                    session["decision_tree_metrics"].append(
+                        [round(precis_test, 3), round(precis_test - precis_train, 3)])
+                    session["decision_tree_metrics"].append(
+                        [round(rappel_test, 3), round(rappel_test - rappel_train, 3)])
                     session["decision_tree_metrics"].append([round(F1_test, 3), round(F1_test - F1_train, 3)])
                     session["decision_tree_metrics"].append([round(accur_test, 3), round(accur_test - accur_train, 3)])
                     # DOT data
@@ -1070,7 +1086,8 @@ def decision_tree():
         elif session['selected_features_tree'] and session['selected_target_tree']:
             erreur = True
 
-        return render_template("decision_tree.html", choix_col=choix_col, all_col=all_col, figure_tree=figure_tree, erreur=erreur,
+        return render_template("decision_tree.html", choix_col=choix_col, all_col=all_col, figure_tree=figure_tree,
+                               erreur=erreur,
                                zip=zip, dot_data=dot_data)
     else:
         return render_template("waiting_for_data.html")
@@ -1129,10 +1146,10 @@ def PCA_page():
                         x_pca = model.transform(X)
                         # résultats points
                         data = pd.concat([pd.Series(x_pca[:, 0]).reset_index(drop=True),
-                                                         pd.Series(x_pca[:, 1]).reset_index(drop=True),
-                                                         pd.Series(df_origine[
-                                                                       session['selected_target_pca'][0]]).reset_index(
-                                                             drop=True)], axis=1)
+                                          pd.Series(x_pca[:, 1]).reset_index(drop=True),
+                                          pd.Series(df_origine[
+                                                        session['selected_target_pca'][0]]).reset_index(
+                                              drop=True)], axis=1)
                         data.columns = ["x", "y", str(session['selected_target_pca'][0])]
                         fig = px.scatter(data, x="x", y="y",
                                          color=str(session['selected_target_pca'][0]),
@@ -1159,7 +1176,7 @@ def PCA_page():
                 erreur = True
 
         return render_template("PCA.html", zip=zip, choix_col=choix_col, len=len, erreur=erreur,
-                                   message_encode=message_encode, figure_pca=figure_pca)
+                               message_encode=message_encode, figure_pca=figure_pca)
     else:
         return render_template("waiting_for_data.html")
 
@@ -1216,10 +1233,10 @@ def UMAP_page():
                         x_umap = model.fit_transform(X)
                         # résultats points
                         data = pd.concat([pd.Series(x_umap[:, 0]).reset_index(drop=True),
-                                                         pd.Series(x_umap[:, 1]).reset_index(drop=True),
-                                                         pd.Series(df_origine[
-                                                                       session['selected_target_umap'][0]]).reset_index(
-                                                             drop=True)], axis=1)
+                                          pd.Series(x_umap[:, 1]).reset_index(drop=True),
+                                          pd.Series(df_origine[
+                                                        session['selected_target_umap'][0]]).reset_index(
+                                              drop=True)], axis=1)
                         data.columns = ["x", "y", str(session['selected_target_umap'][0])]
                         fig = px.scatter(data, x="x", y="y",
                                          color=str(session['selected_target_umap'][0]),
@@ -1246,71 +1263,71 @@ def UMAP_page():
                 erreur = True
 
         return render_template("UMAP.html", zip=zip, choix_col=choix_col, len=len, erreur=erreur,
-                                   message_encode=message_encode, figure_umap=figure_umap)
+                               message_encode=message_encode, figure_umap=figure_umap)
     else:
         return render_template("waiting_for_data.html")
 
 
-@app.route('/TSNE', methods=['GET', 'POST'])
-def TSNE_page():
+@app.route('/LLE', methods=['GET', 'POST'])
+def LLE_page():
     if '_choix_dataset' in session.keys():
         df = dico_dataset[session['_choix_dataset']]
         choix_col = df.columns.values
-        erreur, message_encode, figure_tsne = None, [], None
-        if 'selected_col_tsne' not in session:
-            session['selected_col_tsne'] = []
-        if 'col_numeriques_tsne_avec_encode' not in session:
-            session["col_numeriques_tsne_avec_encode"] = []
-        if 'selected_target_tsne' not in session:
-            session["selected_target_tsne"] = []
+        erreur, message_encode, figure_lle = None, [], None
+        if 'selected_col_lle' not in session:
+            session['selected_col_lle'] = []
+        if 'col_numeriques_lle_avec_encode' not in session:
+            session["col_numeriques_lle_avec_encode"] = []
+        if 'selected_target_lle' not in session:
+            session["selected_target_lle"] = []
 
         if request.method == "POST":
-            if request.form.getlist('selected_col_tsne'):
-                session['selected_col_tsne'] = request.form.getlist('selected_col_tsne')
-                session['selected_col_encode_tsne'], session["col_numeriques_tsne_avec_encode"], session[
-                    'selected_target_tsne'] = [], [], []
-                session["col_numeriques_tsne_avec_encode"] = col_numeric(df[session['selected_col_tsne']])
-            if request.form.getlist('selected_col_encode_tsne'):
-                session['selected_col_encode_tsne'] = request.form.getlist('selected_col_encode_tsne')[:-1]
-                session["col_numeriques_tsne_avec_encode"] = list(
-                    set(col_numeric(df[session['selected_col_tsne']]) + session['selected_col_encode_tsne']))
-                session['selected_target_tsne'] = []
-            if request.form.getlist('selected_target_tsne'):
-                session['selected_target_tsne'] = request.form.getlist('selected_target_tsne')
-                temp = session['selected_col_tsne'].copy()
-                temp.remove(session['selected_target_tsne'][0])
+            if request.form.getlist('selected_col_lle'):
+                session['selected_col_lle'] = request.form.getlist('selected_col_lle')
+                session['selected_col_encode_lle'], session["col_numeriques_lle_avec_encode"], session[
+                    'selected_target_lle'] = [], [], []
+                session["col_numeriques_lle_avec_encode"] = col_numeric(df[session['selected_col_lle']])
+            if request.form.getlist('selected_col_encode_lle'):
+                session['selected_col_encode_lle'] = request.form.getlist('selected_col_encode_lle')[:-1]
+                session["col_numeriques_lle_avec_encode"] = list(
+                    set(col_numeric(df[session['selected_col_lle']]) + session['selected_col_encode_lle']))
+                session['selected_target_lle'] = []
+            if request.form.getlist('selected_target_lle'):
+                session['selected_target_lle'] = request.form.getlist('selected_target_lle')
+                temp = session['selected_col_lle'].copy()
+                temp.remove(session['selected_target_lle'][0])
 
-        if len(session['selected_col_tsne']) > 1:
-            df_ml = df[session['selected_col_tsne']]
+        if len(session['selected_col_lle']) > 1:
+            df_ml = df[session['selected_col_lle']]
             df_ml = df_ml.dropna(axis=0)
             df_origine = df_ml.copy()
             if len(df_ml) > 0:
-                if session['selected_col_encode_tsne']:
+                if session['selected_col_encode_lle']:
                     # Encodage
-                    for col in session['selected_col_encode_tsne']:
+                    for col in session['selected_col_encode_lle']:
                         message_encode.append(
                             "Colonne " + col + "  :  " + str(df_ml[col].unique().tolist()) + " -> " + str(
                                 np.arange(len(df_ml[col].unique()))))
                         df_ml[col].replace(df_ml[col].unique(), np.arange(len(df_ml[col].unique())), inplace=True)
-                if session['selected_target_tsne']:
+                if session['selected_target_lle']:
                     try:
                         # tsne
-                        model = TSNE(n_components=2, n_iter=500, n_iter_without_progress=50)
+                        model = LocallyLinearEmbedding()
                         sc = StandardScaler()
-                        y = df_ml[session['selected_target_tsne']]  # target
-                        X = df_ml.drop(session['selected_target_tsne'], axis=1)  # features
+                        y = df_ml[session['selected_target_lle']]  # target
+                        X = df_ml.drop(session['selected_target_lle'], axis=1)  # features
                         X = sc.fit_transform(X)
-                        x_tsne = model.fit_transform(X, )
+                        x_lle = model.fit_transform(X, )
                         # résultats points
-                        data = pd.concat([pd.Series(x_tsne[:, 0]).reset_index(drop=True),
-                                                         pd.Series(x_tsne[:, 1]).reset_index(drop=True),
-                                                         pd.Series(df_origine[
-                                                                       session['selected_target_tsne'][0]]).reset_index(
-                                                             drop=True)], axis=1)
-                        data.columns = ["x", "y", str(session['selected_target_tsne'][0])]
+                        data = pd.concat([pd.Series(x_lle[:, 0]).reset_index(drop=True),
+                                          pd.Series(x_lle[:, 1]).reset_index(drop=True),
+                                          pd.Series(df_origine[
+                                                        session['selected_target_lle'][0]]).reset_index(
+                                              drop=True)], axis=1)
+                        data.columns = ["x", "y", str(session['selected_target_lle'][0])]
                         fig = px.scatter(data, x="x", y="y",
-                                         color=str(session['selected_target_tsne'][0]),
-                                         labels={'color': '{}'.format(str(session['selected_target_tsne'][0]))},
+                                         color=str(session['selected_target_lle'][0]),
+                                         labels={'color': '{}'.format(str(session['selected_target_lle'][0]))},
                                          color_discrete_sequence=px.colors.qualitative.Plotly)
                         fig.update_layout(
                             showlegend=True,
@@ -1323,26 +1340,16 @@ def TSNE_page():
                             plot_bgcolor='rgba(0,0,0,0)',
                         )
                         fig.update(layout_coloraxis_showscale=False)
-                        figure_tsne = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+                        figure_lle = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
 
                     except:
-                        # tsne impossible
+                        # lle impossible
                         erreur = True
             else:
                 # Dataset vide
                 erreur = True
 
-        return render_template("TSNE.html", zip=zip, choix_col=choix_col, len=len, erreur=erreur,
-                                   message_encode=message_encode, figure_tsne=figure_tsne)
+        return render_template("LLE.html", zip=zip, choix_col=choix_col, len=len, erreur=erreur,
+                               message_encode=message_encode, figure_lle=figure_lle)
     else:
         return render_template("waiting_for_data.html")
-
-
-"""
-@app.route('/<string:name>')
-def user(name):
-    return '<h1>Hello, {}!</h1>'.format(name)
-
-if __name__ == '__main__':
-    app.run()
-"""

@@ -9,7 +9,7 @@
         <div class="row">
             <div class="col-3"></div>
             <div class="col-6">
-                <p class="grand_titre">T-SNE : t-distributed stochastic neighbor embedding</p><br><br>
+                <p class="grand_titre">LLE : Locally Linear Embedding</p><br><br>
                 <!--Choix target + features-->
                 <div class="accordion shadow" id="accordion1">
                     <div class="accordion-item">
@@ -24,14 +24,14 @@
                              aria-labelledby="flush-headingOne" data-bs-parent="#accordion1">
                             <div class="accordion-body">
                                 <!-- Choix des features et target -->
-                                <form method="POST" action="{{ url_for('TSNE_page') }}">
+                                <form method="POST" action="{{ url_for('LLE_page') }}">
                                     <h3 class="dropdown-header">Sélectionner au moins 2 colonnes</h3>
                                     <div class="dropdown-divider"></div>
                                     {% for colonne in choix_col %}
-                                        <input type="checkbox" name="selected_col_tsne"
+                                        <input type="checkbox" name="selected_col_lle"
                                                value="{{ colonne }}"
-                                                {% if 'selected_col_tsne' in session %}
-                                               {% if colonne in session['selected_col_tsne'] %}checked
+                                                {% if 'selected_col_lle' in session %}
+                                               {% if colonne in session['selected_col_lle'] %}checked
                                                {% endif %}
                                                 {% endif %}
                                         >
@@ -47,7 +47,7 @@
                 </div>
                 <br><br>
 
-                {% if len(session['selected_col_tsne']) > 1 %}
+                {% if len(session['selected_col_lle']) > 1 %}
                     <!--Encodage-->
                     <div class="accordion shadow" id="accordion2">
                         <div class="accordion-item">
@@ -62,14 +62,14 @@
                                  aria-labelledby="flush-headingTwo" data-bs-parent="#accordion2">
                                 <div class="accordion-body">
                                     <!-- Encodage -->
-                                    <form method="POST" action="{{ url_for('TSNE_page') }}">
+                                    <form method="POST" action="{{ url_for('LLE_page') }}">
                                         <h3 class="dropdown-header">Colonnes à encoder</h3>
                                         <div class="dropdown-divider"></div>
-                                        {% for colonne in session['selected_col_tsne'] %}
-                                            <input type="checkbox" name="selected_col_encode_tsne"
+                                        {% for colonne in session['selected_col_lle'] %}
+                                            <input type="checkbox" name="selected_col_encode_lle"
                                                    value="{{ colonne }}"
-                                                    {% if 'selected_col_encode_tsne' in session %}
-                                                   {% if colonne in session['selected_col_encode_tsne'] %}checked
+                                                    {% if 'selected_col_encode_lle' in session %}
+                                                   {% if colonne in session['selected_col_encode_lle'] %}checked
                                                    {% endif %}
                                                     {% endif %}
                                             >
@@ -85,7 +85,7 @@
                                         {% endif %}
                                         <br>
                                         <input type="hidden"
-                                               name="selected_col_encode_tsne"
+                                               name="selected_col_encode_lle"
                                                value="empty"
                                                checked
                                         >
@@ -111,15 +111,15 @@
                                  aria-labelledby="flush-headingThree" data-bs-parent="#accordion3">
                                 <div class="accordion-body">
                                     <!-- target -->
-                                    <form method="POST" action="{{ url_for('TSNE_page') }}">
+                                    <form method="POST" action="{{ url_for('LLE_page') }}">
                                         <h3 class="dropdown-header">Choix de la target - Si la colonne qui vous
                                             intéresse n'apparait pas, c'est qu'il faut l'encoder</h3>
                                         <div class="dropdown-divider"></div>
-                                        {% for colonne in session['col_numeriques_tsne_avec_encode'] %}
-                                            <input type="radio" name="selected_target_tsne"
+                                        {% for colonne in session['col_numeriques_lle_avec_encode'] %}
+                                            <input type="radio" name="selected_target_lle"
                                                    value="{{ colonne }}"
-                                                    {% if 'selected_target_tsne' in session %}
-                                                   {% if colonne in session['selected_target_tsne'] %}checked
+                                                    {% if 'selected_target_lle' in session %}
+                                                   {% if colonne in session['selected_target_lle'] %}checked
                                                    {% endif %}
                                                     {% endif %}
                                             >
@@ -139,13 +139,13 @@
     </div>
     <br><br>
 
-    {% if figure_tsne %}
+    {% if figure_lle %}
         <br>
         <h3 class="text-center">Résultats</h3><br>
-        <div id='tsne_res' class='chart center-block'></div>
+        <div id='lle_res' class='chart center-block'></div>
         <script type='text/javascript'>
-            var graphs = {{ figure_tsne | safe}};
-            Plotly.plot('tsne_res', graphs, {});
+            var graphs = {{ figure_lle | safe}};
+            Plotly.plot('lle_res', graphs, {});
         </script>
     {% endif %}
 
