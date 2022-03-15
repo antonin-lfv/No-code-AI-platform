@@ -1295,7 +1295,7 @@ def TSNE_page():
                 if session['selected_target_tsne']:
                     try:
                         # tsne
-                        model = TSNE(n_components=2, random_state=0, learning_rate=150, n_iter=750, n_iter_without_progress=100)
+                        model = TSNE(n_components=2, random_state=0, learning_rate=150, n_iter=500, n_iter_without_progress=50)
                         sc = StandardScaler()
                         y = df_ml[session['selected_target_tsne']]  # target
                         X = df_ml.drop(session['selected_target_tsne'], axis=1)  # features
