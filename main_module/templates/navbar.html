@@ -60,16 +60,16 @@
 
 
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle {% if 'PCA_page' in request.endpoint or 'UMAP_page' in request.endpoint or 'TSNE_page' in request.endpoint %}active{% endif %}"
+                    <a class="nav-link dropdown-toggle {% if 'PCA_page' in request.endpoint or 'UMAP_page' in request.endpoint or 'LLE_page' in request.endpoint %}active{% endif %}"
                        id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Réduction de dimension
-                        {% if 'PCA_page' in request.endpoint or 'UMAP_page' in request.endpoint or 'TSNE_page' in request.endpoint %}
+                        {% if 'PCA_page' in request.endpoint or 'UMAP_page' in request.endpoint or 'LLE_page' in request.endpoint %}
                             {{ request.endpoint[:-5] }}{% endif %}
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                         <li><a class="dropdown-item" href="{{ url_for('PCA_page') }}">PCA</a></li>
                         <li><a class="dropdown-item" href="{{ url_for('UMAP_page') }}">UMAP</a></li>
-                        <li><a class="dropdown-item" href="{{ url_for('TSNE_page') }}">t-SNE</a></li>
+                        <li><a class="dropdown-item" href="{{ url_for('LLE_page') }}">LLE</a></li>
                     </ul>
                 </li>
             </ul>
