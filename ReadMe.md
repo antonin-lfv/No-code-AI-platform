@@ -8,6 +8,10 @@
 	<p/>
 <br/>
 
+[Accéder au site](https://no-code-ai-platform.herokuapp.com)
+
+<br>
+
 <p align="center">
   La <b>No-code AI platform</b> est un site développé avec <b>Python</b>, via le micro Framework Flask et déployé avec <b>Heroku</b>. Dans cette première version 1.x.x vous aurez la possibilité de faire du Machine Learning sans écrire de code, sur des datasets prédéfinis. Il y a plusieurs sections qui permettent de découvrir le dataset, avec une première approche visuelle, et une description des données. Puis vous avez la possibilité d'appliquer différents types de modèles sur ces données, qui peuvent être des modèles de régression, de classification ou de réduction de dimension.
 <p/>
