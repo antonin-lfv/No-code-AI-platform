@@ -48,3 +48,7 @@ https://towardsdatascience.com/web-visualization-with-plotly-and-flask-3660abf9c
 ## Probably for metrics
 https://getbootstrap.com/docs/5.0/components/badge/
 https://getbootstrap.com/docs/5.0/utilities/position/
+
+
+## Create badges
+https://shields.io
