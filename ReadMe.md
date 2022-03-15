@@ -4,6 +4,7 @@
 
 <p align="center">
 	<a href="https://no-code-ai-platform.herokuapp.com"><img src="https://img.shields.io/badge/Heroku-430098?style=for-the-badge&logo=heroku&logoColor=white" height="30"/></a>
+	[![Codacy Badge](https://app.codacy.com/project/badge/Grade/6487827863504f9eab2242d93b8cb77e)](https://www.codacy.com/gh/antonin-lfv/No-code-AI-platform/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=antonin-lfv/No-code-AI-platform&amp;utm_campaign=Badge_Grade)
 	<p/>
 <br/>
 
