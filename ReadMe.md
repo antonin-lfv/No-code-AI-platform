@@ -21,7 +21,7 @@
 
 <br>
 
-## Page d'accueil
+<h2 align="center">Page d'accueil</h2>
 
 <br>
 
