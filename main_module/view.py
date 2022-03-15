@@ -1208,7 +1208,7 @@ def UMAP_page():
                 if session['selected_target_umap']:
                     try:
                         # umap
-                        model = umap.UMAP()
+                        model = umap.UMAP(n_epochs=180, n_neighbors=20)
                         sc = StandardScaler()
                         y = df_ml[session['selected_target_umap']]  # target
                         X = df_ml.drop(session['selected_target_umap'], axis=1)  # features
