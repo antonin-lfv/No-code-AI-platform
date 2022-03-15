@@ -1,3 +1,6 @@
+
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/4f42281e34de43df8be6cbe221b6f429)](https://app.codacy.com/gh/antonin-lfv/No-code-AI-platform?utm_source=github.com&utm_medium=referral&utm_content=antonin-lfv/No-code-AI-platform&utm_campaign=Badge_Grade_Settings)
+
 <h1 align="center">No Code AI platform</h1>
 
 <br/>
