@@ -10,7 +10,7 @@
 </p>
 
 <p align="center">
-<a><img href="https://no-code-ai-platform.herokuapp.com" src="https://img.shields.io/badge/Open%20with%20-Heroku-blueviolet" height="20" alt=""/></a>
+<a><href="https://no-code-ai-platform.herokuapp.com" src="https://img.shields.io/badge/Open%20with%20-Heroku-blueviolet" height="20" alt=""/></a>
 </p>
 <br>
 
