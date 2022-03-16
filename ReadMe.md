@@ -1,6 +1,6 @@
 <br><h1 align="center">No Code AI platform</h1>
 
-<br/>
+<br>
 
 <p align="center">
 	<a href="https://www.codacy.com/gh/antonin-lfv/No-code-AI-platform/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=antonin-lfv/No-code-AI-platform&amp;utm_campaign=Badge_Grade"><img src="https://app.codacy.com/project/badge/Grade/6487827863504f9eab2242d93b8cb77e" height="20"/></a>
